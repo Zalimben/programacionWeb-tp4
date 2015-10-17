@@ -1,0 +1,26 @@
+<h1 class="ui dividing header">
+    Formulario de cliente
+</h1>
+
+<form class="ui form" name="personForm">
+    <div class="fields">
+        <div class="three wide field">
+            <label for="clientes">Ingrese el nombre del cliente: </label>
+
+            <div class="ui input">
+                <input id="clientes" type="text" placeholder="Nombre..." data-ng-model="cliente.nombre">
+            </div>
+        </div>
+        <div class="four wide field">
+            <label for="ci">Ingrese el numero de cedula del cliente: </label>
+
+            <div class="ui input">
+                <input id="ci" type="text" placeholder="Cedula..." data-ng-model="cliente.cedula">
+            </div>
+        </div>
+    </div>
+
+    <br/>
+    <button class="ui button blue" data-ng-click="confirmarNuevoCliente()">Confirmar</button>
+</form>
+

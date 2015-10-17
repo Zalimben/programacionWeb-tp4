@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="scriptlet" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="30" bottomMargin="30" whenResourceMissingType="Empty">
+	<property name="com.jasperassistant.designer.Grid" value="false"/>
+	<property name="com.jasperassistant.designer.SnapToGrid" value="false"/>
+	<property name="com.jasperassistant.designer.GridWidth" value="12"/>
+	<property name="com.jasperassistant.designer.GridHeight" value="12"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="fecha" class="java.lang.String">
+		<fieldDescription><![CDATA[fecha]]></fieldDescription>
+	</field>
+	<field name="cliente" class="java.lang.String">
+		<fieldDescription><![CDATA[cliente]]></fieldDescription>
+	</field>
+	<field name="venta" class="java.lang.Integer">
+		<fieldDescription><![CDATA[venta]]></fieldDescription>
+	</field>
+	<field name="total" class="java.lang.Integer">
+		<fieldDescription><![CDATA[total]]></fieldDescription>
+	</field>
+	<field name="producto" class="java.lang.String">
+		<fieldDescription><![CDATA[producto]]></fieldDescription>
+	</field>
+	<field name="cantidad" class="java.lang.Integer">
+		<fieldDescription><![CDATA[cantidad]]></fieldDescription>
+	</field>
+	<group name="dummy">
+		<groupExpression><![CDATA["dummy"]]></groupExpression>
+		<groupHeader>
+			<band height="23">
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="5" width="535" height="15" backcolor="#70A9A9"/>
+					<box>
+						<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					</box>
+					<textElement/>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="50" y="5" width="150" height="15"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Cliente]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="300" y="5" width="128" height="15"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<text><![CDATA[Total]]></text>
+					</staticText>
+				<staticText>
+					<reportElement x="420" y="5" width="121" height="15"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Fecha]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="5" width="136" height="15"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Venta]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="225" y="5" width="136" height="15"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Cantidad]]></text>
+				</staticText>
+
+				<staticText>
+					<reportElement x="150" y="5" width="136" height="15"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Producto]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<detail>
+		<band height="16">
+		<staticText>
+			<reportElement mode="Opaque" x="0" y="0" width="535" height="14" backcolor="#E5ECF9"/>
+			<box>
+			<bottomPen lineWidth="0.25" lineColor="#CCCCCC"/>
+			</box>
+			<textElement/>
+			<text><![CDATA[]]></text>
+		</staticText>
+		<textField>
+			<reportElement x="50" y="0" width="150" height="15"/>
+			<textElement textAlignment="Center" verticalAlignment="Middle"/>
+			<textFieldExpression class="java.lang.String"><![CDATA[$F{cliente}]]></textFieldExpression>
+		</textField>
+		<textField>
+			<reportElement x="300" y="0" width="128" height="15"/>
+			<textElement textAlignment="Center" verticalAlignment="Middle"/>
+			<textFieldExpression class="java.lang.Integer"><![CDATA[$F{total}]]></textFieldExpression>
+		</textField>
+		<textField>
+			<reportElement x="420" y="0" width="121" height="15"/>
+			<textElement textAlignment="Center" verticalAlignment="Middle">
+			<font size="9"/>
+		</textElement>
+			<textFieldExpression class="java.lang.String"><![CDATA[$F{fecha}]]></textFieldExpression>
+		</textField>
+		<textField>
+			<reportElement x="0" y="0" width="136" height="15"/>
+			<textElement textAlignment="Center" verticalAlignment="Middle"/>
+			<textFieldExpression class="java.lang.Integer"><![CDATA[$F{venta}]]></textFieldExpression>
+		</textField>
+		<textField>
+			<reportElement x="150" y="0" width="136" height="15"/>
+			<textElement textAlignment="Center" verticalAlignment="Middle"/>
+			<textFieldExpression class="java.lang.Integer"><![CDATA[$F{producto}]]></textFieldExpression>
+		</textField>
+		<textField>
+			<reportElement x="225" y="0" width="136" height="15"/>
+			<textElement textAlignment="Center" verticalAlignment="Middle"/>
+			<textFieldExpression class="java.lang.Integer"><![CDATA[$F{cantidad}]]></textFieldExpression>
+		</textField>
+		</band>
+	</detail>
+</jasperReport>

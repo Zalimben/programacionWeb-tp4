@@ -1,0 +1,88 @@
+
+
+Observación: El proyecto debe manejarse con Maven
+
+1- Mantenimiento (Listado + formulario) de:
+    Productos
+    Proveedores
+    Clientes
+
+2- Compra de productos.
+    En una compra,  se pueden especificar varios productos de un solo proveedor. Especificar cantidad por cada producto.
+    Se guarda toda la compra en una única transacción.
+
+    Por cada compra, guardar en tablas los datos de la cabecera (fecha, proveedor) y los detalles de la compra (producto, cantidad).
+
+    IMPORTANTE: En la tabla de COMPRAS_DET, poner un check constraint que evite asignar un valor <= 0 al campo CANTIDAD.
+    NO hacer esta validación desde Java, solo manejar la excepción lanzada por la BD.
+
+    2.2 Implementar "listado de compras".
+
+3- Venta.
+    En una venta, se pueden especificar varios productos a ser vendidos a un cliente. Especificar cantidad por cada
+    producto. Se guarda toda la venta en una única transacción.
+    Al guardar la venta, actualizar stock del producto. Si no hay stock suficiente, abortar venta.
+
+    IMPORTANTE: En la tabla de VENTAS_DET, poner un check constraint que evite asignar un valor <= 0 al campo CANTIDAD.
+    NO hacer esta validación desde Java, solo manejar la excepción lanzada por la BD.
+
+    Por cada venta, guardar en tablas los datos de la cabecera (fecha, cliente)
+    y los detalles de la venta (producto, cantidad).
+
+    3.2 Implementar "listado de ventas".
+
+4- Cargas masivas
+    Se debe poder cargar desde archivos csv o json, los siguientes datos:
+    Clientes
+    Compras: una fila del archivo tiene 1 cabecera y n detalles
+    Ventas: una fila del archivo tiene 1 cabecera y n detalles
+
+    TODAS las cargas masivas deben:
+
+        Validar los tipos de datos de cada campo, y la existencia de todos los campos obligatorios.
+        Mostrar TODOS los errores de validación detectados, y NUNCA abortar ante el primer error.
+        Si ocurrió al menos 1 error, entonces abortar TODA la carga. (pero siempre mostrar todos los errores
+        detectados durante el parseo de todo el archivo)
+        Al cargar compras y ventas, hacer las mismas validaciones que se harían desde el formulario
+        (stock suficiente, manejar errores del check constraint)
+        En ningún momento debe estar el archivo completo cargado en memoria RAM
+
+5- Funcionalidades de los listados
+    Todos los listados (Cliente, Proveedor, Producto, Compra, Venta) deben:
+    - Paginar
+    - Filtrar
+    - Ordenar
+    Desde la BD hasta el browser deben enviarse solo las filas que deben ser mostradas en la "página actual"
+    considerando los criterios de filtrado (0 .. N)
+    y el criterio de ordenamiento (una columna, ascendente o descendente)
+    Permitir EXPORTAR los datos a un archivo CSV o JSON. Una fila por cada entidad.
+    Se deben exportar TODOS los datos que cumplan con los criterios de filtrado en la base de datos
+    (NO se debe exportar solo la página actualmente desplegada en el browser).
+    En ningún momento debe estar en memoria el contenido completo del archivo.
+
+6- Generación de solicitudes de compra
+    (Timer) Implementar un proceso que cada 3 minutos busque los productos cuyo stock se encuentre por debajo de 10,
+    y por cada producto inserte una SOLICITUD DE COMPRA, indicando: fecha_hora y producto.
+
+7- Proceso de facturación
+    7.1 Al hacer click en el ítem del menú  "Generar facturas", pedir confirmación:
+    "Seguro que desea lanzar la facturación?"
+
+    En caso que el usuario confirme, invocar al proceso de facturación que debe quedar corriendo en background, e
+    inmediatamente informar que el proceso fue lanzado. La GUI no debe quedar esperando a que termine el proceso.
+
+    Este proceso debe:
+        Por cada venta que aún no apunte a una factura (tabla FACTURAS),
+            - Insertar una fila en FACTURAS, especificando fecha y monto total de la factura.
+            - Actualizar la venta haciendo que apunte a su correspondiente factura
+            - JasperReports generar en un directorio del servidor un PDF con los datos de la factura
+
+    7.2 Desde el ítem de menú "Estado facturación" mostrar una interfaz que muestre el estado actual del proceso de
+    facturación. El estado puede uno de los siguientes:
+        - No existe proceso de facturación corriendo
+        - El proceso de facturación aún está corriendo
+
+        Esta interfaz debe tener el botón "Detener proceso de facturación", dicho botón está habilitado solo si
+        el proceso se encuentra corriendo. Al hacer click en el mismo este debe causar la detención del proceso que se
+        encuentra corriendo en background, y el aborto de la transacción actual del mismo (rollback de base de datos,
+        borrado de los pdfs que ya llegó a generar)

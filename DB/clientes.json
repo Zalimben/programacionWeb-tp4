@@ -1,0 +1,16 @@
+{
+	"clientes": [
+		{
+			"nombre" : "Nabil",
+			"cedula" : "4123842"
+		},
+		{
+			"nombre" : "Alexis",
+			"cedula" : "4208953"
+		},
+		{
+			"nombre" : "Saul",
+			"cedula" : "4238495"
+		}
+	]
+}

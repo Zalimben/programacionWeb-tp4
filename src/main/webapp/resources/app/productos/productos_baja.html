@@ -1,0 +1,26 @@
+<script>
+    $(document).ready(function () {
+        $('.ui.dropdown')
+                .dropdown()
+        ;
+    });
+</script>
+<h1 class="ui dividing header">
+    Baja de productos
+</h1>
+<form class="ui form" name="personForm">
+    <div class="fields">
+        <div class="three wide field">
+            <label for="productos">Seleccione el cliente que desea eliminar: </label>
+
+            <select id="productos" class="ui search dropdown"
+                    data-ng-options="producto.id as producto.descripcion for producto in productos"
+                    data-ng-model="productoId">
+                <option value="">Producto...</option>
+            </select>
+        </div>
+    </div>
+
+    <br/>
+    <button class="ui button blue" data-ng-click="confirmarEliminarProducto()">Confirmar</button>
+</form>

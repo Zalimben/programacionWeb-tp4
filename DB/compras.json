@@ -1,0 +1,15 @@
+{
+	"compras":[
+		{
+			"fecha":"08152015",
+			"monto":"15000",
+			"proveedor":"2",
+			"productos":[
+				{
+					"producto": "74",
+					"cantidad": "7"
+				}
+			]
+		}
+	]
+}

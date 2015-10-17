@@ -1,0 +1,16 @@
+{
+	"ventas":[
+		{
+			"fecha":"13",
+			"factura":"1000",
+			"cliente":"35",
+			"monto":"26000",
+			"ventas":[
+				{
+					"producto": "74",
+					"cantidad": "77"
+				}
+			]
+		}
+	]
+}
