@@ -11,7 +11,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.ejb.Remove;
 import javax.ejb.Stateful;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
@@ -49,6 +48,9 @@ public class CompraFileService {
     private List<CompraDetalleEntity> listaCompraDetalles = new ArrayList<>();
 
 
+    /**
+     * @param is
+     */
     public void parsear(String is) {
         ObjectMapper objectMapper = new ObjectMapper();
         jfactory = objectMapper.getJsonFactory();
@@ -141,6 +143,7 @@ public class CompraFileService {
         producto = em.find(ProductoEntity.class, Long.parseLong(productoId));
 
         CompraDetalleEntity compraDetalle = new CompraDetalleEntity();
+        compraDetalle.setCompra(compra);
         compraDetalle.setProducto(producto);
         compraDetalle.setCantidad(Long.parseLong(cantidad));
 

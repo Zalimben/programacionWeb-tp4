@@ -15,8 +15,7 @@ public class FacturaEntity {
     @Id
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
     @Expose
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_factura")
-    @SequenceGenerator(name = "seq_factura", sequenceName = "seq_factura")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Basic

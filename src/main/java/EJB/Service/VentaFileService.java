@@ -1,7 +1,9 @@
 package EJB.Service;
 
 import JPA.*;
-import org.codehaus.jackson.*;
+import org.codehaus.jackson.JsonFactory;
+import org.codehaus.jackson.JsonParser;
+import org.codehaus.jackson.JsonToken;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.ejb.Remove;
@@ -143,6 +145,7 @@ public class VentaFileService {
         producto = em.find(ProductoEntity.class, Long.parseLong(productoId));
 
         VentaDetalleEntity ventaDetalle = new VentaDetalleEntity();
+        ventaDetalle.setVenta(venta);
         ventaDetalle.setProducto(producto);
         ventaDetalle.setCantidad(Long.parseLong(cantidad));
 
