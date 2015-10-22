@@ -25,38 +25,39 @@
         <p:growl id="messages" showDetail="false"/>
         <h:form>
             <p:menubar>
+                <p:menuitem value="Home" url="http://localhost:8080/tp4/faces/views/home.xhtml" />
+
                 <p:submenu label="Clientes" icon="ui-icon-document">
-                    <p:menuitem value="Lista" url="#" />
-                    <p:menuitem value="Crear" url="#" />
-                    <p:menuitem value="Carga Masiva" url="#" />
+                    <p:menuitem value="Lista" url="http://localhost:8080/tp4/faces/views/clientes/list.xhtml" />
+                    <p:menuitem value="Carga Masiva" url="http://localhost:8080/tp4/faces/views/clientes/carga_masiva.xhtml" />
                 </p:submenu>
                 <p:submenu label="Proveedores" icon="ui-icon-document">
-                    <p:menuitem value="Lista" url="#" />
-                    <p:menuitem value="Crear" url="#" />
+                    <p:menuitem value="Lista" url="http://localhost:8080/tp4/faces/views/proveedores/list.xhtml" />
                 </p:submenu>
                 <p:submenu label="Productos" icon="ui-icon-document">
-                    <p:menuitem value="Lista" url="#" />
-                    <p:menuitem value="Crear" url="#" />
+                    <p:menuitem value="Lista" url="http://localhost:8080/tp4/faces/views/productos/list.xhtml" />
                 </p:submenu>
                 <p:submenu label="Ventas" icon="ui-icon-document">
-                    <p:menuitem value="Lista" url="#" />
-                    <p:menuitem value="Crear" url="#" />
-                    <p:menuitem value="Carga Masiva" url="#" />
+                    <p:menuitem value="Lista" url="http://localhost:8080/tp4/faces/views/ventas/list.xhtml" />
+                    <p:menuitem value="Carga Masiva" url="http://localhost:8080/tp4/faces/views/ventas/carga_masiva.xhtml" />
                 </p:submenu>
                 <p:submenu label="Compras" icon="ui-icon-document">
-                    <p:menuitem value="Lista" url="#" />
-                    <p:menuitem value="Crear" url="#" />
-                    <p:menuitem value="Carga Masiva" url="#" />
-                    <p:menuitem value="Solicitud de Compras" url="#" />
+                    <p:menuitem value="Lista" url="http://localhost:8080/tp4/faces/views/compras/list.xhtml" />
+                    <p:menuitem value="Carga Masiva" url="http://localhost:8080/tp4/faces/views/compras/carga_masiva.xhtml" />
                 </p:submenu>
                 <p:submenu label="Facturas" icon="ui-icon-document">
-                    <p:menuitem value="Lista" url="#" />
+                    <p:menuitem value="Lista" url="http://localhost:8080/tp4/faces/views/facturas/list.xhtml" />
+                </p:submenu>
+                <p:submenu label="Solicitudes" icon="ui-icon-document">
+                    <p:menuitem value="Lista" url="http://localhost:8080/tp4/faces/views/solicitudes/list.xhtml" />
                 </p:submenu>
             </p:menubar>
         </h:form>
 
         <p:panel style="height: 760px;">
-            <ui:insert name="content">Content</ui:insert>
+            <h:form>
+                <ui:insert name="content">Content</ui:insert>
+            </h:form>
         </p:panel>
 
         <div class="footer">
