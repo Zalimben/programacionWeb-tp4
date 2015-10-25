@@ -1,5 +1,6 @@
 package BackingBean;
 
+import EJB.Helper.ClienteResponse;
 import EJB.Service.ClienteService;
 import JPA.ClienteEntity;
 
@@ -9,42 +10,60 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import java.io.Serializable;
+import java.util.List;
 
 /**
- * backingBeans de Cliente
+ * BackingBeans de Cliente
  *
  * Created by szalimben on 25/10/15.
  */
 
-@ManagedBean(name = "clientes")
+@ManagedBean(name = "cliente")
 @SessionScoped
-public class ClientesBean {
+public class ClientesBean implements Serializable {
 
-    private static final String redirectTo = "http://localhost:8080/tp4/faces/views/clientes/";
-    private static final String ABM = "abm.xhtml";
-    private static final String LIST = "list.xhtml";
-    private static final String CARGA = "carga_masiva.xhtml";
-    @Inject
+	@Inject
 	ClienteEntity cliente;
+
 	@EJB
-	ClienteService service;
-    private FacesMessage message;
+	ClienteService clienteService;
+
+	private static final String redirectTo = "http://localhost:8080/tp4/faces/views/clientes/";
+	private static final String ABM = "abm.xhtml";
+	private static final String LIST = "list.xhtml";
+	private static final String CARGA = "carga_masiva.xhtml";
+
+	private List<ClienteEntity> clientes;
+
+	private String nombre;
+	private String cedulaIdentidad;
+	private String by_all_attributes;
+	private String by_nombre;
+	private String by_cedula;
+	private Integer page=1;
+	private Integer totalPages=0;
+	private ClienteResponse clienteResponse;
+
+	private FacesMessage message;
 
 	/* Metodos */
 	/**
 	 * Añade un cliente nuevo
 	 */
-    public void doCrearCliente() {
+	public void doCrearCliente() {
+
+		FacesContext context = FacesContext.getCurrentInstance();
 
 		try{
-			service.add(cliente);
+			clienteService.add(cliente);
 			resetCampos();
-			FacesContext context = FacesContext.getCurrentInstance();
-			message = new FacesMessage("Cliente creado exitosamente");
-			context.addMessage("messages", message);
+			setMessage(new FacesMessage("Cliente creado exitosamente"));
+
 		} catch(Exception e) {
-			e.printStackTrace();
+			setMessage(new FacesMessage("No se puede crear el cliente"));
 		}
+		context.addMessage("messages", message);
 	}
 
 	/* RedirectTO */
@@ -67,6 +86,40 @@ public class ClientesBean {
 		cliente.setCedulaIdentidad(null);
 	}
 
+	public List<ClienteEntity> getClientes() {
+		clienteResponse = clienteService.getClientes(nombre, cedulaIdentidad, by_all_attributes,
+		                                             by_nombre, by_cedula, page);
+
+		clientes = clienteResponse.getEntidades();
+
+		return clientes;
+	}
+
+	public void goNextPage(){
+		if(page<totalPages) {
+			page += 1;
+			clienteResponse = clienteService.getClientes(nombre, cedulaIdentidad, by_all_attributes,
+			                                             by_nombre, by_cedula, page);
+
+			clientes = clienteResponse.getEntidades();
+		}
+	}
+
+	public void goBackPage(){
+		if(page>1) {
+			page -= 1;
+
+			clienteResponse = clienteService.getClientes(nombre, cedulaIdentidad, by_all_attributes,
+			                                             by_nombre, by_cedula, page);
+
+			clientes = clienteResponse.getEntidades();
+		}
+	}
+
+	public void resetPage(){
+		page = 1;
+	}
+
 	/* Getter & Setter */
 	public ClienteEntity getCliente() {
 		return cliente;
@@ -76,4 +129,65 @@ public class ClientesBean {
 		this.cliente = cliente;
 	}
 
+	public void setMessage(FacesMessage message) {
+		this.message = message;
+	}
+
+	public FacesMessage getMessage() {
+		return message;
+	}
+
+	public Integer getPage() {
+		return page;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getCedulaIdentidad() {
+		return cedulaIdentidad;
+	}
+
+	public void setCedulaIdentidad(String cedulaIdentidad) {
+		this.cedulaIdentidad = cedulaIdentidad;
+	}
+
+	public String getBy_all_attributes() {
+		return by_all_attributes;
+	}
+
+	public void setBy_all_attributes(String by_all_attributes) {
+		this.by_all_attributes = by_all_attributes;
+	}
+
+	public String getBy_nombre() {
+		return by_nombre;
+	}
+
+	public void setBy_nombre(String by_nombre) {
+		this.by_nombre = by_nombre;
+	}
+
+	public String getBy_cedula() {
+		return by_cedula;
+	}
+
+	public void setBy_cedula(String by_cedula) {
+		this.by_cedula = by_cedula;
+	}
+
+	public Integer getTotalPages() {
+		if(clienteResponse == null)
+			clienteResponse = clienteService.getClientes(nombre, cedulaIdentidad, by_all_attributes,
+			                                             by_nombre, by_cedula, page);
+
+		totalPages = clienteResponse.getMeta().getTotal_pages().intValue();
+
+		return totalPages;
+	}
 }
