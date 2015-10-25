@@ -45,6 +45,11 @@ public class ClientesBean implements Serializable {
 	private Integer totalPages=0;
 	private ClienteResponse clienteResponse;
 
+	// Para Modificar
+	private ClienteEntity selectedCliente;
+	private String nombreModificar;
+	private String cedulaModificar;
+
 	private FacesMessage message;
 
 	/* Metodos */
@@ -52,6 +57,41 @@ public class ClientesBean implements Serializable {
 	public void preCreate() {
 
 		clienteEntity = new ClienteEntity();
+	}
+
+
+	/**
+	 * Modificar un cliente
+	 */
+	public void doEditarCliente() {
+
+		FacesContext context = FacesContext.getCurrentInstance();
+
+		if(validateString(nombreModificar)) {
+			selectedCliente.setNombre(nombreModificar);
+		}
+
+		if(validateString(cedulaModificar)) {
+			selectedCliente.setCedulaIdentidad(cedulaModificar);
+		}
+		try{
+			clienteService.update(selectedCliente);
+			setMessage(new FacesMessage("Cliente modificado exitosamente"));
+		} catch(Exception e) {
+			setMessage(new FacesMessage("No se puede modificar el cliente"));
+		}
+		resetCampos();
+		context.addMessage("messages", message);
+	}
+
+	private boolean validateString (String data) {
+
+		if("".equals(data) || data == null ) {
+			return false;
+		}
+
+		return true;
+
 	}
 
 	/**
@@ -63,7 +103,7 @@ public class ClientesBean implements Serializable {
 
 		try{
 			clienteService.add(clienteEntity);
-				setMessage(new FacesMessage("Cliente creado exitosamente"));
+			setMessage(new FacesMessage("Cliente creado exitosamente"));
 		} catch(Exception e) {
 			setMessage(new FacesMessage("No se puede crear el cliente"));
 		}
@@ -89,6 +129,8 @@ public class ClientesBean implements Serializable {
 
 		clienteEntity.setNombre(null);
 		clienteEntity.setCedulaIdentidad(null);
+		setNombreModificar(null);
+		setCedulaModificar(null);
 	}
 
 	public List<ClienteEntity> getClientes() {
@@ -199,5 +241,29 @@ public class ClientesBean implements Serializable {
 		totalPages = clienteResponse.getMeta().getTotal_pages().intValue();
 
 		return totalPages;
+	}
+
+	public ClienteEntity getSelectedCliente() {
+		return selectedCliente;
+	}
+
+	public void setSelectedCliente(ClienteEntity selectedCliente) {
+		this.selectedCliente = selectedCliente;
+	}
+
+	public void setCedulaModificar(String cedulaModificar) {
+		this.cedulaModificar = cedulaModificar;
+	}
+
+	public String getCedulaModificar() {
+		return cedulaModificar;
+	}
+
+	public void setNombreModificar(String nombreModificar) {
+		this.nombreModificar = nombreModificar;
+	}
+
+	public String getNombreModificar() {
+		return nombreModificar;
 	}
 }

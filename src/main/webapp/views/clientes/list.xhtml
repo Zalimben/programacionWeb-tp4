@@ -28,7 +28,7 @@
         </h:inputText>
         <p:watermark value="Cedula" for="inputCedula" />
         <br/><br/>
-        jj
+        raw
 
         <!-- tabla de datos-->
         <p:dataTable id="tabla_clientes"
@@ -47,6 +47,11 @@
                 <f:facet name="header">Cedula</f:facet>
                 #{cli.cedulaIdentidad}
             </p:column>
+            <p:column style="width:32px;text-align: center">
+                <p:commandButton style="height:25px" update=":form:editClienteForm" oncomplete="PF('modificarCliente').show()" icon="ui-icon-search" >
+                    <f:setPropertyActionListener value="#{cli}" target="#{cliente.selectedCliente}" />
+                </p:commandButton>
+            </p:column>
 
         </p:dataTable>
 
@@ -59,10 +64,38 @@
         </h:panelGrid>
 
         <br />
-        <!-- BTN AÑADIR CLIENTE -->
+        <!-- BTN AÑADIR CLIENTE - POPUP-->
         <p:commandButton id="newCliente" update="tabla_clientes" value="Añadir Cliente" oncomplete="PF('createCliente').show()"  />
         <ui:include src="abm.xhtml" />
 
+        <!-- BTN MODIFICAR CLIENTE - POPUP-->
+        <h:form id="editClienteForm">
+           <p:dialog widgetVar="modificarCliente" closable="false" id="modificar_cliente" header="Modificar cliente" resizable="false" >
+
+                <h:panelGrid id="formEditCliente"  columns="3" style="width:100%;">
+                    <p:outputLabel value="Nombre" />
+                    <p:inputText  value="#{cliente.nombreModificar}" placeholder="#{cliente.selectedCliente.nombre}"
+                                  id="nombreEditCliente" maxlength="50" style="width:100%;height:100%"
+                                  requiredMessage="Describa un nombre " >
+                    </p:inputText>
+                    <p:messages style="margin-left: 15px;" for="nombreEditCliente" />
+
+                    <p:outputLabel value="Nro. Documento" />
+                    <p:inputText value="#{cliente.cedulaModificar}"  placeholder="#{cliente.selectedCliente.cedulaIdentidad}"
+                                 id="documentoEditCliente" maxlength="50" style="width:100%;height:100%"
+                                 requiredMessage="Describa el documento" >
+                    </p:inputText>
+                    <p:messages style="margin-left: 15px;" for="documentoEditCliente" />
+                </h:panelGrid>
+
+                <br />
+                <p:commandButton process="editClienteForm" value="Guardar" oncomplete="if(!args.validationFailed){PF('modificarCliente').hide()}"
+                                 update=":messages :form:tabla_clientes" actionListener="#{cliente.doEditarCliente}" />
+
+                <p:commandButton process="@this formEditCliente"  immediate="true" oncomplete="PF('modificarCliente').hide()" value="Cancelar"
+                                 update="formEditCliente" actionListener="#{cliente.resetCampos}"  />
+           </p:dialog>
+        </h:form>
     </ui:define>
 
 </ui:composition>
