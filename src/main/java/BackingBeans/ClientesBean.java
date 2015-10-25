@@ -3,6 +3,8 @@ package BackingBeans;
 import EJB.Helper.ClienteResponse;
 import EJB.Service.ClienteService;
 import JPA.ClienteEntity;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -10,6 +12,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -23,17 +27,14 @@ import java.util.List;
 @SessionScoped
 public class ClientesBean implements Serializable {
 
-	@Inject
+    private static final String redirectTo = "http://localhost:8080/tp4/faces/views/clientes/";
+    private static final String ABM = "abm.xhtml";
+    private static final String LIST = "list.xhtml";
+    private static final String CARGA = "carga_masiva.xhtml";
+    @Inject
 	ClienteEntity clienteEntity;
-
 	@EJB
 	ClienteService clienteService;
-
-	private static final String redirectTo = "http://localhost:8080/tp4/faces/views/clientes/";
-	private static final String ABM = "abm.xhtml";
-	private static final String LIST = "list.xhtml";
-	private static final String CARGA = "carga_masiva.xhtml";
-
 	private List<ClienteEntity> clientes;
 
 	private String nombre;
@@ -49,6 +50,7 @@ public class ClientesBean implements Serializable {
 	private ClienteEntity selectedCliente;
 	private String nombreModificar;
 	private String cedulaModificar;
+    private StreamedContent file;
 
 	private FacesMessage message;
 
@@ -196,12 +198,12 @@ public class ClientesBean implements Serializable {
 		this.clienteEntity = cliente;
 	}
 
+    public FacesMessage getMessage() {
+        return message;
+    }
+
 	public void setMessage(FacesMessage message) {
 		this.message = message;
-	}
-
-	public FacesMessage getMessage() {
-		return message;
 	}
 
 	public Integer getPage() {
@@ -266,19 +268,30 @@ public class ClientesBean implements Serializable {
 		this.selectedCliente = selectedCliente;
 	}
 
+    public String getCedulaModificar() {
+        return cedulaModificar;
+    }
+
 	public void setCedulaModificar(String cedulaModificar) {
 		this.cedulaModificar = cedulaModificar;
 	}
 
-	public String getCedulaModificar() {
-		return cedulaModificar;
-	}
+    public String getNombreModificar() {
+        return nombreModificar;
+    }
 
 	public void setNombreModificar(String nombreModificar) {
 		this.nombreModificar = nombreModificar;
 	}
 
-	public String getNombreModificar() {
-		return nombreModificar;
-	}
+    public StreamedContent getFile() throws IOException {
+        clienteService.exportAllClientes(nombre, cedulaIdentidad, by_all_attributes, by_nombre, by_cedula, page);
+        String contentType = FacesContext.getCurrentInstance().getExternalContext().getMimeType("/tmp/clientes.json");
+        file = new DefaultStreamedContent(new FileInputStream("/tmp/clientes.json"), contentType, "clientes.json");
+        return file;
+    }
+
+    public void setFile(StreamedContent file) {
+        this.file = file;
+    }
 }

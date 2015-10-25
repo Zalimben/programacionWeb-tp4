@@ -11,6 +11,7 @@ import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by nabil on 08/10/15.
@@ -32,11 +33,11 @@ public class ClienteFileService {
     private String nombre;
     private String cedula;
 
-    public void parsear(String is) {
+    public void parsear(InputStream is) {
         ObjectMapper objectMapper = new ObjectMapper();
         jfactory = objectMapper.getJsonFactory();
-        String result = is;
-        String archivo = result.substring(result.indexOf('{'));
+//        String result = is;
+//        String archivo = result.substring(result.indexOf('{'));
 
         try {
 //            String archivo = "{\n" +
@@ -55,7 +56,7 @@ public class ClienteFileService {
 //                    "\t\t}\n" +
 //                    "\t]\n" +
 //                    "}";
-            jParser = jfactory.createJsonParser(archivo);
+            jParser = jfactory.createJsonParser(is);
 
             jParser.nextToken(); // token '{'
 //            String texto1 = jParser.getText();

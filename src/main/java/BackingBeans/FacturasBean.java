@@ -15,7 +15,7 @@ import javax.inject.Inject;
  */
 @ManagedBean(name = "facturas")
 @SessionScoped
-public class FacturasBeans {
+public class FacturasBean {
     @EJB
     FacturaService facturaService;
 

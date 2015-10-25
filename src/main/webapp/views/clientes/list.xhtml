@@ -13,22 +13,21 @@
         <!-- filtrado-->
         <br/>
         <h:inputText id="inputAllAttributes" value="#{cliente.by_all_attributes}">
-            <p:ajax event="valueChange" update="tabla_clientes page" listener="#{cliente.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_clientes page" listener="#{cliente.resetPage}"/>
         </h:inputText>
         <p:watermark value="Filtro completo" for="inputAllAttributes" />
         <br/><br/>
 
         <h:inputText id="inputNombre" value="#{cliente.by_nombre}" >
-            <p:ajax event="valueChange" update="tabla_clientes page" listener="#{cliente.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_clientes page" listener="#{cliente.resetPage}"/>
         </h:inputText>
         <p:watermark value="Nombre" for="inputNombre" />
 
         <h:inputText id="inputCedula" value="#{cliente.by_cedula}" >
-            <p:ajax event="valueChange" update="tabla_clientes page" listener="#{cliente.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_clientes page" listener="#{cliente.resetPage}"/>
         </h:inputText>
         <p:watermark value="Cedula" for="inputCedula" />
         <br/><br/>
-        aaaaafff
 
         <!-- tabla de datos-->
         <p:dataTable id="tabla_clientes"
@@ -64,6 +63,8 @@
             </p:column>
 
         </p:dataTable>
+        <br/>
+        <br/>
 
         <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
             <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
@@ -77,8 +78,13 @@
                 <h:outputText style="height: 25px;" id="page" value=" #{cliente.page} of #{cliente.totalPages} " />
             <p:commandButton style="height: 25px;" icon="ui-icon-arrow-1-e" actionListener="#{cliente.goNextPage}" update="page tabla_clientes"/>
         </h:panelGrid>
-
         <br />
+        <h:form>
+            <p:commandButton value="Download" ajax="false">
+                <p:fileDownload value="#{cliente.file}"/>
+            </p:commandButton>
+        </h:form>
+        <br/>
         <!-- BTN AÑADIR CLIENTE - POPUP-->
         <p:commandButton id="newCliente" update="tabla_clientes" value="Añadir Cliente" oncomplete="PF('createCliente').show()"  />
         <ui:include src="abm.xhtml" />
