@@ -7,11 +7,11 @@
                 xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="/index.xhtml">
-    <ui:define name="content">
 
-    <h:form>
+    <ui:define  name="content">
+
         <!-- filtrado-->
-        <br/><br/>
+        <br/>
         <h:inputText id="inputAllAttributes" value="#{cliente.by_all_attributes}">
             <p:ajax event="keyup" update="tabla_clientes page" listener="#{cliente.resetPage}"/>
         </h:inputText>
@@ -30,20 +30,28 @@
         <br/><br/>
 
         <!-- tabla de datos-->
-        <p:dataTable id="tabla_clientes" value="#{cliente.clientes}" var="clientes">
+        <p:dataTable id="tabla_clientes"
+                     value="#{cliente.clientes}" rowIndexVar="index" var="cli" emptyMessage="No se encuentran registros">
+
             <f:facet name="header">
                 Lista de clientes
             </f:facet>
 
             <p:column>
                 <f:facet name="header">Nombre</f:facet>
-                #{clientes.nombre}
+                #{cli.nombre}
             </p:column>
 
             <p:column>
                 <f:facet name="header">Cedula</f:facet>
-                #{clientes.cedulaIdentidad}
+                #{cli.cedulaIdentidad}
             </p:column>
+            <p:column style="width:32px;text-align: center">
+                <p:commandButton style="height:25px" update=":form:editClienteForm" oncomplete="PF('modificarCliente').show()" icon="ui-icon-search" >
+                    <f:setPropertyActionListener value="#{cli}" target="#{cliente.selectedCliente}" />
+                </p:commandButton>
+            </p:column>
+
         </p:dataTable>
         <br/>
         <br/>
@@ -60,43 +68,45 @@
 
         <!-- paginacion-->
         <br/>
-        <p:commandButton value="Atras" actionListener="#{cliente.goBackPage}" update="page tabla_clientes"/>
-        <h:outputText id="page" value=" #{cliente.page} of #{cliente.totalPages} " />
-        <p:commandButton value="Siguiente" actionListener="#{cliente.goNextPage}" update="page tabla_clientes"/>
-    </h:form>
-
+        <h:panelGrid columns="3" style="align-content: center;padding-left:90%" >
+            <p:commandButton style="height: 25px;" icon="ui-icon-arrow-1-w" actionListener="#{cliente.goBackPage}" update="page tabla_clientes"/>
+                <h:outputText style="height: 25px;" id="page" value=" #{cliente.page} of #{cliente.totalPages} " />
+            <p:commandButton style="height: 25px;" icon="ui-icon-arrow-1-e" actionListener="#{cliente.goNextPage}" update="page tabla_clientes"/>
+        </h:panelGrid>
 
         <br />
-        <p:commandButton id="newCliente" value="Añadir Cliente" onclick="PF('createCliente').show()" />
+        <!-- BTN AÑADIR CLIENTE - POPUP-->
+        <p:commandButton id="newCliente" update="tabla_clientes" value="Añadir Cliente" oncomplete="PF('createCliente').show()"  />
+        <ui:include src="abm.xhtml" />
 
-        <!-- PopUp para Alta, Modificar -->
-        <p:dialog widgetVar="createCliente" id="create_cliente" header="Registrar nuevo cliente"  >
-            <h:form>
-                <h:panelGrid id="formCliente"  columns="3" style="width:100%;">
+        <!-- BTN MODIFICAR CLIENTE - POPUP-->
+        <h:form id="editClienteForm">
+           <p:dialog widgetVar="modificarCliente" closable="false" id="modificar_cliente" header="Modificar cliente" resizable="false" >
+
+                <h:panelGrid id="formEditCliente"  columns="3" style="width:100%;">
                     <p:outputLabel value="Nombre" />
-                    <p:inputText  value="#{cliente.cliente.nombre}"
-                        id="nombreCliente" maxlength="50" style="width:100%;height:100%"
-                        required="true" requiredMessage="Describa un nombre " >
+                    <p:inputText  value="#{cliente.nombreModificar}" placeholder="#{cliente.selectedCliente.nombre}"
+                                  id="nombreEditCliente" maxlength="50" style="width:100%;height:100%"
+                                  requiredMessage="Describa un nombre " >
                     </p:inputText>
-                    <p:messages style="margin-left: 15px;" for="nombreCliente" />
+                    <p:messages style="margin-left: 15px;" for="nombreEditCliente" />
 
                     <p:outputLabel value="Nro. Documento" />
-                    <p:inputText value="#{cliente.cliente.cedulaIdentidad}"
-                        id="documentoCliente" maxlength="50" style="width:100%;height:100%"
-                        required="true" requiredMessage="Describa el documento" >
+                    <p:inputText value="#{cliente.cedulaModificar}"  placeholder="#{cliente.selectedCliente.cedulaIdentidad}"
+                                 id="documentoEditCliente" maxlength="50" style="width:100%;height:100%"
+                                 requiredMessage="Describa el documento" >
                     </p:inputText>
-                    <p:messages style="margin-left: 15px;" for="documentoCliente" />
+                    <p:messages style="margin-left: 15px;" for="documentoEditCliente" />
                 </h:panelGrid>
 
                 <br />
-                <p:commandButton process="@form formCliente" value="Crear" oncomplete="if(!args.validationFailed){PF('createCliente').hide()}"
-                update=":messages formCliente" actionListener="#{cliente.doCrearCliente}" />
+                <p:commandButton process="editClienteForm" value="Guardar" oncomplete="if(!args.validationFailed){PF('modificarCliente').hide()}"
+                                 update=":messages :form:tabla_clientes" actionListener="#{cliente.doEditarCliente}" />
 
-                <p:commandButton process="@form formCliente"  immediate="true" oncomplete="PF('createCliente').hide()" value="Cancelar"
-                        update="formCliente" actionListener="#{cliente.resetCampos}"  />
-            </h:form>
-        </p:dialog>
-
+                <p:commandButton process="@this formEditCliente"  immediate="true" oncomplete="PF('modificarCliente').hide()" value="Cancelar"
+                                 update="formEditCliente" actionListener="#{cliente.resetCampos}"  />
+           </p:dialog>
+        </h:form>
     </ui:define>
 
 </ui:composition>
