@@ -1,68 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:font="http://java.sun.com/jsf/composite">
+        >
 
-	<h:head>
-		<title>Facultad Politecnica - Programacion Web y Uso de Internet</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<link rel="stylesheet" type="text/css" href="resources/static/css/table.css" />
-		<link rel="stylesheet" type="text/css" href="resources/static/css/semantic.min.css" />
-		<script type="text/javascript" src="resources/static/js/jquery-2.1.4.min.js"></script>
-		<script type="text/javascript" src="resources/static/js/semantic.min.js"></script>
+<h:head>
+    <title>Facultad Politecnica - Programacion Web y Uso de Internet</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script type="text/javascript" src="resources/static/js/jquery-2.1.4.min.js"></script>
 
-        <link rel="stylesheet" type="text/css" href="resources/bootstrap/css/bootstrap.min.css" />
-        <link rel="stylesheet" type="text/css" href="resources/bootstrap/css/bootstrap-theme.min.css" />
-        <script type="text/javascript" src="resources/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="resources/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="resources/bootstrap/css/bootstrap-theme.min.css"/>
+    <script type="text/javascript" src="resources/bootstrap/js/bootstrap.min.js"></script>
 
-	</h:head>
+</h:head>
 
-	<h:body>
-        <p:growl id="messages" showDetail="false"/>
-        <h:form>
-            <p:menubar>
-                <p:menuitem value="Home" url="http://localhost:8080/tp4/faces/views/home.xhtml" />
+<h:body>
+    <p:growl id="messages" showDetail="false"/>
 
-                <p:submenu label="Clientes" icon="ui-icon-document">
-                    <p:menuitem value="Lista" url="http://localhost:8080/tp4/faces/views/clientes/list.xhtml" />
-                    <p:menuitem value="Carga Masiva" url="http://localhost:8080/tp4/faces/views/clientes/carga_masiva.xhtml" />
-                </p:submenu>
-                <p:submenu label="Proveedores" icon="ui-icon-document">
-                    <p:menuitem value="Lista" url="http://localhost:8080/tp4/faces/views/proveedores/list.xhtml" />
-                </p:submenu>
-                <p:submenu label="Productos" icon="ui-icon-document">
-                    <p:menuitem value="Lista" url="http://localhost:8080/tp4/faces/views/productos/list.xhtml" />
-                </p:submenu>
-                <p:submenu label="Ventas" icon="ui-icon-document">
-                    <p:menuitem value="Lista" url="http://localhost:8080/tp4/faces/views/ventas/list.xhtml" />
-                    <p:menuitem value="Carga Masiva" url="http://localhost:8080/tp4/faces/views/ventas/carga_masiva.xhtml" />
-                </p:submenu>
-                <p:submenu label="Compras" icon="ui-icon-document">
-                    <p:menuitem value="Lista" url="http://localhost:8080/tp4/faces/views/compras/list.xhtml" />
-                    <p:menuitem value="Carga Masiva" url="http://localhost:8080/tp4/faces/views/compras/carga_masiva.xhtml" />
-                </p:submenu>
-                <p:submenu label="Facturas" icon="ui-icon-document">
-                    <p:menuitem value="Lista" url="http://localhost:8080/tp4/faces/views/facturas/list.xhtml" />
-                </p:submenu>
-                <p:submenu label="Solicitudes" icon="ui-icon-document">
-                    <p:menuitem value="Lista" url="http://localhost:8080/tp4/faces/views/solicitudes/list.xhtml" />
-                </p:submenu>
-            </p:menubar>
-        </h:form>
 
-        <p:panel style="height: 760px;">
+    <p:panel>
+
+    </p:panel>
+
+
+    <p:layout fullPage="true">
+
+        <p:layoutUnit position="north" size="100" header="Top" resizable="true" closable="true" collapsible="true">
+            <h:outputText value="Sistema Compra Venta"/>
+        </p:layoutUnit>
+
+        <p:layoutUnit position="south" size="100" header="Bottom" resizable="true" closable="true" collapsible="true">
+            <div class="footer">
+                <p:outputLabel value="Alexis Ojeda - Saul Zalimben - Nabil Chamas 2015"/>
+            </div>
+        </p:layoutUnit>
+
+        <p:layoutUnit position="west" size="260" collapsible="true">
+            <h:form>
+                <p:menu>
+                    <p:menuitem value="Home" url="http://localhost:8080/tp4/faces/views/home.xhtml"/>
+
+                    <p:submenu label="Clientes" icon="ui-icon-document">
+                        <p:menuitem value="Lista" url="http://localhost:8080/tp4/faces/views/clientes/list.xhtml"/>
+                        <p:menuitem value="Carga Masiva"
+                                    url="http://localhost:8080/tp4/faces/views/clientes/carga_masiva.xhtml"/>
+                    </p:submenu>
+                    <p:submenu label="Proveedores" icon="ui-icon-document">
+                        <p:menuitem value="Lista" url="http://localhost:8080/tp4/faces/views/proveedores/list.xhtml"/>
+                    </p:submenu>
+                    <p:submenu label="Productos" icon="ui-icon-document">
+                        <p:menuitem value="Lista" url="http://localhost:8080/tp4/faces/views/productos/list.xhtml"/>
+                    </p:submenu>
+                    <p:submenu label="Ventas" icon="ui-icon-document">
+                        <p:menuitem value="Lista" url="http://localhost:8080/tp4/faces/views/ventas/list.xhtml"/>
+                        <p:menuitem value="Carga Masiva"
+                                    url="http://localhost:8080/tp4/faces/views/ventas/carga_masiva.xhtml"/>
+                    </p:submenu>
+                    <p:submenu label="Compras" icon="ui-icon-document">
+                        <p:menuitem value="Lista" url="http://localhost:8080/tp4/faces/views/compras/list.xhtml"/>
+                        <p:menuitem value="Carga Masiva"
+                                    url="http://localhost:8080/tp4/faces/views/compras/carga_masiva.xhtml"/>
+                    </p:submenu>
+                    <p:submenu label="Facturas" icon="ui-icon-document">
+                        <p:menuitem value="Lista" url="http://localhost:8080/tp4/faces/views/facturas/list.xhtml"/>
+                    </p:submenu>
+                    <p:submenu label="Solicitudes" icon="ui-icon-document">
+                        <p:menuitem value="Lista" url="http://localhost:8080/tp4/faces/views/solicitudes/list.xhtml"/>
+                    </p:submenu>
+                </p:menu>
+            </h:form>
+        </p:layoutUnit>
+
+        <p:layoutUnit position="east" size="200" header="Right" resizable="true" closable="true" collapsible="true"
+                      effect="drop">
+            <h:outputText value="Right unit content."/>
+        </p:layoutUnit>
+
+        <p:layoutUnit position="center">
             <h:form>
                 <ui:insert name="content">Content</ui:insert>
             </h:form>
-        </p:panel>
+        </p:layoutUnit>
 
-        <div class="footer">
-            <p:outputLabel value="Alexis Ojeda - Saul Zalimben - Nabil Chamas 2015" />
-        </div>
+    </p:layout>
 
-    </h:body>
+
+</h:body>
 </html>

@@ -123,27 +123,27 @@ public class FacturaService extends Service<FacturaEntity> {
     }
 
     public String facturar() {
-        try {
-            estadoFacturacion = facturacion.facturacion();
-        } catch (Exception e) {
-            return e.getMessage();
-        }
-        return "\"Facturando\"";
+//        try {
+//            estadoFacturacion = facturacion.facturacion();
+//        } catch (Exception e) {
+//            return e.getMessage();
+//        }
+        return "Facturando";
     }
 
     public String isRun() {
         if (estadoFacturacion == null || estadoFacturacion.isDone() || estadoFacturacion.isCancelled())
-            return "\"Detenido\"";
+            return "Detenido";
         else
-            return "\"Corriendo\"";
+            return "Corriendo";
     }
 
     public String detener() {
         if (estadoFacturacion != null) {
             estadoFacturacion.cancel(true);
-            return "\"Detenido\"";
+            return "Detenido";
         }
-        return "\"No se puede detener\"";
+        return "No se puede detener";
     }
 
 }
