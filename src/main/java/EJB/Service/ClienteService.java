@@ -6,14 +6,12 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.ws.rs.core.MultivaluedMap;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -41,7 +39,8 @@ public class ClienteService extends Service<ClienteEntity> {
      *
      * @return Elemento cuyo identificador corresponda
      */
-    public Object exportAllClientes(MultivaluedMap<String, String> queryParams) {
+    public Object exportAllClientes(String nombre, String cedula, String por_all_attributes,
+                                    String por_nombre, String por_cedula, Integer page_parametro) {
         ClienteResponse response = new ClienteResponse();
         ObjectMapper mapper = new ObjectMapper();
         String file = "/tmp/clientes.json";
@@ -55,18 +54,18 @@ public class ClienteService extends Service<ClienteEntity> {
         /**
          * Retrieve one or none of the URI query params that have the column name and sort order values
          */
-        if (queryParams.getFirst("nombre") != null) {
+        if (nombre != null) {
             ordenarPorColumna = "nombre";
-            ordenDeOrdenacion = queryParams.getFirst("nombre");
-        } else if (queryParams.getFirst("cedulaIdentidad") != null) {
+            ordenDeOrdenacion = nombre;
+        } else if (cedula != null) {
             ordenarPorColumna = "cedulaIdentidad";
-            ordenDeOrdenacion = queryParams.getFirst("cedulaIdentidad");
+            ordenDeOrdenacion = cedula;
         }
 
         // Iniciamos las variables parael filtrado
-        String by_all_attributes = queryParams.getFirst("by_all_attributes");
-        String by_cedula_identidad = queryParams.getFirst("by_cedulaI   dentidad");
-        String by_nombre = queryParams.getFirst("by_nombre");
+        String by_all_attributes = por_all_attributes;
+        String by_cedula_identidad = por_cedula;
+        String by_nombre = por_nombre;
 
         if (by_nombre == null) {
             by_nombre = "";
@@ -95,9 +94,11 @@ public class ClienteService extends Service<ClienteEntity> {
 
         // Fijamos la Ordenacion
         if ("asc".equals(ordenDeOrdenacion)) {
+            criteriaQuery.multiselect(clientes.<String>get("nombre"), clientes.<String>get("cedulaIdentidad"));
             criteriaQuery.where(filtradoPorAllAttributes, filtradoPorColumna).orderBy(criteriaBuilder.asc(clientes.get(ordenarPorColumna)));
         } else {
-            criteriaQuery.select(clientes).where(filtradoPorAllAttributes, filtradoPorColumna).orderBy(criteriaBuilder.desc(clientes.get(ordenarPorColumna)));
+            criteriaQuery.multiselect(clientes.<String>get("nombre"), clientes.<String>get("cedulaIdentidad"));
+            criteriaQuery.where(filtradoPorAllAttributes, filtradoPorColumna).orderBy(criteriaBuilder.desc(clientes.get(ordenarPorColumna)));
         }
 
 

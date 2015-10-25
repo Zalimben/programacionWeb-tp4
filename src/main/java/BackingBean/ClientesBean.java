@@ -1,8 +1,12 @@
 package BackingBean;
 
 import EJB.Helper.ClienteResponse;
+import EJB.Service.ClienteFileService;
 import EJB.Service.ClienteService;
 import JPA.ClienteEntity;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
 
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -10,12 +14,14 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
 /**
  * BackingBeans de Cliente
- *
+ * <p>
  * Created by szalimben on 25/10/15.
  */
 
@@ -23,171 +29,199 @@ import java.util.List;
 @SessionScoped
 public class ClientesBean implements Serializable {
 
-	@Inject
-	ClienteEntity cliente;
+    private static final String redirectTo = "http://localhost:8080/tp4/faces/views/clientes/";
+    private static final String ABM = "abm.xhtml";
+    private static final String LIST = "list.xhtml";
+    private static final String CARGA = "carga_masiva.xhtml";
+    @Inject
+    ClienteEntity cliente;
+    @EJB
+    ClienteService clienteService;
+    @EJB
+    ClienteFileService clienteFileService;
+    private List<ClienteEntity> clientes;
 
-	@EJB
-	ClienteService clienteService;
+    private String nombre;
+    private String cedulaIdentidad;
+    private String by_all_attributes;
+    private String by_nombre;
+    private String by_cedula;
+    private Integer page = 1;
+    private Integer totalPages = 0;
+    private ClienteResponse clienteResponse;
+    private UploadedFile importar;
+    private StreamedContent file;
+    private FacesMessage message;
 
-	private static final String redirectTo = "http://localhost:8080/tp4/faces/views/clientes/";
-	private static final String ABM = "abm.xhtml";
-	private static final String LIST = "list.xhtml";
-	private static final String CARGA = "carga_masiva.xhtml";
+    public UploadedFile getImportar() {
+        return importar;
+    }
 
-	private List<ClienteEntity> clientes;
+    public void setImportar(UploadedFile importar) {
+        this.importar = importar;
+    }
 
-	private String nombre;
-	private String cedulaIdentidad;
-	private String by_all_attributes;
-	private String by_nombre;
-	private String by_cedula;
-	private Integer page=1;
-	private Integer totalPages=0;
-	private ClienteResponse clienteResponse;
+    /**
+     * Añade un cliente nuevo
+     */
+    public void doCrearCliente() {
 
-	private FacesMessage message;
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        try {
+            clienteService.add(cliente);
+            resetCampos();
+            setMessage(new FacesMessage("Cliente creado exitosamente"));
+
+        } catch (Exception e) {
+            setMessage(new FacesMessage("No se puede crear el cliente"));
+        }
+        context.addMessage("messages", message);
+    }
 
 	/* Metodos */
-	/**
-	 * Añade un cliente nuevo
-	 */
-	public void doCrearCliente() {
 
-		FacesContext context = FacesContext.getCurrentInstance();
+    /* RedirectTO */
+    public String crearCliente() {
 
-		try{
-			clienteService.add(cliente);
-			resetCampos();
-			setMessage(new FacesMessage("Cliente creado exitosamente"));
+        return redirectTo.concat(ABM);
+    }
 
-		} catch(Exception e) {
-			setMessage(new FacesMessage("No se puede crear el cliente"));
-		}
-		context.addMessage("messages", message);
-	}
+    public String listaCliente() {
+        return redirectTo.concat(LIST);
+    }
 
-	/* RedirectTO */
-	public String crearCliente() {
+    public String cargaMasiva() {
+        return redirectTo.concat(CARGA);
+    }
 
-		return redirectTo.concat(ABM);
-	}
+    public void resetCampos() {
 
-	public String listaCliente() {
-		return redirectTo.concat(LIST);
-	}
+        cliente.setNombre(null);
+        cliente.setCedulaIdentidad(null);
+    }
 
-	public String cargaMasiva() {
-		return redirectTo.concat(CARGA);
-	}
+    public List<ClienteEntity> getClientes() {
+        clienteResponse = clienteService.getClientes(nombre, cedulaIdentidad, by_all_attributes,
+                by_nombre, by_cedula, page);
 
-	public void resetCampos() {
+        clientes = clienteResponse.getEntidades();
 
-		cliente.setNombre(null);
-		cliente.setCedulaIdentidad(null);
-	}
+        return clientes;
+    }
 
-	public List<ClienteEntity> getClientes() {
-		clienteResponse = clienteService.getClientes(nombre, cedulaIdentidad, by_all_attributes,
-		                                             by_nombre, by_cedula, page);
+    public void goNextPage() {
+        if (page < totalPages) {
+            page += 1;
+            clienteResponse = clienteService.getClientes(nombre, cedulaIdentidad, by_all_attributes,
+                    by_nombre, by_cedula, page);
 
-		clientes = clienteResponse.getEntidades();
+            clientes = clienteResponse.getEntidades();
+        }
+    }
 
-		return clientes;
-	}
+    public void goBackPage() {
+        if (page > 1) {
+            page -= 1;
 
-	public void goNextPage(){
-		if(page<totalPages) {
-			page += 1;
-			clienteResponse = clienteService.getClientes(nombre, cedulaIdentidad, by_all_attributes,
-			                                             by_nombre, by_cedula, page);
+            clienteResponse = clienteService.getClientes(nombre, cedulaIdentidad, by_all_attributes,
+                    by_nombre, by_cedula, page);
 
-			clientes = clienteResponse.getEntidades();
-		}
-	}
+            clientes = clienteResponse.getEntidades();
+        }
+    }
 
-	public void goBackPage(){
-		if(page>1) {
-			page -= 1;
+    public void resetPage() {
+        page = 1;
+    }
 
-			clienteResponse = clienteService.getClientes(nombre, cedulaIdentidad, by_all_attributes,
-			                                             by_nombre, by_cedula, page);
+    /* Getter & Setter */
+    public ClienteEntity getCliente() {
+        return cliente;
+    }
 
-			clientes = clienteResponse.getEntidades();
-		}
-	}
+    public void setCliente(ClienteEntity cliente) {
+        this.cliente = cliente;
+    }
 
-	public void resetPage(){
-		page = 1;
-	}
+    public FacesMessage getMessage() {
+        return message;
+    }
 
-	/* Getter & Setter */
-	public ClienteEntity getCliente() {
-		return cliente;
-	}
+    public void setMessage(FacesMessage message) {
+        this.message = message;
+    }
 
-	public void setCliente(ClienteEntity cliente) {
-		this.cliente = cliente;
-	}
+    public Integer getPage() {
+        return page;
+    }
 
-	public void setMessage(FacesMessage message) {
-		this.message = message;
-	}
+    public String getNombre() {
+        return nombre;
+    }
 
-	public FacesMessage getMessage() {
-		return message;
-	}
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-	public Integer getPage() {
-		return page;
-	}
+    public String getCedulaIdentidad() {
+        return cedulaIdentidad;
+    }
 
-	public String getNombre() {
-		return nombre;
-	}
+    public void setCedulaIdentidad(String cedulaIdentidad) {
+        this.cedulaIdentidad = cedulaIdentidad;
+    }
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
+    public String getBy_all_attributes() {
+        return by_all_attributes;
+    }
 
-	public String getCedulaIdentidad() {
-		return cedulaIdentidad;
-	}
+    public void setBy_all_attributes(String by_all_attributes) {
+        this.by_all_attributes = by_all_attributes;
+    }
 
-	public void setCedulaIdentidad(String cedulaIdentidad) {
-		this.cedulaIdentidad = cedulaIdentidad;
-	}
+    public String getBy_nombre() {
+        return by_nombre;
+    }
 
-	public String getBy_all_attributes() {
-		return by_all_attributes;
-	}
+    public void setBy_nombre(String by_nombre) {
+        this.by_nombre = by_nombre;
+    }
 
-	public void setBy_all_attributes(String by_all_attributes) {
-		this.by_all_attributes = by_all_attributes;
-	}
+    public String getBy_cedula() {
+        return by_cedula;
+    }
 
-	public String getBy_nombre() {
-		return by_nombre;
-	}
+    public void setBy_cedula(String by_cedula) {
+        this.by_cedula = by_cedula;
+    }
 
-	public void setBy_nombre(String by_nombre) {
-		this.by_nombre = by_nombre;
-	}
+    public Integer getTotalPages() {
+        if (clienteResponse == null)
+            clienteResponse = clienteService.getClientes(nombre, cedulaIdentidad, by_all_attributes,
+                    by_nombre, by_cedula, page);
 
-	public String getBy_cedula() {
-		return by_cedula;
-	}
+        totalPages = clienteResponse.getMeta().getTotal_pages().intValue();
 
-	public void setBy_cedula(String by_cedula) {
-		this.by_cedula = by_cedula;
-	}
+        return totalPages;
+    }
 
-	public Integer getTotalPages() {
-		if(clienteResponse == null)
-			clienteResponse = clienteService.getClientes(nombre, cedulaIdentidad, by_all_attributes,
-			                                             by_nombre, by_cedula, page);
+    public StreamedContent getFile() throws IOException {
+        clienteService.exportAllClientes(nombre, cedulaIdentidad, by_all_attributes, by_nombre, by_cedula, page);
+        String contentType = FacesContext.getCurrentInstance().getExternalContext().getMimeType("/tmp/clientes.json");
+        file = new DefaultStreamedContent(new FileInputStream("/tmp/clientes.json"), contentType, "clientes.json");
+        return file;
+    }
 
-		totalPages = clienteResponse.getMeta().getTotal_pages().intValue();
+    public void setFile(StreamedContent file) {
+        this.file = file;
+    }
 
-		return totalPages;
-	}
+    public void upload() throws IOException {
+        if (importar != null) {
+            clienteFileService.parsear(importar.getInputstream());
+            FacesMessage message = new FacesMessage("Succesful", importar.getFileName() + " is uploaded.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+    }
 }

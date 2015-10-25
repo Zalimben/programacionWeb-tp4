@@ -3,13 +3,17 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
                 template="/index.xhtml">
 
     <ui:define name="content">
 
         <p:outputLabel value="Formulario para la Carga Masiva de Clientes" />
+        <h:form enctype="multipart/form-data">
+            <p:fileUpload value="#{cliente.importar}" mode="simple" skinSimple="true"/>
+
+            <p:commandButton value="Submit" ajax="false" actionListener="#{cliente.upload}" disabled="false"/>
+        </h:form>
 
     </ui:define>
 

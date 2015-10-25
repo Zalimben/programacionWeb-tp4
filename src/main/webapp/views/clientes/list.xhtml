@@ -13,18 +13,18 @@
         <!-- filtrado-->
         <br/><br/>
         <h:inputText id="inputAllAttributes" value="#{cliente.by_all_attributes}">
-            <p:ajax event="valueChange" update="tabla_clientes page" listener="#{cliente.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_clientes page" listener="#{cliente.resetPage}"/>
         </h:inputText>
         <p:watermark value="Filtro completo" for="inputAllAttributes" />
         <br/><br/>
 
         <h:inputText id="inputNombre" value="#{cliente.by_nombre}" >
-            <p:ajax event="valueChange" update="tabla_clientes page" listener="#{cliente.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_clientes page" listener="#{cliente.resetPage}"/>
         </h:inputText>
         <p:watermark value="Nombre" for="inputNombre" />
 
         <h:inputText id="inputCedula" value="#{cliente.by_cedula}" >
-            <p:ajax event="valueChange" update="tabla_clientes page" listener="#{cliente.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_clientes page" listener="#{cliente.resetPage}"/>
         </h:inputText>
         <p:watermark value="Cedula" for="inputCedula" />
         <br/><br/>
@@ -45,6 +45,18 @@
                 #{clientes.cedulaIdentidad}
             </p:column>
         </p:dataTable>
+        <br/>
+        <br/>
+
+        <br/>
+        <h:form>
+            <p:commandButton value="Download" ajax="false">
+                <p:fileDownload value="#{cliente.file}"/>
+            </p:commandButton>
+        </h:form>
+        <br/>
+        <br/>
+        <br/>
 
         <!-- paginacion-->
         <br/>
@@ -84,6 +96,7 @@
                         update="formCliente" actionListener="#{cliente.resetCampos}"  />
             </h:form>
         </p:dialog>
+
     </ui:define>
 
 </ui:composition>
