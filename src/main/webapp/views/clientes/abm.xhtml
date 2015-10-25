@@ -3,16 +3,38 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
                 template="/index.xhtml">
 
     <ui:define name="content">
 
-        <p:outputLabel value="Aqui se deberá desplegar el formulario para crear/modificar cliente" />
+        <h:form>
+            <p:dialog widgetVar="createCliente" id="create_cliente" modal="true" header="Registrar nuevo cliente"  >
+                <h:panelGrid id="formCliente"  columns="3" style="width:30%;">
+                    <p:outputLabel value="Nombre" />
+                    <p:inputText value="#{cliente.cliente.nombre}"
+                                 id="nombreCliente" maxlength="50" style="width:100%"
+                                 required="true" >
+                    </p:inputText>
+                    <p:messages for="nombreCliente" />
 
-        <p:commandButton id="newCliente" value="Crear Cliente" />
+                    <p:outputLabel value="Nro. Documento" />
+                    <p:inputText value="#{cliente.cliente.cedulaIdentidad}"
+                                 id="documentoCliente" maxlength="50" style="width:100%"
+                                 required="true" >
+                    </p:inputText>
+                    <p:messages for="documentoCliente" />
 
+                </h:panelGrid>
+
+                <br />
+                <p:commandButton process="formCliente" value="Crear" oncomplete="PF('createCliente').hide()"
+                                 actionListener="#{cliente.crear}" update=":messages formCliente" />
+
+                <p:commandButton immediate="true" oncomplete="PF('createCliente').hide()" value="Cancelar"
+                                 update="formCliente" actionListener="#{cliente.resetCampos}"  />
+            </p:dialog>
+        </h:form>
     </ui:define>
 
 </ui:composition>
