@@ -24,7 +24,7 @@ import java.util.List;
 public class ClientesBean implements Serializable {
 
 	@Inject
-	ClienteEntity cliente;
+	ClienteEntity clienteEntity;
 
 	@EJB
 	ClienteService clienteService;
@@ -48,6 +48,12 @@ public class ClientesBean implements Serializable {
 	private FacesMessage message;
 
 	/* Metodos */
+
+	public void preCreate() {
+
+		clienteEntity = new ClienteEntity();
+	}
+
 	/**
 	 * Añade un cliente nuevo
 	 */
@@ -56,13 +62,12 @@ public class ClientesBean implements Serializable {
 		FacesContext context = FacesContext.getCurrentInstance();
 
 		try{
-			clienteService.add(cliente);
-			resetCampos();
-			setMessage(new FacesMessage("Cliente creado exitosamente"));
-
+			clienteService.add(clienteEntity);
+				setMessage(new FacesMessage("Cliente creado exitosamente"));
 		} catch(Exception e) {
 			setMessage(new FacesMessage("No se puede crear el cliente"));
 		}
+		resetCampos();
 		context.addMessage("messages", message);
 	}
 
@@ -82,8 +87,8 @@ public class ClientesBean implements Serializable {
 
 	public void resetCampos() {
 
-		cliente.setNombre(null);
-		cliente.setCedulaIdentidad(null);
+		clienteEntity.setNombre(null);
+		clienteEntity.setCedulaIdentidad(null);
 	}
 
 	public List<ClienteEntity> getClientes() {
@@ -121,12 +126,17 @@ public class ClientesBean implements Serializable {
 	}
 
 	/* Getter & Setter */
-	public ClienteEntity getCliente() {
-		return cliente;
+	public ClienteEntity getClienteEntity() {
+
+		if(clienteEntity.getNombre() == null) {
+			setClienteEntity(new ClienteEntity("", ""));
+		}
+
+		return clienteEntity;
 	}
 
-	public void setCliente(ClienteEntity cliente) {
-		this.cliente = cliente;
+	public void setClienteEntity(ClienteEntity cliente) {
+		this.clienteEntity = cliente;
 	}
 
 	public void setMessage(FacesMessage message) {

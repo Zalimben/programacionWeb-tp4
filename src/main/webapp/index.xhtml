@@ -20,12 +20,6 @@
 <h:body>
     <p:growl id="messages" showDetail="false"/>
 
-
-    <p:panel>
-
-    </p:panel>
-
-
     <p:layout fullPage="true">
 
         <p:layoutUnit position="north" size="100" header="Top" resizable="true" closable="true" collapsible="true">
@@ -74,13 +68,9 @@
             </h:form>
         </p:layoutUnit>
 
-        <!--<p:layoutUnit position="east" size="200" header="Right" resizable="true" closable="true" collapsible="true"-->
-        <!--effect="drop">-->
-        <!--<h:outputText value="Right unit content."/>-->
-        <!--</p:layoutUnit>-->
 
         <p:layoutUnit position="center">
-            <h:form>
+            <h:form id="form">
                 <ui:insert name="content">Content</ui:insert>
             </h:form>
         </p:layoutUnit>

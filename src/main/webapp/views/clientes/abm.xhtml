@@ -8,31 +8,33 @@
 
     <ui:define name="content">
 
+        <!-- PopUp para Crear Cliente -->
         <h:form>
-            <p:dialog widgetVar="createCliente" id="create_cliente" modal="true" header="Registrar nuevo cliente"  >
-                <h:panelGrid id="formCliente"  columns="3" style="width:30%;">
+            <p:dialog widgetVar="createCliente" closable="false" id="create_cliente" header="Registrar nuevo cliente" resizable="false" >
+
+                <h:panelGrid id="formCliente"  columns="3" style="width:100%;">
                     <p:outputLabel value="Nombre" />
-                    <p:inputText value="#{cliente.cliente.nombre}"
-                                 id="nombreCliente" maxlength="50" style="width:100%"
-                                 required="true" >
+                    <p:inputText  value="#{cliente.clienteEntity.nombre}"
+                                  id="nombreCliente" maxlength="50" style="width:100%;height:100%"
+                                  required="true" requiredMessage="Describa un nombre " >
                     </p:inputText>
-                    <p:messages for="nombreCliente" />
+                    <p:messages style="margin-left: 15px;" for="nombreCliente" />
 
                     <p:outputLabel value="Nro. Documento" />
-                    <p:inputText value="#{cliente.cliente.cedulaIdentidad}"
-                                 id="documentoCliente" maxlength="50" style="width:100%"
-                                 required="true" >
+                    <p:inputText value="#{cliente.clienteEntity.cedulaIdentidad}"
+                                 id="documentoCliente" maxlength="50" style="width:100%;height:100%"
+                                 required="true" requiredMessage="Describa el documento" >
                     </p:inputText>
-                    <p:messages for="documentoCliente" />
-
+                    <p:messages style="margin-left: 15px;" for="documentoCliente" />
                 </h:panelGrid>
 
                 <br />
-                <p:commandButton process="formCliente" value="Crear" oncomplete="PF('createCliente').hide()"
-                                 actionListener="#{cliente.crear}" update=":messages formCliente" />
+                <p:commandButton process="@this formCliente" value="Crear" oncomplete="if(!args.validationFailed){PF('createCliente').hide()}"
+                                 update=":messages @form" actionListener="#{cliente.doCrearCliente}" />
 
-                <p:commandButton immediate="true" oncomplete="PF('createCliente').hide()" value="Cancelar"
+                <p:commandButton process="@this formCliente"  immediate="true" oncomplete="PF('createCliente').hide()" value="Cancelar"
                                  update="formCliente" actionListener="#{cliente.resetCampos}"  />
+
             </p:dialog>
         </h:form>
     </ui:define>
