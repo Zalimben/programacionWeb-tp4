@@ -21,6 +21,7 @@ public class FacturasBeans {
 
     @Inject
     FacturaEntity facturaEntity;
+
     private String mensaje;
 
     public String getMensaje() {

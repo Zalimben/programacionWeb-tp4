@@ -1,4 +1,4 @@
-package backingBeans;
+package BackingBeans;
 
 import EJB.Service.ClienteService;
 import JPA.ClienteEntity;
@@ -9,7 +9,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import java.io.Serializable;
 
 /**
  * backingBeans de Cliente
@@ -17,28 +16,25 @@ import java.io.Serializable;
  * Created by szalimben on 25/10/15.
  */
 
-@ManagedBean(name = "cliente")
+@ManagedBean(name = "clientes")
 @SessionScoped
-public class ClienteController implements Serializable {
+public class ClientesBean {
 
-	@Inject
+    private static final String redirectTo = "http://localhost:8080/tp4/faces/views/clientes/";
+    private static final String ABM = "abm.xhtml";
+    private static final String LIST = "list.xhtml";
+    private static final String CARGA = "carga_masiva.xhtml";
+    @Inject
 	ClienteEntity cliente;
-
 	@EJB
 	ClienteService service;
-
-	private static final String redirectTo = "http://localhost:8080/tp4/faces/views/clientes/";
-	private static final String ABM = "abm.xhtml";
-	private static final String LIST = "list.xhtml";
-	private static final String CARGA = "carga_masiva.xhtml";
-
-	FacesMessage message;
+    private FacesMessage message;
 
 	/* Metodos */
 	/**
 	 * Añade un cliente nuevo
 	 */
-	public void crear() {
+    public void doCrearCliente() {
 
 		try{
 			service.add(cliente);
