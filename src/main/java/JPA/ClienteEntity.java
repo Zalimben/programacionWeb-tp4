@@ -2,6 +2,7 @@ package JPA;
 
 import com.google.gson.annotations.Expose;
 
+import javax.ejb.LocalBean;
 import javax.persistence.*;
 import java.util.List;
 
