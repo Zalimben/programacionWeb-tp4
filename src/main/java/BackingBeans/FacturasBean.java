@@ -1,4 +1,4 @@
-package BackingBean;
+package BackingBeans;
 
 import EJB.Service.FacturaService;
 import JPA.FacturaEntity;

@@ -56,16 +56,6 @@
         <br/>
         <br/>
 
-        <br/>
-        <h:form>
-            <p:commandButton value="Download" ajax="false">
-                <p:fileDownload value="#{cliente.file}"/>
-            </p:commandButton>
-        </h:form>
-        <br/>
-        <br/>
-        <br/>
-
         <!-- paginacion-->
         <br/>
         <h:panelGrid columns="3" style="align-content: center;padding-left:90%" >
@@ -73,8 +63,13 @@
                 <h:outputText style="height: 25px;" id="page" value=" #{cliente.page} of #{cliente.totalPages} " />
             <p:commandButton style="height: 25px;" icon="ui-icon-arrow-1-e" actionListener="#{cliente.goNextPage}" update="page tabla_clientes"/>
         </h:panelGrid>
-
         <br />
+        <h:form>
+            <p:commandButton value="Download" ajax="false">
+                <p:fileDownload value="#{cliente.file}"/>
+            </p:commandButton>
+        </h:form>
+        <br/>
         <!-- BTN AÑADIR CLIENTE - POPUP-->
         <p:commandButton id="newCliente" update="tabla_clientes" value="Añadir Cliente" oncomplete="PF('createCliente').show()"  />
         <ui:include src="abm.xhtml" />
