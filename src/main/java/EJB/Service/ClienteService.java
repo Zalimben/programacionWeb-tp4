@@ -145,11 +145,9 @@ public class ClienteService extends Service<ClienteEntity> {
     /**
      * Metodo para obtener la lista de clientes por filtro y
      * orden aplicado a las columnas
-     *
-     * @param queryParams parametros de filtro y orden
-     * @return Lista de Clientes que coinciden con los parametros de filtro y orden
      */
-    public Object getClientes(MultivaluedMap<String, String> queryParams) {
+    public ClienteResponse getClientes(String nombre, String cedula, String por_all_attributes,
+                              String por_nombre, String por_cedula, Integer page_parametro) {
 
         ClienteResponse response = new ClienteResponse();
         inicializarMeta();
@@ -163,18 +161,18 @@ public class ClienteService extends Service<ClienteEntity> {
         /**
          * Retrieve one or none of the URI query params that have the column name and sort order values
          */
-        if (queryParams.getFirst("nombre") != null) {
+        if (nombre != null) {
             ordenarPorColumna = "nombre";
-            ordenDeOrdenacion = queryParams.getFirst("nombre");
-        } else if (queryParams.getFirst("cedulaIdentidad") != null) {
+            ordenDeOrdenacion = nombre;
+        } else if (cedula != null) {
             ordenarPorColumna = "cedulaIdentidad";
-            ordenDeOrdenacion = queryParams.getFirst("cedulaIdentidad");
+            ordenDeOrdenacion = cedula;
         }
 
         // Iniciamos las variables parael filtrado
-        String by_all_attributes = queryParams.getFirst("by_all_attributes");
-        String by_cedula_identidad = queryParams.getFirst("by_cedulaIdentidad");
-        String by_nombre = queryParams.getFirst("by_nombre");
+        String by_all_attributes = por_all_attributes;
+        String by_cedula_identidad = por_cedula;
+        String by_nombre = por_nombre;
 
         if (by_nombre == null) {
             by_nombre = "";
@@ -211,11 +209,13 @@ public class ClienteService extends Service<ClienteEntity> {
         }
 
         Integer page;
-        if (queryParams.getFirst("page") != null) {
-            page = Integer.valueOf(queryParams.getFirst("page")) - 1;
+        if (page_parametro != null) {
+            page = page_parametro - 1;
         } else {
             page = 0;
         }
+//        Integer page;
+//        page=0; // mientras desarrollo
 
         response.setEntidades(em.createQuery(criteriaQuery).setMaxResults(getMeta().getPage_size().intValue()).setFirstResult(page * getMeta().getPage_size().intValue()).getResultList());
         getMeta().setTotal((long) em.createQuery(criteriaQuery).getResultList().size());

@@ -1,18 +1,75 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:font="http://java.sun.com/jsf/composite">
 
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.org/ui"
-                template="/index.xhtml">
+<h:head>
+    <title>Facultad Politecnica - Programacion Web y Uso de Internet</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript" src="resources/static/js/jquery-2.1.4.min.js"></script>
 
-    <ui:define name="content">
+    <link rel="stylesheet" type="text/css" href="resources/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="resources/bootstrap/css/bootstrap-theme.min.css" />
+    <script type="text/javascript" src="resources/bootstrap/js/bootstrap.min.js"></script>
+</h:head>
 
-        <p:outputLabel value="Esto sera la vistas de ventas" />
+<h:body>
+    <ui:insert name="header">
+        <ui:include src="commomHeader.xhtml" />
+    </ui:insert>
 
-        <p:commandButton id="newCliente" value="Crear" />
 
-    </ui:define>
+    <h:form>
+        <!-- filtrado-->
+        <br/><br/>
+        <h:inputText id="inputAllAttributes" value="#{cliente.by_all_attributes}">
+            <p:ajax event="valueChange" update="tabla_clientes page" listener="#{cliente.resetPage}"/>
+        </h:inputText>
+        <p:watermark value="Filtro completo" for="inputAllAttributes" />
+        <br/><br/>
 
-</ui:composition>
+        <h:inputText id="inputNombre" value="#{cliente.by_nombre}" >
+            <p:ajax event="valueChange" update="tabla_clientes page" listener="#{cliente.resetPage}"/>
+        </h:inputText>
+        <p:watermark value="Nombre" for="inputNombre" />
+
+        <h:inputText id="inputCedula" value="#{cliente.by_cedula}" >
+            <p:ajax event="valueChange" update="tabla_clientes page" listener="#{cliente.resetPage}"/>
+        </h:inputText>
+        <p:watermark value="Cedula" for="inputCedula" />
+        <br/><br/>
+
+
+        <!-- tabla de datos-->
+        <p:dataTable id="tabla_clientes" value="#{cliente.clientes}" var="clientes">
+            <f:facet name="header">
+                Lista de clientes
+            </f:facet>
+
+            <p:column>
+                <f:facet name="header">Nombre</f:facet>
+                #{clientes.nombre}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">Cedula</f:facet>
+                #{clientes.cedulaIdentidad}
+            </p:column>
+        </p:dataTable>
+
+        <!-- paginacion-->
+        <br/>
+        <p:commandButton value="Atras" actionListener="#{cliente.goBackPage}" update="page tabla_clientes"/>
+        <h:outputText id="page" value=" #{cliente.page} of #{cliente.totalPages} " />
+        <p:commandButton value="Siguiente" actionListener="#{cliente.goNextPage}" update="page tabla_clientes"/>
+    </h:form>
+
+
+
+</h:body>
+</html>

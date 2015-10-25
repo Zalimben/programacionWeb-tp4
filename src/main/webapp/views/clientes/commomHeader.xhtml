@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -8,19 +8,14 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:font="http://java.sun.com/jsf/composite">
 
-	<h:head>
-		<title>Facultad Politecnica - Programacion Web y Uso de Internet</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<script type="text/javascript" src="resources/static/js/jquery-2.1.4.min.js"></script>
+<h:head>
+    <title>Facultad Politecnica - Programacion Web y Uso de Internet</title>
 
-        <link rel="stylesheet" type="text/css" href="resources/bootstrap/css/bootstrap.min.css" />
-        <link rel="stylesheet" type="text/css" href="resources/bootstrap/css/bootstrap-theme.min.css" />
-        <script type="text/javascript" src="resources/bootstrap/js/bootstrap.min.js"></script>
+</h:head>
 
-	</h:head>
-
-	<h:body>
-        <p:growl id="messages" showDetail="false"/>
+<h:body>
+    <!--<p:growl id="messages" showDetail="false"/>-->
+    <ui:composition>
         <h:form>
             <p:menubar>
                 <p:menuitem value="Home" url="http://localhost:8080/tp4/faces/views/home.xhtml" />
@@ -51,16 +46,7 @@
                 </p:submenu>
             </p:menubar>
         </h:form>
+    </ui:composition>
 
-        <p:panel style="height: 760px;">
-            <h:form>
-                <ui:insert name="content">Content</ui:insert>
-            </h:form>
-        </p:panel>
-
-        <div class="footer">
-            <p:outputLabel value="Alexis Ojeda - Saul Zalimben - Nabil Chamas 2015" />
-        </div>
-
-    </h:body>
+</h:body>
 </html>
