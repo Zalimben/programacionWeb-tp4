@@ -28,7 +28,7 @@
         </h:inputText>
         <p:watermark value="Cedula" for="inputCedula" />
         <br/><br/>
-        raw
+        aaaaafff
 
         <!-- tabla de datos-->
         <p:dataTable id="tabla_clientes"
@@ -47,13 +47,28 @@
                 <f:facet name="header">Cedula</f:facet>
                 #{cli.cedulaIdentidad}
             </p:column>
-            <p:column style="width:32px;text-align: center">
-                <p:commandButton style="height:25px" update=":form:editClienteForm" oncomplete="PF('modificarCliente').show()" icon="ui-icon-search" >
+
+            <!-- BTN modificar -->
+            <p:column style="width:35px;text-align: center">
+                <p:commandButton style="height:25px;width:30px;" update=":form:editClienteForm :messages"  oncomplete="PF('modificarCliente').show()" icon="ui-icon-search" >
+                    <f:setPropertyActionListener value="#{cli}" target="#{cliente.selectedCliente}" />
+                </p:commandButton>
+            </p:column>
+
+            <!-- BTN eliminar -->
+            <p:column style="width:35px;text-align: center">
+                <p:commandButton style="height:25px;width:30px;" icon="ui-icon-circle-close" update="tabla_clientes :messages" actionListener="#{cliente.eliminarCliente}" >
+                    <p:confirm header="Confirmar" message="Eliminar el registro?" icon="ui-icon-alert" />
                     <f:setPropertyActionListener value="#{cli}" target="#{cliente.selectedCliente}" />
                 </p:commandButton>
             </p:column>
 
         </p:dataTable>
+
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+            <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+        </p:confirmDialog>
 
         <!-- paginacion-->
         <br/>

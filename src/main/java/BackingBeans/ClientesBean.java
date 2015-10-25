@@ -59,6 +59,21 @@ public class ClientesBean implements Serializable {
 		clienteEntity = new ClienteEntity();
 	}
 
+	public void eliminarCliente() {
+
+		FacesContext context = FacesContext.getCurrentInstance();
+
+		try{
+			clienteService.deleteCliente(selectedCliente.getId().intValue());
+			setMessage(new FacesMessage("Se ha eliminado el registro"));
+		} catch(Exception e) {
+			setMessage(new FacesMessage("No se puede eliminar el registro"));
+		}
+
+		selectedCliente = new ClienteEntity();
+		context.addMessage("messages", message);
+
+	}
 
 	/**
 	 * Modificar un cliente
