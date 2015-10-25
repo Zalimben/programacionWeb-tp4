@@ -1,9 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
                 template="/index.xhtml">
 
@@ -11,14 +9,25 @@
 
         <p:outputLabel value="Aqui se desplegara la lista de las facturas" />
 
-        <br />
+        <p:commandButton id="facturar" value="Iniciar Facturacion" actionListener="#{facturas.doFacturar}"
+                         update=":messages">
+            <p:confirm header="Facturacion" message="Esta seguro de iniciar el proceso de facturacion"
+                       icon="ui-icon-alert"/>
+        </p:commandButton>
 
-        <p:commandButton id="facturar" value="Iniciar Facturacion" />
+        <p:commandButton id="estado" value="Estado de Facturacion" actionListener="#{facturas.getEstadoFacturacion}"
+                         update=":messages"/>
 
-        <p:commandButton id="estado" value="Estado de Facturacion" />
+        <p:commandButton id="cancelFacturacion" value="Cancelar Facturacion"
+                         actionListener="#{facturas.doCancelarFacturacion}" update=":messages">
+            <p:confirm header="Detener Facturacion" message="Esta seguro de detener el proceso de facturacion"
+                       icon="ui-icon-alert"/>
+        </p:commandButton>
 
-        <p:commandButton id="cancelFacturacion" value="Cancelar Facturacion" />
-
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+        </p:confirmDialog>
     </ui:define>
 
 </ui:composition>
