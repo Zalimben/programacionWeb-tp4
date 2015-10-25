@@ -1,4 +1,4 @@
-package BackingBeans;
+package BackingBean;
 
 import EJB.Service.ClienteService;
 import JPA.ClienteEntity;

@@ -1,4 +1,4 @@
-package BackingBeans;
+package BackingBean;
 
 import EJB.Service.FacturaService;
 import JPA.FacturaEntity;
@@ -15,7 +15,7 @@ import javax.inject.Inject;
  */
 @ManagedBean(name = "facturas")
 @SessionScoped
-public class FacturasBeans {
+public class FacturasBean {
     @EJB
     FacturaService facturaService;
 
