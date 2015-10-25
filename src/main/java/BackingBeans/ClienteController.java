@@ -1,4 +1,4 @@
-package backingBeans;
+package BackingBeans;
 
 import EJB.Service.ClienteService;
 import JPA.ClienteEntity;
@@ -12,7 +12,7 @@ import javax.inject.Inject;
 import java.io.Serializable;
 
 /**
- * backingBeans de Cliente
+ * BackingBeans de Cliente
  *
  * Created by szalimben on 25/10/15.
  */
@@ -32,7 +32,7 @@ public class ClienteController implements Serializable {
 	private static final String LIST = "list.xhtml";
 	private static final String CARGA = "carga_masiva.xhtml";
 
-	FacesMessage message;
+	private FacesMessage message;
 
 	/* Metodos */
 	/**
@@ -40,15 +40,17 @@ public class ClienteController implements Serializable {
 	 */
 	public void crear() {
 
+		FacesContext context = FacesContext.getCurrentInstance();
+
 		try{
 			service.add(cliente);
 			resetCampos();
-			FacesContext context = FacesContext.getCurrentInstance();
-			message = new FacesMessage("Cliente creado exitosamente");
-			context.addMessage("messages", message);
+			setMessage(new FacesMessage("Cliente creado exitosamente"));
+
 		} catch(Exception e) {
-			e.printStackTrace();
+			setMessage(new FacesMessage("No se puede crear el cliente"));
 		}
+		context.addMessage("messages", message);
 	}
 
 	/* RedirectTO */
@@ -80,4 +82,11 @@ public class ClienteController implements Serializable {
 		this.cliente = cliente;
 	}
 
+	public void setMessage(FacesMessage message) {
+		this.message = message;
+	}
+
+	public FacesMessage getMessage() {
+		return message;
+	}
 }
