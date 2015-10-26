@@ -1,18 +1,94 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:font="http://java.sun.com/jsf/composite">
 
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.org/ui"
-                template="/index.xhtml">
+<h:head>
+    <title>Facultad Politecnica - Programacion Web y Uso de Internet</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript" src="resources/static/js/jquery-2.1.4.min.js"></script>
 
-    <ui:define name="content">
+    <link rel="stylesheet" type="text/css" href="resources/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="resources/bootstrap/css/bootstrap-theme.min.css" />
+    <script type="text/javascript" src="resources/bootstrap/js/bootstrap.min.js"></script>
+</h:head>
 
-        <p:outputLabel value="Aqui se desplega la lista de compras" />
+<h:body>
+    <ui:insert name="header">
+        <ui:include src="commomHeader.xhtml" />
+    </ui:insert>
 
-        <p:commandButton id="newCompra" value="Crer" />
 
-    </ui:define>
+    <h:form>
+        <!-- filtrado-->
+        <br/><br/>
+        <p:inputText id="inputAllAttributes" value="#{compra.byAllAttributes}">
+            <p:ajax event="valueChange" update="tabla_compras page" listener="#{compra.resetPage}"/>
+        </p:inputText>
+        <p:watermark value="Filtro completo" for="inputAllAttributes"/>
+        <br/><br/>
 
-</ui:composition>
+        <p:inputText id="inputProveedor" value="#{compra.byProveedor}">
+            <p:ajax event="valueChange" update="tabla_compras page" listener="#{compra.resetPage}"/>
+        </p:inputText>
+        <p:watermark value="Proveedor" for="inputProveedor"/>
+
+        <p:inputText id="inputFecha" value="#{compra.byFecha}">
+            <p:ajax event="valueChange" update="tabla_compras page" listener="#{compra.resetPage}"/>
+        </p:inputText>
+        <p:watermark value="Fecha" for="inputFecha"/>
+
+        <p:inputText id="inputMonto" value="#{compra.byMonto}">
+            <p:ajax event="valueChange" update="tabla_compras page" listener="#{compra.resetPage}"/>
+        </p:inputText>
+        <p:watermark value="Monto" for="inputMonto"/>
+        <br/><br/>
+
+
+        <!-- tabla de datos-->
+        <p:dataTable id="tabla_compras" value="#{compra.compras}" var="comprasVar">
+            <f:facet name="header">
+                Lista de compras
+            </f:facet>
+
+            <p:column>
+                <f:facet name="header">
+                    <p:commandButton value="Proveedor" actionListener="#{compra.orderByProveedor}"
+                                     update="tabla_compras"/>
+                </f:facet>
+                #{comprasVar.proveedor.descripcion}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <p:commandButton value="Fecha" actionListener="#{compra.orderByFecha}"
+                                     update="tabla_compras"/>
+                </f:facet>
+                #{comprasVar.fecha}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <p:commandButton value="Monto" actionListener="#{compra.orderByMonto}"
+                                     update="tabla_compras"/>
+                </f:facet>
+                #{comprasVar.monto}
+            </p:column>
+        </p:dataTable>
+
+        <!-- paginacion-->
+        <br/>
+        <p:commandButton value="Atras" actionListener="#{compra.goBackPage}" update="page tabla_compras"/>
+        <h:outputText id="page" value=" #{compra.page} of #{compra.totalPages} " />
+        <p:commandButton value="Siguiente" actionListener="#{compra.goNextPage}" update="page tabla_compras"/>
+    </h:form>
+
+
+
+</h:body>
+</html>

@@ -194,6 +194,7 @@ public class CompraService extends Service<CompraEntity> {
 
     }
 
+
     /**
      * Metodo para obtener la lista de entidades por filtro y
      * orden aplicado a las columnas
@@ -201,7 +202,8 @@ public class CompraService extends Service<CompraEntity> {
      * @param queryParams parametros de filtro y orden
      * @return Lista de Clientes que coinciden con los parametros de filtro y orden
      */
-    public Object getCompras(MultivaluedMap<String, String> queryParams) {
+    public ComprasResponse getCompras(String proveedor, String fecha, String monto, String byAllAttributes,
+                             String byProveedor, String byFecha, String byMonto, Integer pageParametro) {
 
         ComprasResponse response = new ComprasResponse();
         inicializarMeta();
@@ -215,22 +217,22 @@ public class CompraService extends Service<CompraEntity> {
         /**
          * Retrieve one or none of the URI query params that have the column name and sort order values
          */
-        if (queryParams.getFirst("proveedor.descripcion") != null) {
+        if (proveedor != null) {
             ordenarPorColumna = "proveedor";
-            ordenDeOrdenacion = queryParams.getFirst("proveedor.descripcion");
-        } else if (queryParams.getFirst("monto") != null) {
+            ordenDeOrdenacion = proveedor;
+        } else if (monto != null) {
             ordenarPorColumna = "monto";
-            ordenDeOrdenacion = queryParams.getFirst("monto");
-        } else if (queryParams.getFirst("fecha") != null) {
+            ordenDeOrdenacion = monto;
+        } else if (fecha != null) {
             ordenarPorColumna = "fecha";
-            ordenDeOrdenacion = queryParams.getFirst("fecha");
+            ordenDeOrdenacion = fecha;
         }
 
         // Iniciamos las varialles para el filtrado
-        String by_all_attributes = queryParams.getFirst("by_all_attributes");
-        String by_monto = queryParams.getFirst("by_monto");
-        String by_proveedor = queryParams.getFirst("by_proveedor.descripcion");
-        String by_fecha = queryParams.getFirst("by_fecha");
+        String by_all_attributes = byAllAttributes;
+        String by_monto = byMonto;
+        String by_proveedor = byProveedor;
+        String by_fecha = byFecha;
 
         if (by_proveedor == null) {
             by_proveedor = "";
@@ -281,8 +283,8 @@ public class CompraService extends Service<CompraEntity> {
         }
 
         Integer page;
-        if (queryParams.getFirst("page") != null) {
-            page = Integer.valueOf(queryParams.getFirst("page")) - 1;
+        if (pageParametro != null) {
+            page = pageParametro - 1;
         } else {
             page = 0;
         }
