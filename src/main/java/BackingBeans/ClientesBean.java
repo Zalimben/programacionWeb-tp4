@@ -28,9 +28,7 @@ import java.util.List;
 public class ClientesBean implements Serializable {
 
     private static final String redirectTo = "http://localhost:8080/tp4/faces/views/clientes/";
-    private static final String ABM = "abm.xhtml";
-    private static final String LIST = "list.xhtml";
-    private static final String CARGA = "carga_masiva.xhtml";
+
     @Inject
 	ClienteEntity clienteEntity;
 	@EJB
@@ -58,7 +56,9 @@ public class ClientesBean implements Serializable {
 
 
 	/**
-	 * Elimina un Cliente
+	 * Elimina un cliente dado el id del mismo
+	 * @param id
+	 *         : Id de la entidad a eliminar
 	 */
 	public void eliminarCliente(long id) {
 
@@ -99,13 +99,16 @@ public class ClientesBean implements Serializable {
 		context.addMessage("messages", message);
 	}
 
+	/**
+	 * Verifica que un String sea valido
+	 *
+	 * @param data: String que sera verificado
+	 * @return <b>True</b> si es valido <br />
+	 *          <b>False</b> caso contrario
+	 */
 	private boolean validateString (String data) {
 
-		if("".equals(data) || data == null ) {
-			return false;
-		}
-
-		return true;
+		return !("".equals(data) || data == null) ;
 
 	}
 
@@ -126,20 +129,9 @@ public class ClientesBean implements Serializable {
 		context.addMessage("messages", message);
 	}
 
-	/* RedirectTO */
-	public String crearCliente() {
-
-		return redirectTo.concat(ABM);
-	}
-
-	public String listaCliente() {
-		return redirectTo.concat(LIST);
-	}
-
-	public String cargaMasiva() {
-		return redirectTo.concat(CARGA);
-	}
-
+	/**
+	 * Limpia los campos del Formulario de Creacion y Modificacion
+	 */
 	public void resetCampos() {
 
 		clienteEntity = new ClienteEntity();
@@ -147,6 +139,10 @@ public class ClientesBean implements Serializable {
 		setCedulaModificar(null);
 	}
 
+	/**
+	 * Lista de Clientes
+	 * @return Obtiene la lista de Clientes de forma Lazy
+	 */
 	public List<ClienteEntity> getClientes() {
 		clienteResponse = service.getClientes(nombre, cedulaIdentidad, by_all_attributes,
 		                                             by_nombre, by_cedula, page);
@@ -156,6 +152,9 @@ public class ClientesBean implements Serializable {
 		return clientes;
 	}
 
+	/**
+	 * Avanza a la siguiente Pagina
+	 */
 	public void goNextPage(){
 		if(page<totalPages) {
 			page += 1;
@@ -166,6 +165,9 @@ public class ClientesBean implements Serializable {
 		}
 	}
 
+	/**
+	 * Retrocede una pagina
+	 */
 	public void goBackPage(){
 		if(page>1) {
 			page -= 1;
@@ -177,8 +179,45 @@ public class ClientesBean implements Serializable {
 		}
 	}
 
+	/**
+	 * Inicializa las paginas
+	 */
 	public void resetPage(){
 		page = 1;
+	}
+
+	/**
+	 * Ordenacion por la columna del nombre
+	 */
+	public void orderByNombre(){
+
+		if(nombre==null)
+			nombre = "asc";
+		else if(nombre.equals("asc"))
+			nombre = "desc";
+		else
+			nombre = "asc";
+
+		clienteResponse = service.getClientes(nombre, null, by_all_attributes,
+		                                             by_nombre, by_cedula, page);
+
+		clientes = clienteResponse.getEntidades();
+	}
+
+	/**
+	 * Ordenacion por la columna de cedula
+	 */
+	public void orderByCedula(){
+		if(cedulaIdentidad==null)
+			cedulaIdentidad = "asc";
+		else if(cedulaIdentidad.equals("asc"))
+			cedulaIdentidad = "desc";
+		else
+			cedulaIdentidad = "asc";
+
+		clienteResponse = service.getClientes(null, cedulaIdentidad, by_all_attributes,
+		                                             by_nombre, by_cedula, page);
+		clientes = clienteResponse.getEntidades();
 	}
 
 	/* Getter & Setter */

@@ -30,20 +30,26 @@
         <br/><br/>
 
         <!-- tabla de datos-->
-        <p:dataTable id="tabla_clientes"
-                     value="#{cliente.clientes}" rowIndexVar="index" var="cli" emptyMessage="No se encuentran registros">
+        <p:dataTable id="tabla_clientes" value="#{cliente.clientes}" rowIndexVar="index"
+                     var="cli" emptyMessage="No se encuentran registros">
 
             <f:facet name="header">
                 Lista de clientes
             </f:facet>
 
             <p:column>
-                <f:facet name="header">Nombre</f:facet>
+                <f:facet name="header">
+                    <p:commandButton process="tabla_clientes" value="Nombre" actionListener="#{cliente.orderByNombre}"
+                                     update="tabla_clientes" />
+                </f:facet>
                 #{cli.nombre}
             </p:column>
 
             <p:column>
-                <f:facet name="header">Cedula</f:facet>
+                <f:facet name="header">
+                    <p:commandButton process="tabla_clientes" value="Cedula" actionListener="#{cliente.orderByCedula}"
+                                     update="tabla_clientes" />
+                </f:facet>
                 #{cli.cedulaIdentidad}
             </p:column>
 
