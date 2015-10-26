@@ -2,7 +2,7 @@
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui"
+                xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
                 template="/index.xhtml">
 
     <ui:define name="content">
@@ -11,20 +11,25 @@
 
         <br /> <br />
 
-        <p:commandButton id="facturar" value="Iniciar Facturacion" actionListener="#{facturas.doFacturar}"
-                         update=":messages">
-            <p:confirm header="Facturacion" message="Esta seguro de iniciar el proceso de facturacion"
-                       icon="ui-icon-alert"/>
-        </p:commandButton>
+        <h:panelGrid columns="4">
+            <p:commandButton icon="ui-icon-disk" value="Descargar" ajax="false">
+                <p:fileDownload value="#{cliente.file}"/>
+            </p:commandButton>
+            <p:commandButton id="facturar" value="Iniciar Facturacion" actionListener="#{facturas.doFacturar}"
+                             update=":messages">
+                <p:confirm header="Facturacion" message="Esta seguro de iniciar el proceso de facturacion"
+                           icon="ui-icon-alert"/>
+            </p:commandButton>
 
-        <p:commandButton id="estado" value="Estado de Facturacion" actionListener="#{facturas.getEstadoFacturacion}"
-                         update=":messages"/>
+            <p:commandButton id="estado" value="Estado de Facturacion" actionListener="#{facturas.getEstadoFacturacion}"
+                             update=":messages"/>
 
-        <p:commandButton id="cancelFacturacion" value="Cancelar Facturacion"
-                         actionListener="#{facturas.doCancelarFacturacion}" update=":messages">
-            <p:confirm header="Detener Facturacion" message="Esta seguro de detener el proceso de facturacion"
-                       icon="ui-icon-alert"/>
-        </p:commandButton>
+            <p:commandButton id="cancelFacturacion" value="Cancelar Facturacion"
+                             actionListener="#{facturas.doCancelarFacturacion}" update=":messages">
+                <p:confirm header="Detener Facturacion" message="Esta seguro de detener el proceso de facturacion"
+                           icon="ui-icon-alert"/>
+            </p:commandButton>
+        </h:panelGrid>
 
         <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
             <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>

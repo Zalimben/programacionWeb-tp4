@@ -11,6 +11,14 @@
 
         <p:outputLabel value="Aqui se debera desplegar la lista de solicitudes de compra" />
 
+        <!-- BOTON DE EXPORTAR Y CREAR -->
+        <h:panelGrid columns="2">
+            <p:commandButton icon="ui-icon-disk" value="Descargar" ajax="false">
+                <p:fileDownload value="#{cliente.file}"/>
+            </p:commandButton>
+        </h:panelGrid>
+        <br/>
+
     </ui:define>
 
 </ui:composition>

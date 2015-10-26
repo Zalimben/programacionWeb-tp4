@@ -12,7 +12,19 @@
         <p:outputLabel value="Aqui se desplega la lista de compras" />
 
         <br />
-        <p:commandButton id="newCompra" value="Crer" action="abm.xhtml?faces-redirect=true"  />
+
+
+        <!-- BOTON DE EXPORTAR Y CREAR -->
+        <h:panelGrid columns="2">
+            <p:commandButton icon="ui-icon-disk" value="Descargar" ajax="false">
+                <p:fileDownload value="#{cliente.file}"/>
+            </p:commandButton>
+            <p:commandButton icon="ui-icon-plusthick"  id="newCompra" value="Crear Compra" />
+        </h:panelGrid>
+        <br/>
+        <ui:include src="abm.xhtml" />
+
+
 
     </ui:define>
 
