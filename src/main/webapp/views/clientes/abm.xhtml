@@ -3,13 +3,10 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui"
-                template="/index.xhtml">
-
-    <ui:define name="content">
+                xmlns:p="http://primefaces.org/ui">
 
         <!-- PopUp para Crear Cliente -->
-        <h:form>
+        <h:form id="createClienteForm">
             <p:dialog widgetVar="createCliente" closable="false" id="create_cliente" header="Registrar nuevo cliente" resizable="false" >
 
                 <h:panelGrid id="formCliente"  columns="3" style="width:100%;">
@@ -29,14 +26,13 @@
                 </h:panelGrid>
 
                 <br />
-                <p:commandButton process="@this formCliente" value="Crear" oncomplete="if(!args.validationFailed){PF('createCliente').hide()}"
-                                 update=":messages @form" actionListener="#{cliente.doCrearCliente}" />
+                <p:commandButton process="createClienteForm" value="Crear" oncomplete="if(!args.validationFailed){PF('createCliente').hide()}"
+                                 update=":messages createClienteForm" actionListener="#{cliente.doCrearCliente}" />
 
-                <p:commandButton process="@this formCliente"  immediate="true" oncomplete="PF('createCliente').hide()" value="Cancelar"
-                                 update="formCliente" actionListener="#{cliente.resetCampos}"  />
+                <p:commandButton immediate="true" oncomplete="PF('createCliente').hide()" value="Cancelar"
+                                 update="createClienteForm" actionListener="#{cliente.resetCampos}"  />
 
             </p:dialog>
         </h:form>
-    </ui:define>
 
 </ui:composition>

@@ -9,6 +9,8 @@
 
         <p:outputLabel value="Aqui se desplegara la lista de las facturas" />
 
+        <br /> <br />
+
         <p:commandButton id="facturar" value="Iniciar Facturacion" actionListener="#{facturas.doFacturar}"
                          update=":messages">
             <p:confirm header="Facturacion" message="Esta seguro de iniciar el proceso de facturacion"

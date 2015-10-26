@@ -34,7 +34,7 @@ public class ClientesBean implements Serializable {
     @Inject
 	ClienteEntity clienteEntity;
 	@EJB
-	ClienteService clienteService;
+	ClienteService service;
 	private List<ClienteEntity> clientes;
 
 	private String nombre;
@@ -56,23 +56,21 @@ public class ClientesBean implements Serializable {
 
 	/* Metodos */
 
-	public void preCreate() {
 
-		clienteEntity = new ClienteEntity();
-	}
-
-	public void eliminarCliente() {
+	/**
+	 * Elimina un Cliente
+	 */
+	public void eliminarCliente(long id) {
 
 		FacesContext context = FacesContext.getCurrentInstance();
 
 		try{
-			clienteService.deleteCliente(selectedCliente.getId().intValue());
-			setMessage(new FacesMessage("Se ha eliminado el registro"));
+			String m = service.deleteCliente((int)id);
+			setMessage(new FacesMessage(m));
 		} catch(Exception e) {
 			setMessage(new FacesMessage("No se puede eliminar el registro"));
 		}
 
-		selectedCliente = new ClienteEntity();
 		context.addMessage("messages", message);
 
 	}
@@ -92,7 +90,7 @@ public class ClientesBean implements Serializable {
 			selectedCliente.setCedulaIdentidad(cedulaModificar);
 		}
 		try{
-			clienteService.update(selectedCliente);
+			service.update(selectedCliente);
 			setMessage(new FacesMessage("Cliente modificado exitosamente"));
 		} catch(Exception e) {
 			setMessage(new FacesMessage("No se puede modificar el cliente"));
@@ -119,7 +117,7 @@ public class ClientesBean implements Serializable {
 		FacesContext context = FacesContext.getCurrentInstance();
 
 		try{
-			clienteService.add(clienteEntity);
+			service.add(clienteEntity);
 			setMessage(new FacesMessage("Cliente creado exitosamente"));
 		} catch(Exception e) {
 			setMessage(new FacesMessage("No se puede crear el cliente"));
@@ -144,14 +142,13 @@ public class ClientesBean implements Serializable {
 
 	public void resetCampos() {
 
-		clienteEntity.setNombre(null);
-		clienteEntity.setCedulaIdentidad(null);
+		clienteEntity = new ClienteEntity();
 		setNombreModificar(null);
 		setCedulaModificar(null);
 	}
 
 	public List<ClienteEntity> getClientes() {
-		clienteResponse = clienteService.getClientes(nombre, cedulaIdentidad, by_all_attributes,
+		clienteResponse = service.getClientes(nombre, cedulaIdentidad, by_all_attributes,
 		                                             by_nombre, by_cedula, page);
 
 		clientes = clienteResponse.getEntidades();
@@ -162,7 +159,7 @@ public class ClientesBean implements Serializable {
 	public void goNextPage(){
 		if(page<totalPages) {
 			page += 1;
-			clienteResponse = clienteService.getClientes(nombre, cedulaIdentidad, by_all_attributes,
+			clienteResponse = service.getClientes(nombre, cedulaIdentidad, by_all_attributes,
 			                                             by_nombre, by_cedula, page);
 
 			clientes = clienteResponse.getEntidades();
@@ -173,7 +170,7 @@ public class ClientesBean implements Serializable {
 		if(page>1) {
 			page -= 1;
 
-			clienteResponse = clienteService.getClientes(nombre, cedulaIdentidad, by_all_attributes,
+			clienteResponse = service.getClientes(nombre, cedulaIdentidad, by_all_attributes,
 			                                             by_nombre, by_cedula, page);
 
 			clientes = clienteResponse.getEntidades();
@@ -252,7 +249,7 @@ public class ClientesBean implements Serializable {
 
 	public Integer getTotalPages() {
 		if(clienteResponse == null)
-			clienteResponse = clienteService.getClientes(nombre, cedulaIdentidad, by_all_attributes,
+			clienteResponse = service.getClientes(nombre, cedulaIdentidad, by_all_attributes,
 			                                             by_nombre, by_cedula, page);
 
 		totalPages = clienteResponse.getMeta().getTotal_pages().intValue();
@@ -285,7 +282,7 @@ public class ClientesBean implements Serializable {
 	}
 
     public StreamedContent getFile() throws IOException {
-        clienteService.exportAllClientes(nombre, cedulaIdentidad, by_all_attributes, by_nombre, by_cedula, page);
+        service.exportAllClientes(nombre, cedulaIdentidad, by_all_attributes, by_nombre, by_cedula, page);
         String contentType = FacesContext.getCurrentInstance().getExternalContext().getMimeType("/tmp/clientes.json");
         file = new DefaultStreamedContent(new FileInputStream("/tmp/clientes.json"), contentType, "clientes.json");
         return file;

@@ -35,6 +35,7 @@ public class Service<T> implements IService<T>, Serializable {
             if (data != null) {
                 try {
                     em.remove(data);
+                    System.out.println("La entidad se ha borrado exitosamente");
                 } catch (PersistenceException e2) {
                     return ("Error al borrar la entidad, la entidad es una FK en otra entidad");
                 }

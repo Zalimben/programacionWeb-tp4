@@ -49,23 +49,21 @@
 
             <!-- BTN modificar -->
             <p:column style="width:35px;text-align: center">
-                <p:commandButton style="height:25px;width:30px;" update=":form:editClienteForm :messages"  oncomplete="PF('modificarCliente').show()" icon="ui-icon-search" >
+                <p:commandButton process="tabla_clientes"  style="height:25px;width:30px;" update=":form:editClienteForm :messages"  oncomplete="PF('modificarCliente').show()" icon="ui-icon-search" >
                     <f:setPropertyActionListener value="#{cli}" target="#{cliente.selectedCliente}" />
                 </p:commandButton>
             </p:column>
 
             <!-- BTN eliminar -->
             <p:column style="width:35px;text-align: center">
-                <p:commandButton style="height:25px;width:30px;" icon="ui-icon-circle-close" update="tabla_clientes :messages" actionListener="#{cliente.eliminarCliente}" >
+                <p:commandButton process="tabla_clientes" style="height:25px;width:30px;" icon="ui-icon-trash" update="tabla_clientes :messages" actionListener="#{cliente.eliminarCliente(cli.id)}" >
                     <p:confirm header="Confirmar" message="Eliminar el registro?" icon="ui-icon-alert" />
-                    <f:setPropertyActionListener value="#{cli}" target="#{cliente.selectedCliente}" />
                 </p:commandButton>
             </p:column>
 
         </p:dataTable>
-        <br/>
-        <br/>
 
+        <!-- CUADRO DE CONFIRMACION PARA ELIMIANR -->
         <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
             <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
             <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
@@ -78,15 +76,15 @@
                 <h:outputText style="height: 25px;" id="page" value=" #{cliente.page} of #{cliente.totalPages} " />
             <p:commandButton style="height: 25px;" icon="ui-icon-arrow-1-e" actionListener="#{cliente.goNextPage}" update="page tabla_clientes"/>
         </h:panelGrid>
-        <br />
-        <h:form>
-            <p:commandButton value="Download" ajax="false">
+
+        <!-- BOTON DE EXPORTAR Y CREAR CLIENTE -->
+        <h:panelGrid columns="2">
+            <p:commandButton icon="ui-icon-disk" value="Descargar" ajax="false">
                 <p:fileDownload value="#{cliente.file}"/>
             </p:commandButton>
-        </h:form>
+            <p:commandButton icon="ui-icon-plusthick" id="newCliente" update="tabla_clientes createClienteForm" value="Añadir Cliente" oncomplete="PF('createCliente').show()"  />
+        </h:panelGrid>
         <br/>
-        <!-- BTN AÑADIR CLIENTE - POPUP-->
-        <p:commandButton id="newCliente" update="tabla_clientes" value="Añadir Cliente" oncomplete="PF('createCliente').show()"  />
         <ui:include src="abm.xhtml" />
 
         <!-- BTN MODIFICAR CLIENTE - POPUP-->
