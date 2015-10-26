@@ -119,4 +119,37 @@ public class Cliente {
     public void resetPage(){
         page = 1;
     }
+
+    public void orderByNombre(){
+
+        if(nombre==null)
+            nombre = "asc";
+        else if(nombre.equals("asc"))
+            nombre = "desc";
+        else
+            nombre = "asc";
+
+        cedulaIdentidad = null;
+
+        clienteResponse = clienteService.getClientes(nombre, cedulaIdentidad, by_all_attributes,
+                by_nombre, by_cedula, page);
+
+        clientes = clienteResponse.getEntidades();
+    }
+
+    public void orderByCedula(){
+        if(cedulaIdentidad==null)
+            cedulaIdentidad = "asc";
+        else if(cedulaIdentidad.equals("asc"))
+            cedulaIdentidad = "desc";
+        else
+            cedulaIdentidad = "asc";
+
+        nombre = null;
+
+        clienteResponse = clienteService.getClientes(nombre, cedulaIdentidad, by_all_attributes,
+                by_nombre, by_cedula, page);
+
+        clientes = clienteResponse.getEntidades();
+    }
 }

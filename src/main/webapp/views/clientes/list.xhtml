@@ -27,20 +27,20 @@
     <h:form>
         <!-- filtrado-->
         <br/><br/>
-        <h:inputText id="inputAllAttributes" value="#{cliente.by_all_attributes}">
+        <p:inputText id="inputAllAttributes" value="#{cliente.by_all_attributes}">
             <p:ajax event="valueChange" update="tabla_clientes page" listener="#{cliente.resetPage}"/>
-        </h:inputText>
+        </p:inputText>
         <p:watermark value="Filtro completo" for="inputAllAttributes" />
         <br/><br/>
 
-        <h:inputText id="inputNombre" value="#{cliente.by_nombre}" >
+        <p:inputText id="inputNombre" value="#{cliente.by_nombre}" >
             <p:ajax event="valueChange" update="tabla_clientes page" listener="#{cliente.resetPage}"/>
-        </h:inputText>
+        </p:inputText>
         <p:watermark value="Nombre" for="inputNombre" />
 
-        <h:inputText id="inputCedula" value="#{cliente.by_cedula}" >
+        <p:inputText id="inputCedula" value="#{cliente.by_cedula}" >
             <p:ajax event="valueChange" update="tabla_clientes page" listener="#{cliente.resetPage}"/>
-        </h:inputText>
+        </p:inputText>
         <p:watermark value="Cedula" for="inputCedula" />
         <br/><br/>
 
@@ -52,12 +52,18 @@
             </f:facet>
 
             <p:column>
-                <f:facet name="header">Nombre</f:facet>
+                <f:facet name="header">
+                    <p:commandButton value="Nombre" actionListener="#{cliente.orderByNombre}"
+                            update="tabla_clientes" />
+                </f:facet>
                 #{clientes.nombre}
             </p:column>
 
             <p:column>
-                <f:facet name="header">Cedula</f:facet>
+                <f:facet name="header">
+                    <p:commandButton value="Cedula" actionListener="#{cliente.orderByCedula}"
+                                     update="tabla_clientes" />
+                </f:facet>
                 #{clientes.cedulaIdentidad}
             </p:column>
         </p:dataTable>
