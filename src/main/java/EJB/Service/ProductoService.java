@@ -220,7 +220,12 @@ public class ProductoService extends Service<ProductoEntity> {
 
     }
 
-    public Object getProductos(MultivaluedMap<String, String> queryParams) {
+
+
+    public ProductoResponse getProductos(String descripcion, String proveedor, String stock,
+                               String precio, String byAllAttributes, String byDescripcion,
+                               String byProveedor, String byStock, String byPrecio,
+                               Integer pageParametro) {
 
         ProductoResponse response = new ProductoResponse();
         inicializarMeta();
@@ -235,26 +240,26 @@ public class ProductoService extends Service<ProductoEntity> {
         /**
          * Retrieve one or none of the URI query params that have the column name and sort order values
          */
-        if (queryParams.getFirst("proveedor.descripcion") != null) {
+        if (proveedor != null) {
             ordenarPorColumna = "proveedor";
-            ordenDeOrdenacion = queryParams.getFirst("proveedor.descripcion");
-        } else if (queryParams.getFirst("stock") != null) {
+            ordenDeOrdenacion = proveedor;
+        } else if (stock != null) {
             ordenarPorColumna = "stock";
-            ordenDeOrdenacion = queryParams.getFirst("stock");
-        } else if (queryParams.getFirst("precio") != null) {
+            ordenDeOrdenacion = stock;
+        } else if (precio != null) {
             ordenarPorColumna = "precio";
-            ordenDeOrdenacion = queryParams.getFirst("precio");
-        } else if (queryParams.getFirst("descripcion") != null) {
+            ordenDeOrdenacion = precio;
+        } else if (descripcion != null) {
             ordenarPorColumna = "descripcion";
-            ordenDeOrdenacion = queryParams.getFirst("descripcion");
+            ordenDeOrdenacion = descripcion;
         }
 
         // Iniciamos las varialles para el filtrado
-        String by_all_attributes = queryParams.getFirst("by_all_attributes");
-        String by_stock = queryParams.getFirst("by_stock");
-        String by_proveedor = queryParams.getFirst("by_proveedor.descripcion");
-        String by_precio = queryParams.getFirst("by_precio");
-        String by_descripcion = queryParams.getFirst("by_descripcion");
+        String by_all_attributes = byAllAttributes;
+        String by_stock = byStock;
+        String by_proveedor = byProveedor;
+        String by_precio = byPrecio;
+        String by_descripcion = byDescripcion;
 
         if (by_proveedor == null) {
             by_proveedor = "";
@@ -268,6 +273,12 @@ public class ProductoService extends Service<ProductoEntity> {
         if (by_all_attributes == null) {
             by_all_attributes = "";
         }
+
+//        if(by_precio.equals(""))
+//            by_precio = "0";
+//
+//        if(by_stock.equals(""))
+//            by_stock = "0";
 
         /* Creamos el query para la consulta */
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
@@ -313,8 +324,8 @@ public class ProductoService extends Service<ProductoEntity> {
         }
 
         Integer page;
-        if (queryParams.getFirst("page") != null) {
-            page = Integer.valueOf(queryParams.getFirst("page")) - 1;
+        if (pageParametro != null) {
+            page = pageParametro - 1;
         } else {
             page = 0;
         }

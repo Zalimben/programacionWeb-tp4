@@ -115,13 +115,16 @@ public class VentasService extends Service<VentaEntity> {
 
     }
 
+
     /**
      * Metodo para obtener el listado de las ventas, este metodo ya incluye el ordenamiento y la busqueda por columnas
      *
      * @param queryParams Conjunto de parametros para el filtrado y ordenacion
      * @return Retorna la lista de entidades filtradas
      */
-    public Object getVentas(MultivaluedMap<String, String> queryParams) {
+    public VentasResponse getVentas(String cliente, String fecha, String monto,
+                                    String byAllAttributes, String byCliente,
+                                    String byFecha, String byMonto, Integer pageParametro) {
         VentasResponse response = new VentasResponse();
         inicializarMeta();
 
@@ -134,22 +137,22 @@ public class VentasService extends Service<VentaEntity> {
         /**
          * Retrieve one or none of the URI query params that have the column name and sort order values
          */
-        if (queryParams.getFirst("cliente.nombre") != null) {
+        if (cliente != null) {
             ordenarPorColumna = "cliente";
-            ordenDeOrdenacion = queryParams.getFirst("cliente.nombre");
-        } else if (queryParams.getFirst("monto") != null) {
+            ordenDeOrdenacion = cliente;
+        } else if (monto != null) {
             ordenarPorColumna = "monto";
-            ordenDeOrdenacion = queryParams.getFirst("monto");
-        } else if (queryParams.getFirst("fecha") != null) {
+            ordenDeOrdenacion = monto;
+        } else if (fecha != null) {
             ordenarPorColumna = "fecha";
-            ordenDeOrdenacion = queryParams.getFirst("fecha");
+            ordenDeOrdenacion = fecha;
         }
 
         // Iniciamos las variables para el filtrado
-        String by_all_attributes = queryParams.getFirst("by_all_attributes");
-        String by_monto = queryParams.getFirst("by_monto");
-        String by_cliente = queryParams.getFirst("by_cliente.nombre");
-        String by_fecha = queryParams.getFirst("by_fecha");
+        String by_all_attributes = byAllAttributes;
+        String by_monto = byMonto;
+        String by_cliente = byCliente;
+        String by_fecha = byFecha;
 
 
         if (by_cliente == null) {
@@ -199,8 +202,8 @@ public class VentasService extends Service<VentaEntity> {
         }
 
         Integer page;
-        if (queryParams.getFirst("page") != null) {
-            page = Integer.valueOf(queryParams.getFirst("page")) - 1;
+        if (pageParametro != null) {
+            page = pageParametro - 1;
         } else {
             page = 0;
         }
