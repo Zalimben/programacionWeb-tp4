@@ -9,7 +9,67 @@
 
     <ui:define name="content">
 
-        <p:outputLabel value="Aqui se desplega la lista de compras" />
+        <!-- filtrado-->
+        <br/><br/>
+        <p:inputText id="inputAllAttributes" value="#{compra.byAllAttributes}">
+            <p:ajax event="valueChange" update="tabla_compras page" listener="#{compra.resetPage}"/>
+        </p:inputText>
+        <p:watermark value="Filtro completo" for="inputAllAttributes"/>
+        <br/><br/>
+
+        <p:inputText id="inputProveedor" value="#{compra.byProveedor}">
+            <p:ajax event="valueChange" update="tabla_compras page" listener="#{compra.resetPage}"/>
+        </p:inputText>
+        <p:watermark value="Proveedor" for="inputProveedor"/>
+
+        <p:inputText id="inputFecha" value="#{compra.byFecha}">
+            <p:ajax event="valueChange" update="tabla_compras page" listener="#{compra.resetPage}"/>
+        </p:inputText>
+        <p:watermark value="Fecha" for="inputFecha"/>
+
+        <p:inputText id="inputMonto" value="#{compra.byMonto}">
+            <p:ajax event="valueChange" update="tabla_compras page" listener="#{compra.resetPage}"/>
+        </p:inputText>
+        <p:watermark value="Monto" for="inputMonto"/>
+        <br/><br/>
+
+
+        <!-- tabla de datos-->
+        <p:dataTable id="tabla_compras" value="#{compra.compras}" var="comprasVar">
+            <f:facet name="header">
+                Lista de compras
+            </f:facet>
+
+            <p:column>
+                <f:facet name="header">
+                    <p:commandButton value="Proveedor" actionListener="#{compra.orderByProveedor}"
+                                     update="tabla_compras"/>
+                </f:facet>
+                #{comprasVar.proveedor.descripcion}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <p:commandButton value="Fecha" actionListener="#{compra.orderByFecha}"
+                                     update="tabla_compras"/>
+                </f:facet>
+                #{comprasVar.fecha}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <p:commandButton value="Monto" actionListener="#{compra.orderByMonto}"
+                                     update="tabla_compras"/>
+                </f:facet>
+                #{comprasVar.monto}
+            </p:column>
+        </p:dataTable>
+
+        <!-- paginacion-->
+        <br/>
+        <p:commandButton value="Atras" actionListener="#{compra.goBackPage}" update="page tabla_compras"/>
+        <h:outputText id="page" value=" #{compra.page} of #{compra.totalPages} " />
+        <p:commandButton value="Siguiente" actionListener="#{compra.goNextPage}" update="page tabla_compras"/>
 
         <br />
 

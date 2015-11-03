@@ -57,7 +57,7 @@ CREATE SEQUENCE seq_solicitud_compra
     MINVALUE 1;
 
 /* Tablas */
-CREATE TABLE proveedor (
+CREATE TABLE proveedorId (
   id          BIGINT PRIMARY KEY DEFAULT nextval('seq_proveedor'),
   descripcion VARCHAR(100)
 );
@@ -127,7 +127,7 @@ CREATE TABLE compra (
   monto        BIGINT,
   CONSTRAINT compra_pkey PRIMARY KEY (id),
   CONSTRAINT proveedor_fkey FOREIGN KEY (proveedor_id)
-  REFERENCES proveedor (id)
+  REFERENCES proveedorId (id)
     MATCH SIMPLE
     ON UPDATE CASCADE
     ON DELETE RESTRICT

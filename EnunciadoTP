@@ -8,10 +8,10 @@ Observación: El proyecto debe manejarse con Maven
     Clientes
 
 2- Compra de productos.
-    En una compra,  se pueden especificar varios productos de un solo proveedor. Especificar cantidad por cada producto.
+    En una compra,  se pueden especificar varios productos de un solo proveedorId. Especificar cantidad por cada producto.
     Se guarda toda la compra en una única transacción.
 
-    Por cada compra, guardar en tablas los datos de la cabecera (fecha, proveedor) y los detalles de la compra (producto, cantidad).
+    Por cada compra, guardar en tablas los datos de la cabecera (fecha, proveedorId) y los detalles de la compra (producto, cantidad).
 
     IMPORTANTE: En la tabla de COMPRAS_DET, poner un check constraint que evite asignar un valor <= 0 al campo CANTIDAD.
     NO hacer esta validación desde Java, solo manejar la excepción lanzada por la BD.
