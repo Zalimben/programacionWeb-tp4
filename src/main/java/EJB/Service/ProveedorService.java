@@ -122,7 +122,8 @@ public class ProveedorService extends Service<ProveedorEntity> {
 
     }
 
-    public Object getProveedores(MultivaluedMap<String, String> queryParams) {
+    public ProveedorResponse getProveedores(String descripcion, String byAllAttributes, String byDescripcion,
+                                            Integer pageParametro) {
 
         ProveedorResponse response = new ProveedorResponse();
         inicializarMeta();
@@ -137,14 +138,14 @@ public class ProveedorService extends Service<ProveedorEntity> {
         /**
          * Retrieve one or none of the URI query params that have the column name and sort order values
          */
-        if (queryParams.getFirst("descripcion") != null) {
+        if (descripcion != null) {
             ordenarPorColumna = "descripcion";
-            ordenDeOrdenacion = queryParams.getFirst("descripcion");
+            ordenDeOrdenacion = descripcion;
         }
 
         // Iniciamos las varialles para el filtrado
-        String by_all_attributes = queryParams.getFirst("by_all_attributes");
-        String by_descripcion = queryParams.getFirst("by_descripcion");
+        String by_all_attributes = byAllAttributes;
+        String by_descripcion = byDescripcion;
 
         if (by_descripcion == null) {
             by_descripcion = "";
@@ -175,8 +176,8 @@ public class ProveedorService extends Service<ProveedorEntity> {
         }
 
         Integer page;
-        if (queryParams.getFirst("page") != null) {
-            page = Integer.valueOf(queryParams.getFirst("page")) - 1;
+        if (pageParametro != null) {
+            page = pageParametro - 1;
         } else {
             page = 0;
         }
