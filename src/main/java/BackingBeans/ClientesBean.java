@@ -204,6 +204,7 @@ public class ClientesBean implements Serializable {
 		else
 			nombre = "asc";
 
+		cedulaIdentidad = null;
 		clienteResponse = service.getClientes(nombre, null, by_all_attributes,
 		                                             by_nombre, by_cedula, page);
 
@@ -221,6 +222,7 @@ public class ClientesBean implements Serializable {
 		else
 			cedulaIdentidad = "asc";
 
+		nombre = null;
 		clienteResponse = service.getClientes(null, cedulaIdentidad, by_all_attributes,
 		                                             by_nombre, by_cedula, page);
 		clientes = clienteResponse.getEntidades();
