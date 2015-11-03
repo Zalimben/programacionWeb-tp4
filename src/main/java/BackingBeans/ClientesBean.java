@@ -9,6 +9,7 @@ import org.primefaces.model.StreamedContent;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.io.FileInputStream;
@@ -23,6 +24,7 @@ import java.util.List;
  */
 
 @ManagedBean(name = "cliente")
+@SessionScoped
 public class ClientesBean implements Serializable {
 
     private static final String redirectTo = "http://localhost:8080/tp4/faces/views/clientes/";
