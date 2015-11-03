@@ -12,23 +12,23 @@
         <!-- filtrado-->
         <br/><br/>
         <p:inputText id="inputAllAttributes" value="#{compra.byAllAttributes}">
-            <p:ajax event="keydown" update="tabla_compras page" listener="#{compra.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_compras page" listener="#{compra.resetPage}"/>
         </p:inputText>
         <p:watermark value="Filtro completo" for="inputAllAttributes"/>
         <br/><br/>
 
         <p:inputText id="inputProveedor" value="#{compra.byProveedor}">
-            <p:ajax event="keydown" update="tabla_compras page" listener="#{compra.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_compras page" listener="#{compra.resetPage}"/>
         </p:inputText>
         <p:watermark value="Proveedor" for="inputProveedor"/>
 
         <p:inputText id="inputFecha" value="#{compra.byFecha}">
-            <p:ajax event="keydown" update="tabla_compras page" listener="#{compra.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_compras page" listener="#{compra.resetPage}"/>
         </p:inputText>
         <p:watermark value="Fecha" for="inputFecha"/>
 
         <p:inputText id="inputMonto" value="#{compra.byMonto}">
-            <p:ajax event="keydown" update="tabla_compras page" listener="#{compra.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_compras page" listener="#{compra.resetPage}"/>
         </p:inputText>
         <p:watermark value="Monto" for="inputMonto"/>
         <br/><br/>

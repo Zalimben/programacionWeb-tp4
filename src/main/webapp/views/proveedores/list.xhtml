@@ -12,13 +12,13 @@
         <!-- filtrado-->
         <br/><br/>
         <p:inputText id="inputAllAttributes" value="#{proveedor.byAllAttributes}">
-            <p:ajax event="keydown" update="tabla_proveedores page" listener="#{proveedor.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_proveedores pag:page" listener="#{proveedor.resetPage}"/>
         </p:inputText>
         <p:watermark value="Filtro completo" for="inputAllAttributes" />
         <br/><br/>
 
         <p:inputText id="inputDescripcion" value="#{proveedor.byDescripcion}">
-            <p:ajax event="keydown" update="tabla_proveedores page" listener="#{proveedor.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_proveedores pag:page" listener="#{proveedor.resetPage}"/>
         </p:inputText>
         <p:watermark value="Proveedor" for="inputDescripcion"/>
         <br/><br/>
@@ -32,7 +32,7 @@
 
             <p:column>
                 <f:facet name="header">
-                    <p:commandButton value="Proveedor" actionListener="#{proveedor.orderByDescripcion}"
+                    <p:commandButton process="tabla_proveedores" value="Proveedor" actionListener="#{proveedor.orderByDescripcion}"
                                      update="tabla_proveedores" />
                 </f:facet>
                 #{proveedorVar.descripcion}
@@ -41,9 +41,11 @@
 
         <!-- paginacion-->
         <br/>
-        <p:commandButton value="Atras" actionListener="#{proveedor.goBackPage}" update="page tabla_proveedores" />
-        <h:outputText id="page" value=" #{proveedor.page} of #{proveedor.totalPages} " />
-        <p:commandButton value="Siguiente" actionListener="#{proveedor.goNextPage}" update="page tabla_proveedores" />
+        <h:form id="pag">
+            <p:commandButton process="pag" value="Atras" actionListener="#{proveedor.goBackPage}" update="page :form:tabla_proveedores" />
+            <h:outputText id="page" value=" #{proveedor.page} of #{proveedor.totalPages} " />
+            <p:commandButton process="pag" value="Siguiente" actionListener="#{proveedor.goNextPage}" update="page :form:tabla_proveedores" />
+        </h:form>
 
         <br />
 

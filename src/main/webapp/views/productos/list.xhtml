@@ -12,27 +12,27 @@
         <!-- filtrado-->
         <br/><br/>
         <p:inputText id="inputAllAttributes" value="#{producto.byAllAttributes}">
-            <p:ajax event="keydown" update="tabla_productos page" listener="#{producto.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_productos page" listener="#{producto.resetPage}"/>
         </p:inputText>
         <p:watermark value="Filtro completo" for="inputAllAttributes" />
         <br/><br/>
 
         <p:inputText id="inputDescription" value="#{producto.byDescripcion}">
-            <p:ajax event="keydown" update="tabla_productos page" listener="#{producto.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_productos page" listener="#{producto.resetPage}"/>
         </p:inputText>
         <p:watermark value="Producto" for="inputDescription" />
 
         <p:inputText id="inputProveedor" value="#{producto.byProveedor}">
-            <p:ajax event="keydown" update="tabla_productos page" listener="#{producto.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_productos page" listener="#{producto.resetPage}"/>
         </p:inputText>
         <p:watermark value="Proveedor" for="inputProveedor" />
 
         <p:inputText id="inputStock" value="#{producto.byStock}">
-            <p:ajax event="keydown" update="tabla_productos page" listener="#{producto.resetPage}" />
+            <p:ajax event="keyup" update="tabla_productos page" listener="#{producto.resetPage}" />
         </p:inputText>
         <p:watermark value="Stock" for="inputStock"/>
         <p:inputText id="inputPrecio" value="#{producto.byPrecio}">
-            <p:ajax event="keydown" update="tabla_productos page" listener="#{producto.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_productos page" listener="#{producto.resetPage}"/>
         </p:inputText>
         <p:watermark value="Precio" for="inputPrecio"/>
         <br/><br/>

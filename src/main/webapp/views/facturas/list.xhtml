@@ -12,18 +12,18 @@
         <!-- filtrado-->
         <br/><br/>
         <p:inputText id="inputAllAttributes" value="#{factura.byAllAttributes}">
-            <p:ajax event="keydown" update="tabla_facturas page" listener="#{factura.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_facturas page" listener="#{factura.resetPage}"/>
         </p:inputText>
         <p:watermark value="Filtro completo" for="inputAllAttributes" />
         <br/><br/>
 
         <p:inputText id="inputFecha" value="#{factura.byFecha}" >
-            <p:ajax event="keydown" update="tabla_facturas page" listener="#{factura.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_facturas page" listener="#{factura.resetPage}"/>
         </p:inputText>
         <p:watermark value="Fecha" for="inputFecha" />
 
         <p:inputText id="inputMonto" value="#{factura.byMonto}" >
-            <p:ajax event="keydown" update="tabla_facturas page" listener="#{factura.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_facturas page" listener="#{factura.resetPage}"/>
         </p:inputText>
         <p:watermark value="Monto" for="inputMonto" />
         <br/><br/>
