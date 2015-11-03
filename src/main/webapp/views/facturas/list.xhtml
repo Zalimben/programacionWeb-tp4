@@ -1,13 +1,69 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
                 template="/index.xhtml">
 
     <ui:define name="content">
 
-        <p:outputLabel value="Aqui se desplegara la lista de las facturas" />
+        <!-- filtrado-->
+        <br/><br/>
+        <p:inputText id="inputAllAttributes" value="#{factura.byAllAttributes}">
+            <p:ajax event="valueChange" update="tabla_facturas page" listener="#{factura.resetPage}"/>
+        </p:inputText>
+        <p:watermark value="Filtro completo" for="inputAllAttributes" />
+        <br/><br/>
+
+        <p:inputText id="inputFecha" value="#{factura.byFecha}" >
+            <p:ajax event="valueChange" update="tabla_facturas page" listener="#{factura.resetPage}"/>
+        </p:inputText>
+        <p:watermark value="Fecha" for="inputFecha" />
+
+        <p:inputText id="inputMonto" value="#{factura.byMonto}" >
+            <p:ajax event="valueChange" update="tabla_facturas page" listener="#{factura.resetPage}"/>
+        </p:inputText>
+        <p:watermark value="Monto" for="inputMonto" />
+        <br/><br/>
+
+
+        <!-- tabla de datos-->
+        <p:dataTable id="tabla_facturas" value="#{factura.facturas}" var="facturaVar">
+            <f:facet name="header">
+                Lista de facturas
+            </f:facet>
+
+            <p:column>
+                <f:facet name="header">
+                    Id
+                </f:facet>
+                #{facturaVar.id}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <p:commandButton value="Fecha" actionListener="#{factura.orderByFecha}"
+                                     update="tabla_facturas" />
+                </f:facet>
+                #{facturaVar.fecha}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <p:commandButton value="Monto" actionListener="#{factura.orderByMonto}"
+                                     update="tabla_facturas" />
+                </f:facet>
+                #{facturaVar.monto}
+            </p:column>
+        </p:dataTable>
+
+        <!-- paginacion-->
+        <br/>
+        <p:commandButton value="Atras" actionListener="#{factura.goBackPage}" update="page tabla_facturas"/>
+        <h:outputText id="page" value=" #{factura.page} of #{factura.totalPages} " />
+        <p:commandButton value="Siguiente" actionListener="#{factura.goNextPage}" update="page tabla_facturas"/>
 
         <br /> <br />
 

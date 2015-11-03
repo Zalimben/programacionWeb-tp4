@@ -48,7 +48,8 @@ public class FacturaService extends Service<FacturaEntity> {
      * @param queryParams Parametros de ordenacion y filtrado
      * @return Lista de las facturas filtradas y ordenas segun los parametros
      */
-    public Object getFacturas(MultivaluedMap<String, String> queryParams) {
+    public FacturasResponse getFacturas(String fecha, String monto, String byAllAttributes,
+                                        String byFecha, String byMonto, Integer pageParametro) {
 
         FacturasResponse response = new FacturasResponse();
         inicializarMeta();
@@ -62,18 +63,18 @@ public class FacturaService extends Service<FacturaEntity> {
         /**
          * Retrieve one or none of the URI query params that have the column name and sort order values
          */
-        if (queryParams.getFirst("monto") != null) {
+        if (monto != null) {
             ordenarPorColumna = "monto";
-            ordenDeOrdenacion = queryParams.getFirst("monto");
-        } else if (queryParams.getFirst("fecha") != null) {
+            ordenDeOrdenacion = monto;
+        } else if (fecha != null) {
             ordenarPorColumna = "fecha";
-            ordenDeOrdenacion = queryParams.getFirst("fecha");
+            ordenDeOrdenacion = fecha;
         }
 
         // Iniciamos las varialles para el filtrado
-        String by_all_attributes = queryParams.getFirst("by_all_attributes");
-        String by_monto = queryParams.getFirst("by_monto");
-        String by_fecha = queryParams.getFirst("by_fecha");
+        String by_all_attributes = byAllAttributes;
+        String by_monto = byMonto;
+        String by_fecha = byFecha;
 
         if (by_fecha == null) {
             by_fecha = "";
@@ -108,8 +109,8 @@ public class FacturaService extends Service<FacturaEntity> {
         }
 
         Integer page;
-        if (queryParams.getFirst("page") != null) {
-            page = Integer.valueOf(queryParams.getFirst("page")) - 1;
+        if (pageParametro != null) {
+            page = pageParametro - 1;
         } else {
             page = 0;
         }
