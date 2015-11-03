@@ -34,6 +34,17 @@ public class ProductoService extends Service<ProductoEntity> {
         return delete(id, ProductoEntity.class);
     }
 
+
+    public boolean addProducto(ProductoEntity entity) {
+
+        if(entity.getStock() > 0L && entity.getPrecio() > 0L) {
+            return super.add(entity);
+        }
+
+        return false;
+
+    }
+
     /**
      * Metodo para obtener los productos cuyo stock sean menores al stock minimo
      *

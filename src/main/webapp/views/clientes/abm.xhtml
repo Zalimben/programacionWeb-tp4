@@ -27,10 +27,10 @@
 
                 <br />
                 <p:commandButton process="createClienteForm" value="Crear" oncomplete="if(!args.validationFailed){PF('createCliente').hide()}"
-                                 update=":messages createClienteForm" actionListener="#{cliente.doCrearCliente}" />
+                                 update=":messages documentoCliente nombreCliente" action="#{cliente.doCrearCliente}" />
 
-                <p:commandButton immediate="true" oncomplete="PF('createCliente').hide()" value="Cancelar"
-                                 update="createClienteForm" actionListener="#{cliente.resetCampos}"  />
+                <p:commandButton oncomplete="PF('createCliente').hide()" value="Cancelar"
+                                 update="documentoCliente nombreCliente" action="#{cliente.resetCampos}"  />
 
             </p:dialog>
         </h:form>

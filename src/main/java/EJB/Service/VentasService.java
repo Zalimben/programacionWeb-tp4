@@ -4,10 +4,7 @@ import EJB.Helper.VentasResponse;
 import EJB.Jackson.Venta;
 import EJB.Jackson.VentaDetalle;
 import EJB.Util.StockInsuficienteException;
-import JPA.ClienteEntity;
-import JPA.ProductoEntity;
-import JPA.VentaDetalleEntity;
-import JPA.VentaEntity;
+import JPA.*;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -76,6 +73,40 @@ public class VentasService extends Service<VentaEntity> {
         ventaEntity.setMonto(String.valueOf(montoAcumulador));
         return super.add(ventaEntity);
 
+    }
+
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	public boolean createVenta(VentaEntity entity, List<VentaDetalleEntity> detalleEntityList) throws StockInsuficienteException {
+
+        entity.setFecha(new Date().toString());
+        long montoAcumulador = 0;
+
+        for(VentaDetalleEntity detalle : detalleEntityList) {
+            ProductoEntity productoEntity = productoService.find(detalle.getProducto().getId().intValue(), ProductoEntity.class);
+            if(productoEntity == null) {
+                System.out.println("Producto no encontrado");
+                return false;
+            }
+            else {
+                try {
+                    productoEntity.setStock(productoEntity.getStock() + detalle.getCantidad());
+                    montoAcumulador = montoAcumulador + productoEntity.getPrecio() * detalle.getCantidad();
+                    productoService.update(productoEntity);
+                } catch(Exception e) {
+                    System.out.println("Stock Insuficiente" + e);
+	                throw new StockInsuficienteException("Error al actualizar Stock");
+                }
+            }
+            VentaDetalleEntity ventaDetalleEntity = new VentaDetalleEntity();
+	        ventaDetalleEntity.setProducto(productoEntity);
+	        ventaDetalleEntity.setCantidad(detalle.getCantidad());
+	        ventaDetalleEntity.setVenta(entity);
+
+            entity.setDetalles(ventaDetalleEntity);
+        }
+
+        entity.setMonto(String.valueOf(montoAcumulador));
+        return super.add(entity);
     }
 
     public void deleteVenta(VentaEntity venta) {

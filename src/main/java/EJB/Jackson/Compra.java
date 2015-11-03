@@ -2,9 +2,6 @@ package EJB.Jackson;
 
 import java.util.List;
 
-/**
- * Created by alex on 04/10/15.
- */
 public class Compra {
     String fecha;
     Integer proveedorId;

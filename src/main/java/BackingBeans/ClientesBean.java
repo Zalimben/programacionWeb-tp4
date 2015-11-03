@@ -9,7 +9,6 @@ import org.primefaces.model.StreamedContent;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.io.FileInputStream;
@@ -24,7 +23,6 @@ import java.util.List;
  */
 
 @ManagedBean(name = "cliente")
-@SessionScoped
 public class ClientesBean implements Serializable {
 
     private static final String redirectTo = "http://localhost:8080/tp4/faces/views/clientes/";
@@ -53,8 +51,6 @@ public class ClientesBean implements Serializable {
 	private FacesMessage message;
 
 	/* Metodos */
-
-
 	/**
 	 * Elimina un cliente dado el id del mismo
 	 * @param id
@@ -100,6 +96,27 @@ public class ClientesBean implements Serializable {
 	}
 
 	/**
+	 * Añade un cliente nuevo
+	 */
+	public void doCrearCliente() {
+
+		FacesContext context = FacesContext.getCurrentInstance();
+
+		try{
+			boolean flag = service.add(clienteEntity);
+			if(flag) {
+				setMessage(new FacesMessage("Cliente creado exitosamente"));
+			} else {
+				setMessage(new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede crear el cliente:", "CI Duplicado"));
+			}
+		} catch(Exception e) {
+			setMessage(new FacesMessage("No se puede crear el cliente"));
+		}
+		resetCampos();
+		context.addMessage("messages", message);
+	}
+
+	/**
 	 * Verifica que un String sea valido
 	 *
 	 * @param data: String que sera verificado
@@ -108,25 +125,8 @@ public class ClientesBean implements Serializable {
 	 */
 	private boolean validateString (String data) {
 
-		return !("".equals(data) || data == null) ;
+		return !("".equals(data) || data == null);
 
-	}
-
-	/**
-	 * Añade un cliente nuevo
-	 */
-	public void doCrearCliente() {
-
-		FacesContext context = FacesContext.getCurrentInstance();
-
-		try{
-			service.add(clienteEntity);
-			setMessage(new FacesMessage("Cliente creado exitosamente"));
-		} catch(Exception e) {
-			setMessage(new FacesMessage("No se puede crear el cliente"));
-		}
-		resetCampos();
-		context.addMessage("messages", message);
 	}
 
 	/**
@@ -137,6 +137,11 @@ public class ClientesBean implements Serializable {
 		clienteEntity = new ClienteEntity();
 		setNombreModificar(null);
 		setCedulaModificar(null);
+	}
+
+	public List getAllClientes() {
+
+		return service.getAllClientes();
 	}
 
 	/**
@@ -174,7 +179,6 @@ public class ClientesBean implements Serializable {
 
 			clienteResponse = service.getClientes(nombre, cedulaIdentidad, by_all_attributes,
 			                                             by_nombre, by_cedula, page);
-
 			clientes = clienteResponse.getEntidades();
 		}
 	}

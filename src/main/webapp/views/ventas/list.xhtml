@@ -16,12 +16,12 @@
         <!-- BOTON DE EXPORTAR Y CREAR -->
         <h:panelGrid columns="2">
             <p:commandButton icon="ui-icon-disk" value="Descargar" ajax="false">
-                <p:fileDownload value="#{cliente.file}"/>
+                <p:fileDownload value="#{venta.file}"/>
             </p:commandButton>
-            <p:commandButton icon="ui-icon-plusthick"  id="newVenta" value="Añadir Venta"  />
+            <p:commandButton icon="ui-icon-plusthick"  id="newVenta" value="Añadir Venta"  update="createVentasForm" oncomplete="PF('createVenta').show()"/>
         </h:panelGrid>
         <br/>
-        <ui:include src="abm.xhtml" />
+        <ui:include src="/views/ventas/abm.xhtml" />
 
     </ui:define>
 
