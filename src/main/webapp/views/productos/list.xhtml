@@ -9,7 +9,67 @@
 
     <ui:define name="content">
 
-        <p:outputLabel value="Aqui se desplegara la lista de productos" />
+        <!-- filtrado-->
+        <br/><br/>
+        <p:inputText id="inputAllAttributes" value="#{producto.byAllAttributes}">
+            <p:ajax event="valueChange" update="tabla_productos page" listener="#{producto.resetPage}"/>
+        </p:inputText>
+        <p:watermark value="Filtro completo" for="inputAllAttributes" />
+        <br/><br/>
+
+        <p:inputText id="inputDescription" value="#{producto.byDescripcion}">
+            <p:ajax event="valueChange" update="tabla_productos page" listener="#{producto.resetPage}"/>
+        </p:inputText>
+        <p:watermark value="Producto" for="inputDescription" />
+
+        <p:inputText id="inputProveedor" value="#{producto.byProveedor}">
+            <p:ajax event="valueChange" update="tabla_productos page" listener="#{producto.resetPage}"/>
+        </p:inputText>
+        <p:watermark value="Proveedor" for="inputProveedor" />
+
+        <p:inputText id="inputStock" value="#{producto.byStock}">
+            <p:ajax event="valueChange" update="tabla_productos page" listener="#{producto.resetPage}" />
+        </p:inputText>
+        <p:watermark value="Stock" for="inputStock"/>
+        <p:inputText id="inputPrecio" value="#{producto.byPrecio}">
+            <p:ajax event="valueChange" update="tabla_productos page" listener="#{producto.resetPage}"/>
+        </p:inputText>
+        <p:watermark value="Precio" for="inputPrecio"/>
+        <br/><br/>
+
+
+        <!-- tabla de datos-->
+        <p:dataTable id="tabla_productos" value="#{producto.productos}" var="productoIterador">
+            <f:facet name="header">
+                Lista de productos
+            </f:facet>
+
+            <p:column>
+                <f:facet name="header">Producto</f:facet>
+                #{productoIterador.descripcion}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">Proveedor</f:facet>
+                #{productoIterador.proveedor.descripcion}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">Stock</f:facet>
+                #{productoIterador.stock}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">Precio</f:facet>
+                #{productoIterador.precio}
+            </p:column>
+        </p:dataTable>
+
+        <!-- paginacion-->
+        <br/>
+        <p:commandButton value="Atras" actionListener="#{producto.goBackPage}" update="page tabla_productos"/>
+        <h:outputText id="page" value=" #{producto.page} of #{producto.totalPages} " />
+        <p:commandButton value="Siguiente" actionListener="#{producto.goNextPage}" update="page"/>
 
         <br />
 
