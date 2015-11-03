@@ -4,16 +4,86 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.org/ui"
-                template="/index.xhtml">
+                xmlns:p="http://primefaces.org/ui">
 
-    <ui:define name="content">
+    <!-- PopUp para Crear Ventas -->
+    <h:form id="createVentasForm" style="width: 500px;height: 450px" >
+        <p:dialog style="width: 500px;height: 450px"  widgetVar="createVenta" closable="false" id="create_ventas" header="Registrar nueva venta" resizable="false">
 
-        <p:outputLabel value="Aqui se deberá desplegar el formulario para crear/modificar venta" />
+            <h:panelGrid id="formVenta"  columns="3" style="width:100%;">
+                <p:outputLabel value="Cliente" />
+                <h:selectOneMenu value="#{venta.cliente}" converter="javax.faces.Long"
+                                 id="clienteVenta" maxlength="50" style="width:100%;height:100%"
+                                 required="true" requiredMessage="Describa un cliente">
 
-        <br />
-        <p:commandButton id="newVenta" value="Crear"/>
+                    <f:selectItem itemLabel="Seleccione un cliente" itemValue="" noSelectionOption="true" />
+                    <f:selectItems value="#{cliente.getClientes()}" var="cli" itemValue="#{cli.id}"
+                                   itemLabel="#{cli.nombre}"/>
 
-    </ui:define>
+                    <p:ajax event="valueChange" process="clienteVenta" update="formVentaDetalle" />
+
+                </h:selectOneMenu>
+                <p:messages style="margin-left: 15px;" for="clienteVenta" />
+
+            </h:panelGrid>
+
+            <p:separator />
+
+            <h:panelGrid id="formVentaDetalle"  columns="3" style="width:100%;">
+                <p:outputLabel value="Producto" />
+                <h:selectOneMenu disabled="#{venta.cliente==null}" value="#{venta.producto}" converter="javax.faces.Long"
+                                 id="productoVentaDetalle" maxlength="50" style="width:100%;height:100%"
+                                 required="true" >
+
+                    <f:selectItem itemLabel="Seleccione un producto" noSelectionOption="true" />
+                    <f:selectItems value="#{producto.getAllProducto()}" var="prod" itemValue="#{prod.id}"
+                                   itemLabel="#{prod.descripcion}"/>
+                </h:selectOneMenu>
+                <p:messages style="margin-left: 15px;" for="productoVentaDetalle" />
+
+                <p:outputLabel value="Cantidad" />
+                <p:inputText value="#{venta.cantidad}"
+                             id="cantidadVentaDetalle" maxlength="50" style="width:100%;height:100%"
+                             required="true" requiredMessage="Describa la cantidad del producto" >
+                </p:inputText>
+                <p:commandButton icon="ui-icon-plus" id="addVentaDetalle" update="listaVentaDetalle formVentaDetalle" process="formVentaDetalle"
+                                 actionListener="#{venta.addDetalleVenta}" style="margin-left: 15px;" />
+            </h:panelGrid>
+
+            <p:separator />
+            <p:dataTable style="width: 500px;"  id="listaVentaDetalle" value="#{venta.detallesVenta}" emptyMessage="No existen registros"
+                         rowIndexVar="index" rowKey="index" var="det">
+
+                <f:facet name="header">
+                    Lista de Productos
+                </f:facet>
+
+                <p:column style="width: 150px">
+                    #{det.producto.descripcion}
+                </p:column>
+
+
+                <p:column style="width: 100px" >
+                    #{det.cantidad}
+                </p:column>
+
+                <!-- BTN eliminar -->
+                <p:column style="width:35px;text-align: center">
+                    <p:commandButton process="listaVentaDetalle" style="height:25px;width:30px;" icon="ui-icon-trash" update="listaVentaDetalle :messages"
+                                     actionListener="#{venta.eliminarVentaDetalle(det)}" >
+                    </p:commandButton>
+                </p:column>
+
+            </p:dataTable>
+
+            <br />
+            <p:commandButton process="createVentasForm" value="Crear" oncomplete="if(!args.validationFailed){PF('createVenta').hide()}"
+                             update=":messages clienteVenta productoVentaDetalle cantidadVentaDetalle listaVentaDetalle" actionListener="#{venta.doCrearVenta}" />
+
+            <p:commandButton immediate="true" oncomplete="PF('createVenta').hide()" value="Cancelar"
+                             update="clienteVenta productoVentaDetalle cantidadVentaDetalle listaVentaDetalle" action="#{venta.resetCampos}"  />
+
+        </p:dialog>
+    </h:form>
 
 </ui:composition>

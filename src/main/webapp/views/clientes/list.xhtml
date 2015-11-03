@@ -14,18 +14,18 @@
         <!-- filtrado-->
         <br/>
         <h:inputText id="inputAllAttributes" value="#{cliente.by_all_attributes}">
-            <p:ajax event="keyup" update="tabla_clientes page" listener="#{cliente.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_clientes formPagination:page" listener="#{cliente.resetPage}"/>
         </h:inputText>
         <p:watermark value="Filtro completo" for="inputAllAttributes" />
         <br/><br/>
 
         <h:inputText id="inputNombre" value="#{cliente.by_nombre}" >
-            <p:ajax event="keyup" update="tabla_clientes page" listener="#{cliente.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_clientes formPagination:page" listener="#{cliente.resetPage}"/>
         </h:inputText>
         <p:watermark value="Nombre" for="inputNombre" />
 
         <h:inputText id="inputCedula" value="#{cliente.by_cedula}" >
-            <p:ajax event="keyup" update="tabla_clientes page" listener="#{cliente.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_clientes formPagination:page" listener="#{cliente.resetPage}"/>
         </h:inputText>
         <p:watermark value="Cedula" for="inputCedula" />
         <br/><br/>
@@ -77,12 +77,14 @@
         </p:confirmDialog>
 
         <!-- paginacion-->
-        <br/>
-        <h:panelGrid columns="3" style="align-content: center;padding-left:90%" >
-            <p:commandButton style="height: 25px;" icon="ui-icon-arrow-1-w" actionListener="#{cliente.goBackPage}" update="page tabla_clientes"/>
-                <h:outputText style="height: 25px;" id="page" value=" #{cliente.page} of #{cliente.totalPages} " />
-            <p:commandButton style="height: 25px;" icon="ui-icon-arrow-1-e" actionListener="#{cliente.goNextPage}" update="page tabla_clientes"/>
-        </h:panelGrid>
+        <br/>asd
+        <h:form id="formPagination">
+            <h:panelGrid id="pagination" columns="3" style="align-content: center;padding-left:90%" >
+                <p:commandButton process="@this,pagination" immediate="true" style="height: 25px;" icon="ui-icon-arrow-1-w" actionListener="#{cliente.goBackPage}" update=":messages page :form:tabla_clientes"/>
+                    <h:outputText style="height: 25px;" id="page" value=" #{cliente.page} of #{cliente.totalPages} " />
+                <p:commandButton process="@this,pagination" immediate="true" style="height: 25px;" icon="ui-icon-arrow-1-e" actionListener="#{cliente.goNextPage}" update=":messages page :form:tabla_clientes"/>
+            </h:panelGrid>
+        </h:form>
 
         <!-- BOTON DE EXPORTAR Y CREAR CLIENTE -->
         <h:panelGrid columns="2">

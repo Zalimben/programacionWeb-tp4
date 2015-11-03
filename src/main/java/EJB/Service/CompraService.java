@@ -23,6 +23,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Servicios para la gestion de las compras
@@ -65,6 +66,45 @@ public class CompraService extends Service<CompraEntity> {
 
         compraEntity.setMonto(String.valueOf(montoAcumulador));
         return super.add(compraEntity);
+
+    }
+
+	/**
+	 * Metodo para agregar una Compra Nueva
+	 *
+	 * @param entity
+	 *          :Entidad ha ser persistida
+	 * @param detalleEntityList
+	 *          : Detalles de la Compra
+	 * @return
+	 *          : True si la compra se registro correctamente, Falso caso contrario
+	 * @throws StockInsuficienteException
+	 */
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public boolean createCompra(CompraEntity entity, List<CompraDetalleEntity> detalleEntityList) throws StockInsuficienteException{
+
+        entity.setFecha(new Date().toString());
+	    long montoAcumulador = 0;
+
+        for (CompraDetalleEntity detalle : detalleEntityList) {
+            ProductoEntity productoEntity = productoService.find(detalle.getProducto().getId().intValue(), ProductoEntity.class);
+            if (productoEntity == null) {
+                throw new StockInsuficienteException();
+            } else {
+                productoEntity.setStock(productoEntity.getStock() + detalle.getCantidad());
+                montoAcumulador = montoAcumulador + productoEntity.getPrecio() * detalle.getCantidad();
+                productoService.update(productoEntity);
+            }
+            CompraDetalleEntity compraDetalleEntity = new CompraDetalleEntity();
+            compraDetalleEntity.setProducto(productoEntity);
+            compraDetalleEntity.setCantidad(detalle.getCantidad());
+            compraDetalleEntity.setCompra(entity);
+
+            entity.setDetalles(compraDetalleEntity);
+        }
+
+        entity.setMonto(String.valueOf(montoAcumulador));
+        return super.add(entity);
 
     }
 
