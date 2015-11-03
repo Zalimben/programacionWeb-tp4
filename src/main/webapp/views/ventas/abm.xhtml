@@ -12,12 +12,12 @@
 
             <h:panelGrid id="formVenta"  columns="3" style="width:100%;">
                 <p:outputLabel value="Cliente" />
-                <h:selectOneMenu value="#{venta.cliente}" converter="javax.faces.Long"
+                <h:selectOneMenu value="#{venta.clienteId}" converter="javax.faces.Long"
                                  id="clienteVenta" maxlength="50" style="width:100%;height:100%"
-                                 required="true" requiredMessage="Describa un cliente">
+                                 required="true" requiredMessage="Describa un clienteId">
 
-                    <f:selectItem itemLabel="Seleccione un cliente" itemValue="" noSelectionOption="true" />
-                    <f:selectItems value="#{cliente.getClientes()}" var="cli" itemValue="#{cli.id}"
+                    <f:selectItem itemLabel="Seleccione un clienteId" itemValue="" noSelectionOption="true" />
+                    <f:selectItems value="#{clienteId.getClientes()}" var="cli" itemValue="#{cli.id}"
                                    itemLabel="#{cli.nombre}"/>
 
                     <p:ajax event="valueChange" process="clienteVenta" update="formVentaDetalle" />
@@ -31,7 +31,7 @@
 
             <h:panelGrid id="formVentaDetalle"  columns="3" style="width:100%;">
                 <p:outputLabel value="Producto" />
-                <h:selectOneMenu disabled="#{venta.cliente==null}" value="#{venta.producto}" converter="javax.faces.Long"
+                <h:selectOneMenu disabled="#{venta.clienteId==null}" value="#{venta.producto}" converter="javax.faces.Long"
                                  id="productoVentaDetalle" maxlength="50" style="width:100%;height:100%"
                                  required="true" >
 

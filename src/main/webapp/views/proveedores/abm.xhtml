@@ -7,11 +7,11 @@
 
     <!-- PopUp para Crear Cliente -->
     <h:form id="createProveedorForm">
-        <p:dialog widgetVar="createProveedor" closable="false" id="create_proveedor" header="Registrar nuevo cliente" resizable="false" >
+        <p:dialog widgetVar="createProveedor" closable="false" id="create_proveedor" header="Registrar nuevo clienteId" resizable="false" >
 
             <h:panelGrid id="formProveedor"  columns="3" style="width:100%;">
                 <p:outputLabel value="Nombre" />
-                <p:inputText  value="#{cliente.proveedorEntity.descripcion}"
+                <p:inputText  value="#{clienteId.proveedorEntity.descripcion}"
                               id="nombreProveedor" maxlength="50" style="width:100%;height:100%"
                               required="true" requiredMessage="Describa un nombre " >
                 </p:inputText>
@@ -21,10 +21,10 @@
 
             <br />
             <p:commandButton process="createProveedorForm" value="Crear" oncomplete="if(!args.validationFailed){PF('createProveedor').hide()}"
-                             update=":messages nombreProveedor" actionListener="#{cliente.doCrearProveedor}" />
+                             update=":messages nombreProveedor" actionListener="#{clienteId.doCrearProveedor}" />
 
             <p:commandButton immediate="true" oncomplete="PF('createProveedor').hide()" value="Cancelar"
-                             update="nombreProveedor" actionListener="#{cliente.resetCampos}"  />
+                             update="nombreProveedor" actionListener="#{clienteId.resetCampos}"  />
 
         </p:dialog>
     </h:form>

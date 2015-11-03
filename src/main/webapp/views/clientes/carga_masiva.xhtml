@@ -12,11 +12,11 @@
         <br />  <br />
 
             <h:form enctype="multipart/form-data">
-                <p:fileUpload  value="#{cliente.importar}" mode="simple" skinSimple="true"/>
+                <p:fileUpload  value="#{clienteId.importar}" mode="simple" skinSimple="true"/>
             </h:form>
 
         <br />
-        <p:commandButton icon="ui-icon-circle-arrow-n" value="Cargar" ajax="false" action="#{cliente.upload}" disabled="false"/>
+        <p:commandButton icon="ui-icon-circle-arrow-n" value="Cargar" ajax="false" action="#{clienteId.upload}" disabled="false"/>
 
     </ui:define>
 

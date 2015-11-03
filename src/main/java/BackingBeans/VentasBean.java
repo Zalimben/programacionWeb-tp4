@@ -1,5 +1,6 @@
 package BackingBeans;
 
+import EJB.Helper.VentasResponse;
 import EJB.Service.ClienteService;
 import EJB.Service.ProductoService;
 import EJB.Service.VentasService;
@@ -23,6 +24,7 @@ import java.util.List;
 @SessionScoped
 public class VentasBean {
 
+	// variables saul
 	/* Variables & Dependencias */
 	@EJB
 	VentasService service;
@@ -38,20 +40,161 @@ public class VentasBean {
 	ProductoEntity productoEntity;
 
 	private StreamedContent file;
-	private Long cliente;
+	private Long clienteId;
 	private FacesMessage message;
 
 	private List<VentaDetalleEntity> detallesVenta;
 	private Long cantidad;
 	private Long producto;
 
+	// variables nabil
+	private List<VentaEntity> ventas;
+
+	private String cliente;
+	private String fecha;
+	private String monto;
+	private String byAllAttributes;
+	private String byCliente;
+	private String byFecha;
+	private String byMonto;
+	private Integer page=1;
+	private Integer totalPages=0;
+	private VentasResponse ventasResponse;
+
+	// variables nabil
+	public void goNextPage(){
+		if(page<totalPages) {
+			page += 1;
+			ventasResponse = service.getVentas(cliente, fecha, monto, byAllAttributes, byCliente,
+					byFecha, byMonto, page);
+			ventas = ventasResponse.getEntidades();
+		}
+	}
+
+	public void goBackPage(){
+		if(page>1) {
+			page -= 1;
+			ventasResponse = service.getVentas(cliente, fecha, monto, byAllAttributes, byCliente,
+					byFecha, byMonto, page);
+			ventas = ventasResponse.getEntidades();
+		}
+	}
+
+
+	public void orderByCliente(){
+		if(cliente==null)
+			cliente = "asc";
+		else if(cliente.equals("asc"))
+			cliente = "desc";
+		else
+			cliente = "asc";
+
+		fecha = null;
+		monto = null;
+
+		ventasResponse = service.getVentas(cliente, fecha, monto, byAllAttributes, byCliente,
+				byFecha, byMonto, page);
+		ventas = ventasResponse.getEntidades();
+	}
+
+	public void orderByFecha(){
+		if(fecha==null)
+			fecha="asc";
+		else if(fecha.equals("asc"))
+			fecha="desc";
+		else
+			fecha="asc";
+
+		cliente=null;
+		monto=null;
+
+		ventasResponse = service.getVentas(cliente, fecha, monto, byAllAttributes, byCliente,
+				byFecha, byMonto, page);
+		ventas = ventasResponse.getEntidades();
+	}
+
+	public void orderByMonto(){
+		if(monto==null)
+			monto="asc";
+		else if(monto.equals("asc"))
+			monto="desc";
+		else
+			monto="asc";
+
+		cliente=null;
+		fecha=null;
+
+		ventasResponse = service.getVentas(cliente, fecha, monto, byAllAttributes, byCliente,
+				byFecha, byMonto, page);
+		ventas = ventasResponse.getEntidades();
+	}
+
+
+	public void resetPage(){
+		page = 1;
+	}
+
+	public Integer getPage() {
+		return page;
+	}
+
+	public Integer getTotalPages() {
+		if(ventasResponse == null)
+			ventasResponse = service.getVentas(cliente, fecha, monto, byAllAttributes, byCliente,
+					byFecha, byMonto, page);
+		totalPages = ventasResponse.getMeta().getTotal_pages().intValue();
+		return totalPages;
+	}
+
+	public String getByAllAttributes() {
+		return byAllAttributes;
+	}
+
+	public void setByAllAttributes(String byAllAttributes) {
+		this.byAllAttributes = byAllAttributes;
+	}
+
+	public String getByCliente() {
+		return byCliente;
+	}
+
+	public void setByCliente(String byCliente) {
+		this.byCliente = byCliente;
+	}
+
+	public String getByFecha() {
+		return byFecha;
+	}
+
+	public void setByFecha(String byFecha) {
+		this.byFecha = byFecha;
+	}
+
+	public String getByMonto() {
+		return byMonto;
+	}
+
+	public void setByMonto(String byMonto) {
+		this.byMonto = byMonto;
+	}
+
+	public List<VentaEntity> getVentas() {
+		ventasResponse = service.getVentas(cliente, fecha, monto, byAllAttributes, byCliente,
+				byFecha, byMonto, page);
+		ventas = ventasResponse.getEntidades();
+		return ventas;
+	}
+
+
+
+	// variables saul
 	/* Metodos */
 	public void doCrearVenta() {
 
 		FacesContext context = FacesContext.getCurrentInstance();
 
-		if(cliente != null) {
-			ClienteEntity c = clienteService.find(cliente.intValue(), ClienteEntity.class);
+		if(clienteId != null) {
+			ClienteEntity c = clienteService.find(clienteId.intValue(), ClienteEntity.class);
 		}
 		try{
 			boolean flag = service.createVenta(ventaEntity, detallesVenta);
@@ -103,7 +246,7 @@ public class VentasBean {
 	 */
 	public void resetCampos() {
 
-		setCliente(null);
+		setClienteId(null);
 		setCantidad(null);
 		setProducto(null);
 		ventaEntity = new VentaEntity();
@@ -156,12 +299,12 @@ public class VentasBean {
 		this.file = file;
 	}
 
-	public Long getCliente() {
-		return cliente;
+	public Long getClienteId() {
+		return clienteId;
 	}
 
-	public void setCliente(Long cliente) {
-		this.cliente = cliente;
+	public void setClienteId(Long clienteId) {
+		this.clienteId = clienteId;
 	}
 
 	public FacesMessage getMessage() {

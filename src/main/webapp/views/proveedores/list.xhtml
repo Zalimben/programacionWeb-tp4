@@ -49,7 +49,7 @@
         <!-- BOTON DE EXPORTAR Y CREAR -->
         <h:panelGrid columns="2">
             <p:commandButton icon="ui-icon-disk" value="Descargar" ajax="false">
-                <p:fileDownload value="#{cliente.file}"/>
+                <p:fileDownload value="#{clienteId.file}"/>
             </p:commandButton>
             <p:commandButton icon="ui-icon-plusthick"  id="newProoveedor" update="createProveedorForm" oncomplete="PF('createProveedor').show()" value="Añadir Proveedor"/>
         </h:panelGrid>
@@ -58,11 +58,11 @@
 
         <!-- BTN MODIFICAR CLIENTE - POPUP-->
         <h:form id="editProveedorForm">
-            <p:dialog widgetVar="modificarProveedor" closable="false" id="modificar_proveedor" header="Modificar cliente" resizable="false" >
+            <p:dialog widgetVar="modificarProveedor" closable="false" id="modificar_proveedor" header="Modificar clienteId" resizable="false" >
 
                 <h:panelGrid id="formEditProveedor"  columns="3" style="width:100%;">
                     <p:outputLabel value="Nombre" />
-                    <p:inputText  value="#{cliente.descripcionModificar}" placeholder="#{cliente.selectedProveedor.descripcion}"
+                    <p:inputText  value="#{clienteId.descripcionModificar}" placeholder="#{clienteId.selectedProveedor.descripcion}"
                                   id="nombreEditProveedor" maxlength="50" style="width:100%;height:100%"
                                   requiredMessage="Describa un nombre " >
                     </p:inputText>
@@ -72,10 +72,10 @@
 
                 <br />
                 <p:commandButton process="editProveedorForm" value="Guardar" oncomplete="if(!args.validationFailed){PF('modificarProveedor').hide()}"
-                                 update=":messages" actionListener="#{cliente.doCrearProveedor}" />
+                                 update=":messages" actionListener="#{clienteId.doCrearProveedor}" />
 
                 <p:commandButton process="@this formEditProveedor"  immediate="true" oncomplete="PF('modificarProveedor').hide()" value="Cancelar"
-                                 update="formEditProveedor" actionListener="#{cliente.resetCampos}"  />
+                                 update="formEditProveedor" actionListener="#{clienteId.resetCampos}"  />
             </p:dialog>
         </h:form>
 

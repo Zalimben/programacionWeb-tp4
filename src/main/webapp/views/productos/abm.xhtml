@@ -32,11 +32,11 @@
                 <p:messages style="margin-left: 15px;" for="stockProducto" />
 
                 <p:outputLabel value="Proveedor" />
-                <h:selectOneMenu value="#{producto.cliente}" converter="javax.faces.Long"
+                <h:selectOneMenu value="#{producto.clienteId}" converter="javax.faces.Long"
                                  id="proveedorProducto" maxlength="50" style="width:100%;height:100%"
                                  required="true" requiredMessage="Describa el stock del producto">
 
-                    <f:selectItem itemLabel="Seleccione un cliente" itemValue="" noSelectionOption="true" />
+                    <f:selectItem itemLabel="Seleccione un clienteId" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{producto.getProveedores()}" var="proov" itemValue="#{proov.id}"
                             itemLabel="#{proov.descripcion}"/>
                 </h:selectOneMenu>

@@ -19,14 +19,14 @@ Observación: El proyecto debe manejarse con Maven
     2.2 Implementar "listado de compras".
 
 3- Venta.
-    En una venta, se pueden especificar varios productos a ser vendidos a un cliente. Especificar cantidad por cada
+    En una venta, se pueden especificar varios productos a ser vendidos a un clienteId. Especificar cantidad por cada
     producto. Se guarda toda la venta en una única transacción.
     Al guardar la venta, actualizar stock del producto. Si no hay stock suficiente, abortar venta.
 
     IMPORTANTE: En la tabla de VENTAS_DET, poner un check constraint que evite asignar un valor <= 0 al campo CANTIDAD.
     NO hacer esta validación desde Java, solo manejar la excepción lanzada por la BD.
 
-    Por cada venta, guardar en tablas los datos de la cabecera (fecha, cliente)
+    Por cada venta, guardar en tablas los datos de la cabecera (fecha, clienteId)
     y los detalles de la venta (producto, cantidad).
 
     3.2 Implementar "listado de ventas".

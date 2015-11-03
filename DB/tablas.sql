@@ -62,7 +62,7 @@ CREATE TABLE proveedorId (
   descripcion VARCHAR(100)
 );
 
-CREATE TABLE cliente (
+CREATE TABLE clienteId (
   id               BIGINT PRIMARY KEY   DEFAULT nextval('seq_cliente'),
   nombre           VARCHAR(100),
   cedula_identidad VARCHAR(50) NOT NULL DEFAULT nextval('seq_cliente'::regclass),
@@ -90,7 +90,7 @@ CREATE TABLE venta (
   monto      BIGINT,
   CONSTRAINT venta_pkey PRIMARY KEY (id),
   CONSTRAINT cliente_fkey FOREIGN KEY (cliente_id)
-  REFERENCES cliente (id)
+  REFERENCES clienteId (id)
     MATCH SIMPLE
     ON UPDATE CASCADE
     ON DELETE RESTRICT,

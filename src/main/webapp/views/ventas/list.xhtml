@@ -9,7 +9,67 @@
 
     <ui:define name="content">
 
-        <p:outputLabel value="Aqui se deberá desplegar la lista de ventas" />
+        <!-- filtrado-->
+        <br/><br/>
+        <p:inputText id="inputAllAttributes" value="#{venta.byAllAttributes}">
+            <p:ajax event="valueChange" update="tabla_ventas page" listener="#{venta.resetPage}"/>
+        </p:inputText>
+        <p:watermark value="Filtro completo" for="inputAllAttributes" />
+        <br/><br/>
+
+        <p:inputText id="inputCliente" value="#{venta.byCliente}" >
+            <p:ajax event="valueChange" update="tabla_ventas page" listener="#{venta.resetPage}"/>
+        </p:inputText>
+        <p:watermark value="Cliente" for="inputCliente" />
+
+        <p:inputText id="inputFecha" value="#{venta.byFecha}" >
+            <p:ajax event="valueChange" update="tabla_ventas page" listener="#{venta.resetPage}"/>
+        </p:inputText>
+        <p:watermark value="Fecha" for="inputFecha" />
+
+        <p:inputText id="inputMonto" value="#{venta.byMonto}" >
+            <p:ajax event="valueChange" update="tabla_ventas page" listener="#{venta.resetPage}"/>
+        </p:inputText>
+        <p:watermark value="Monto" for="inputMonto" />
+        <br/><br/>
+
+
+        <!-- tabla de datos-->
+        <p:dataTable id="tabla_ventas" value="#{venta.ventas}" var="ventaVar">
+            <f:facet name="header">
+                Lista de ventas
+            </f:facet>
+
+            <p:column>
+                <f:facet name="header">
+                    <p:commandButton value="Cliente" actionListener="#{venta.orderByCliente}"
+                                     update="tabla_ventas" />
+                </f:facet>
+                #{ventaVar.cliente.nombre}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <p:commandButton value="Fecha" actionListener="#{venta.orderByFecha}"
+                                     update="tabla_ventas" />
+                </f:facet>
+                #{ventaVar.fecha}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <p:commandButton value="Monto" actionListener="#{venta.orderByMonto}"
+                                     update="tabla_ventas" />
+                </f:facet>
+                #{ventaVar.monto}
+            </p:column>
+        </p:dataTable>
+
+        <!-- paginacion-->
+        <br/>
+        <p:commandButton value="Atras" actionListener="#{venta.goBackPage}" update="page tabla_ventas"/>
+        <h:outputText id="page" value=" #{venta.page} of #{venta.page} " />
+        <p:commandButton value="Siguiente" actionListener="#{venta.goNextPage}" update="page tabla_ventas"/>
 
         <br />
 

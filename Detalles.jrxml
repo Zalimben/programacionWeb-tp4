@@ -10,8 +10,8 @@
 	<field name="fecha" class="java.lang.String">
 		<fieldDescription><![CDATA[fecha]]></fieldDescription>
 	</field>
-	<field name="cliente" class="java.lang.String">
-		<fieldDescription><![CDATA[cliente]]></fieldDescription>
+	<field name="clienteId" class="java.lang.String">
+		<fieldDescription><![CDATA[clienteId]]></fieldDescription>
 	</field>
 	<field name="venta" class="java.lang.Integer">
 		<fieldDescription><![CDATA[venta]]></fieldDescription>
@@ -94,7 +94,7 @@
 		<textField>
 			<reportElement x="50" y="0" width="150" height="15"/>
 			<textElement textAlignment="Center" verticalAlignment="Middle"/>
-			<textFieldExpression class="java.lang.String"><![CDATA[$F{cliente}]]></textFieldExpression>
+			<textFieldExpression class="java.lang.String"><![CDATA[$F{clienteId}]]></textFieldExpression>
 		</textField>
 		<textField>
 			<reportElement x="300" y="0" width="128" height="15"/>

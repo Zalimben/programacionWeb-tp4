@@ -13,25 +13,25 @@
 
         <!-- filtrado-->
         <br/>
-        <h:inputText id="inputAllAttributes" value="#{cliente.by_all_attributes}">
-            <p:ajax event="keyup" update="tabla_clientes formPagination:page" listener="#{cliente.resetPage}"/>
+        <h:inputText id="inputAllAttributes" value="#{clienteId.by_all_attributes}">
+            <p:ajax event="keyup" update="tabla_clientes formPagination:page" listener="#{clienteId.resetPage}"/>
         </h:inputText>
         <p:watermark value="Filtro completo" for="inputAllAttributes" />
         <br/><br/>
 
-        <h:inputText id="inputNombre" value="#{cliente.by_nombre}" >
-            <p:ajax event="keyup" update="tabla_clientes formPagination:page" listener="#{cliente.resetPage}"/>
+        <h:inputText id="inputNombre" value="#{clienteId.by_nombre}" >
+            <p:ajax event="keyup" update="tabla_clientes formPagination:page" listener="#{clienteId.resetPage}"/>
         </h:inputText>
         <p:watermark value="Nombre" for="inputNombre" />
 
-        <h:inputText id="inputCedula" value="#{cliente.by_cedula}" >
-            <p:ajax event="keyup" update="tabla_clientes formPagination:page" listener="#{cliente.resetPage}"/>
+        <h:inputText id="inputCedula" value="#{clienteId.by_cedula}" >
+            <p:ajax event="keyup" update="tabla_clientes formPagination:page" listener="#{clienteId.resetPage}"/>
         </h:inputText>
         <p:watermark value="Cedula" for="inputCedula" />
         <br/><br/>
 
         <!-- tabla de datos-->
-        <p:dataTable id="tabla_clientes" value="#{cliente.clientes}" rowIndexVar="index"
+        <p:dataTable id="tabla_clientes" value="#{clienteId.clientes}" rowIndexVar="index"
                      var="cli" emptyMessage="No se encuentran registros">
 
             <f:facet name="header">
@@ -40,7 +40,7 @@
 
             <p:column>
                 <f:facet name="header">
-                    <p:commandButton process="tabla_clientes" value="Nombre" actionListener="#{cliente.orderByNombre}"
+                    <p:commandButton process="tabla_clientes" value="Nombre" actionListener="#{clienteId.orderByNombre}"
                                      update="tabla_clientes" />
                 </f:facet>
                 #{cli.nombre}
@@ -48,7 +48,7 @@
 
             <p:column>
                 <f:facet name="header">
-                    <p:commandButton process="tabla_clientes" value="Cedula" actionListener="#{cliente.orderByCedula}"
+                    <p:commandButton process="tabla_clientes" value="Cedula" actionListener="#{clienteId.orderByCedula}"
                                      update="tabla_clientes" />
                 </f:facet>
                 #{cli.cedulaIdentidad}
@@ -57,13 +57,13 @@
             <!-- BTN modificar -->
             <p:column style="width:35px;text-align: center">
                 <p:commandButton process="tabla_clientes"  style="height:25px;width:30px;" update=":form:editClienteForm :messages"  oncomplete="PF('modificarCliente').show()" icon="ui-icon-search" >
-                    <f:setPropertyActionListener value="#{cli}" target="#{cliente.selectedCliente}" />
+                    <f:setPropertyActionListener value="#{cli}" target="#{clienteId.selectedCliente}" />
                 </p:commandButton>
             </p:column>
 
             <!-- BTN eliminar -->
             <p:column style="width:35px;text-align: center">
-                <p:commandButton process="tabla_clientes" style="height:25px;width:30px;" icon="ui-icon-trash" update="tabla_clientes :messages" actionListener="#{cliente.eliminarCliente(cli.id)}" >
+                <p:commandButton process="tabla_clientes" style="height:25px;width:30px;" icon="ui-icon-trash" update="tabla_clientes :messages" actionListener="#{clienteId.eliminarCliente(cli.id)}" >
                     <p:confirm header="Confirmar" message="Eliminar el registro?" icon="ui-icon-alert" />
                 </p:commandButton>
             </p:column>
@@ -80,16 +80,16 @@
         <br/>asd
         <h:form id="formPagination">
             <h:panelGrid id="pagination" columns="3" style="align-content: center;padding-left:90%" >
-                <p:commandButton process="@this,pagination" immediate="true" style="height: 25px;" icon="ui-icon-arrow-1-w" actionListener="#{cliente.goBackPage}" update=":messages page :form:tabla_clientes"/>
-                    <h:outputText style="height: 25px;" id="page" value=" #{cliente.page} of #{cliente.totalPages} " />
-                <p:commandButton process="@this,pagination" immediate="true" style="height: 25px;" icon="ui-icon-arrow-1-e" actionListener="#{cliente.goNextPage}" update=":messages page :form:tabla_clientes"/>
+                <p:commandButton process="@this,pagination" immediate="true" style="height: 25px;" icon="ui-icon-arrow-1-w" actionListener="#{clienteId.goBackPage}" update=":messages page :form:tabla_clientes"/>
+                    <h:outputText style="height: 25px;" id="page" value=" #{clienteId.page} of #{clienteId.totalPages} " />
+                <p:commandButton process="@this,pagination" immediate="true" style="height: 25px;" icon="ui-icon-arrow-1-e" actionListener="#{clienteId.goNextPage}" update=":messages page :form:tabla_clientes"/>
             </h:panelGrid>
         </h:form>
 
         <!-- BOTON DE EXPORTAR Y CREAR CLIENTE -->
         <h:panelGrid columns="2">
             <p:commandButton icon="ui-icon-disk" value="Descargar" ajax="false">
-                <p:fileDownload value="#{cliente.file}"/>
+                <p:fileDownload value="#{clienteId.file}"/>
             </p:commandButton>
             <p:commandButton icon="ui-icon-plusthick" id="newCliente" update="tabla_clientes createClienteForm" value="Añadir Cliente" oncomplete="PF('createCliente').show()"  />
         </h:panelGrid>
@@ -98,18 +98,18 @@
 
         <!-- BTN MODIFICAR CLIENTE - POPUP-->
         <h:form id="editClienteForm">
-           <p:dialog widgetVar="modificarCliente" closable="false" id="modificar_cliente" header="Modificar cliente" resizable="false" >
+           <p:dialog widgetVar="modificarCliente" closable="false" id="modificar_cliente" header="Modificar clienteId" resizable="false" >
 
                 <h:panelGrid id="formEditCliente"  columns="3" style="width:100%;">
                     <p:outputLabel value="Nombre" />
-                    <p:inputText  value="#{cliente.nombreModificar}" placeholder="#{cliente.selectedCliente.nombre}"
+                    <p:inputText  value="#{clienteId.nombreModificar}" placeholder="#{clienteId.selectedCliente.nombre}"
                                   id="nombreEditCliente" maxlength="50" style="width:100%;height:100%"
                                   requiredMessage="Describa un nombre " >
                     </p:inputText>
                     <p:messages style="margin-left: 15px;" for="nombreEditCliente" />
 
                     <p:outputLabel value="Nro. Documento" />
-                    <p:inputText value="#{cliente.cedulaModificar}"  placeholder="#{cliente.selectedCliente.cedulaIdentidad}"
+                    <p:inputText value="#{clienteId.cedulaModificar}"  placeholder="#{clienteId.selectedCliente.cedulaIdentidad}"
                                  id="documentoEditCliente" maxlength="50" style="width:100%;height:100%"
                                  requiredMessage="Describa el documento" >
                     </p:inputText>
@@ -118,10 +118,10 @@
 
                 <br />
                 <p:commandButton process="editClienteForm" value="Guardar" oncomplete="if(!args.validationFailed){PF('modificarCliente').hide()}"
-                                 update=":messages :form:tabla_clientes" actionListener="#{cliente.doEditarCliente}" />
+                                 update=":messages :form:tabla_clientes" actionListener="#{clienteId.doEditarCliente}" />
 
                 <p:commandButton process="@this formEditCliente"  immediate="true" oncomplete="PF('modificarCliente').hide()" value="Cancelar"
-                                 update="formEditCliente" actionListener="#{cliente.resetCampos}"  />
+                                 update="formEditCliente" actionListener="#{clienteId.resetCampos}"  />
            </p:dialog>
         </h:form>
     </ui:define>
