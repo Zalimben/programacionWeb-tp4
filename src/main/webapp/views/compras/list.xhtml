@@ -42,7 +42,7 @@
 
             <p:column>
                 <f:facet name="header">
-                    <p:commandButton value="Proveedor" actionListener="#{compra.orderByProveedor}"
+                    <p:commandButton process="tabla_compras" value="Proveedor" actionListener="#{compra.orderByProveedor}"
                                      update="tabla_compras"/>
                 </f:facet>
                 #{comprasVar.proveedor.descripcion}
@@ -50,7 +50,7 @@
 
             <p:column>
                 <f:facet name="header">
-                    <p:commandButton value="Fecha" actionListener="#{compra.orderByFecha}"
+                    <p:commandButton process="tabla_compras" value="Fecha" actionListener="#{compra.orderByFecha}"
                                      update="tabla_compras"/>
                 </f:facet>
                 #{comprasVar.fecha}
@@ -58,7 +58,7 @@
 
             <p:column>
                 <f:facet name="header">
-                    <p:commandButton value="Monto" actionListener="#{compra.orderByMonto}"
+                    <p:commandButton process="tabla_compras" value="Monto" actionListener="#{compra.orderByMonto}"
                                      update="tabla_compras"/>
                 </f:facet>
                 #{comprasVar.monto}

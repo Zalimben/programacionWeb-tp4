@@ -17,7 +17,7 @@
                                  required="true" requiredMessage="Describa un clienteId">
 
                     <f:selectItem itemLabel="Seleccione un clienteId" itemValue="" noSelectionOption="true" />
-                    <f:selectItems value="#{clienteId.getClientes()}" var="cli" itemValue="#{cli.id}"
+                    <f:selectItems value="#{venta.clientes}" var="cli" itemValue="#{cli.id}"
                                    itemLabel="#{cli.nombre}"/>
 
                     <p:ajax event="valueChange" process="clienteVenta" update="formVentaDetalle" />
