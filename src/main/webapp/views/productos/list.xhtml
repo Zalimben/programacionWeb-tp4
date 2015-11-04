@@ -12,29 +12,20 @@
         <!-- filtrado-->
         <br/><br/>
         <p:inputText id="inputAllAttributes" value="#{producto.byAllAttributes}">
-            <p:ajax event="keyup" update="tabla_productos page" listener="#{producto.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_productos pag:page" listener="#{producto.resetPage}"/>
         </p:inputText>
         <p:watermark value="Filtro completo" for="inputAllAttributes" />
         <br/><br/>
 
         <p:inputText id="inputDescription" value="#{producto.byDescripcion}">
-            <p:ajax event="keyup" update="tabla_productos page" listener="#{producto.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_productos pag:page" listener="#{producto.resetPage}"/>
         </p:inputText>
         <p:watermark value="Producto" for="inputDescription" />
 
         <p:inputText id="inputProveedor" value="#{producto.byProveedor}">
-            <p:ajax event="keyup" update="tabla_productos page" listener="#{producto.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_productos pag:page" listener="#{producto.resetPage}"/>
         </p:inputText>
         <p:watermark value="Proveedor" for="inputProveedor" />
-
-        <p:inputText id="inputStock" value="#{producto.byStock}">
-            <p:ajax event="keyup" update="tabla_productos page" listener="#{producto.resetPage}" />
-        </p:inputText>
-        <p:watermark value="Stock" for="inputStock"/>
-        <p:inputText id="inputPrecio" value="#{producto.byPrecio}">
-            <p:ajax event="keyup" update="tabla_productos page" listener="#{producto.resetPage}"/>
-        </p:inputText>
-        <p:watermark value="Precio" for="inputPrecio"/>
         <br/><br/>
 
 
@@ -45,12 +36,18 @@
             </f:facet>
 
             <p:column>
-                <f:facet name="header">Producto</f:facet>
+                <f:facet name="header">
+                    <p:commandButton process="tabla_productos" value="Producto" actionListener="#{producto.orderByDescripcion}"
+                                     update="tabla_productos" />
+                </f:facet>
                 #{productoIterador.descripcion}
             </p:column>
 
             <p:column>
-                <f:facet name="header">Proveedor</f:facet>
+                <f:facet name="header">
+                    <p:commandButton process="tabla_productos" value="Proveedor" actionListener="#{producto.orderByProveedor}"
+                                     update="tabla_productos" />
+                </f:facet>
                 #{productoIterador.proveedor.descripcion}
             </p:column>
 
@@ -67,10 +64,11 @@
 
         <!-- paginacion-->
         <br/>
-        <p:commandButton value="Atras" actionListener="#{producto.goBackPage}" update="page tabla_productos"/>
-        <h:outputText id="page" value=" #{producto.page} of #{producto.totalPages} " />
-        <p:commandButton value="Siguiente" actionListener="#{producto.goNextPage}" update="page"/>
-
+        <h:form id="pag">
+            <p:commandButton value="Atras" actionListener="#{producto.goBackPage}" update="page :form:tabla_productos"/>
+            <h:outputText id="page" value=" #{producto.page} of #{producto.totalPages} " />
+            <p:commandButton value="Siguiente" actionListener="#{producto.goNextPage}" update="page :form:tabla_productos"/>
+        </h:form>
         <br />
 
         <!-- BOTON DE EXPORTAR Y CREAR -->

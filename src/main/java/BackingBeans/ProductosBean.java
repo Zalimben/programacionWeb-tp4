@@ -57,16 +57,45 @@ public class ProductosBean {
     private Integer totalPages=0;
     private ProductoResponse productoResponse;
 
-    // metodos nabil
-    public void goNextPage(){
-        page+=1;
 
+    // metodos nabil
+	public void orderByDescripcion(){
+		if(descripcion==null)
+			descripcion="asc";
+		else if(descripcion.equals("asc"))
+			descripcion="desc";
+		else
+			descripcion="asc";
+
+		proveedor=null;
+		productoResponse = service.getProductos(descripcion, proveedor, stock, precio,
+				byAllAttributes, byDescripcion, byProveedor, byStock, byPrecio, page);
+
+		productos = productoResponse.getEntidades();
+	}
+
+	public void orderByProveedor(){
+		if(proveedor==null)
+			proveedor="asc";
+		else if(proveedor.equals("asc"))
+			proveedor="desc";
+		else
+			proveedor="asc";
+
+		descripcion=null;
+		productoResponse = service.getProductos(descripcion, proveedor, stock, precio,
+				byAllAttributes, byDescripcion, byProveedor, byStock, byPrecio, page);
+
+		productos = productoResponse.getEntidades();
+	}
+
+    public void goNextPage(){
         if(page<totalPages) {
             page += 1;
-//            productoResponse = service.getProductos(descripcion, proveedor, stock, precio,
-//                    byAllAttributes, byDescripcion, byProveedor, byStock, byPrecio, page);
-//
-//            productos = productoResponse.getEntidades();
+            productoResponse = service.getProductos(descripcion, proveedor, stock, precio,
+                    byAllAttributes, byDescripcion, byProveedor, byStock, byPrecio, page);
+
+            productos = productoResponse.getEntidades();
         }
     }
 
@@ -102,13 +131,11 @@ public class ProductosBean {
     }
 
     public Integer getTotalPages() {
-//        if(productoResponse == null)
-//            productoResponse = service.getProductos(descripcion, proveedor, stock, precio,
-//                    byAllAttributes, byDescripcion, byProveedor, byStock, byPrecio, page);
-//
-//        totalPages = productoResponse.getMeta().getTotal_pages().intValue();
-        totalPages=2;
+        if(productoResponse == null)
+            productoResponse = service.getProductos(descripcion, proveedor, stock, precio,
+                    byAllAttributes, byDescripcion, byProveedor, byStock, byPrecio, page);
 
+        totalPages = productoResponse.getMeta().getTotal_pages().intValue();
         return totalPages;
     }
 
