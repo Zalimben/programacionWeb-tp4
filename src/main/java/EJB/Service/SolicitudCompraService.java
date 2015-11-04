@@ -77,7 +77,9 @@ public class SolicitudCompraService extends Service<SolicitudCompraEntity> {
         return count;
     }
 
-    public Object getSolicitudes(MultivaluedMap<String, String> queryParams) {
+
+    public SolicitudCompraResponse getSolicitudes(String producto, String fecha, String byAllAttributes,
+                                 String byProducto, String byFecha, Integer pagePar) {
 
         SolicitudCompraResponse response = new SolicitudCompraResponse();
         inicializarMeta();
@@ -92,18 +94,18 @@ public class SolicitudCompraService extends Service<SolicitudCompraEntity> {
         /**
          * Retrieve one or none of the URI query params that have the column name and sort order values
          */
-        if (queryParams.getFirst("producto") != null) {
+        if (producto != null) {
             ordenarPorColumna = "producto";
-            ordenDeOrdenacion = queryParams.getFirst("producto");
-        } else if (queryParams.getFirst("fecha") != null) {
+            ordenDeOrdenacion = producto;
+        } else if (fecha != null) {
             ordenarPorColumna = "fecha";
-            ordenDeOrdenacion = queryParams.getFirst("fecha");
+            ordenDeOrdenacion = fecha;
         }
 
         // Iniciamos las varialles para el filtrado
-        String by_all_attributes = queryParams.getFirst("by_all_attributes");
-        String by_producto = queryParams.getFirst("by_producto");
-        String by_fecha = queryParams.getFirst("by_fecha");
+        String by_all_attributes = byAllAttributes;
+        String by_producto = byProducto;
+        String by_fecha = byFecha;
 
         if (by_fecha == null) {
             by_fecha = "";
@@ -140,8 +142,8 @@ public class SolicitudCompraService extends Service<SolicitudCompraEntity> {
         }
 
         Integer page;
-        if (queryParams.getFirst("page") != null) {
-            page = Integer.valueOf(queryParams.getFirst("page")) - 1;
+        if (pagePar != null) {
+            page = pagePar - 1;
         } else {
             page = 0;
         }
