@@ -9,7 +9,63 @@
 
     <ui:define name="content">
 
-        <p:outputLabel value="Aqui se debera desplegar la lista de solicitudes de compra" />
+        <!-- filtrado-->
+        <br/><br/>
+        <p:inputText id="inputAllAttributes" value="#{solicitud.byAllAttributes}">
+            <p:ajax event="keyup" update="tabla_solicitudes pag:page" listener="#{solicitud.resetPage}"/>
+        </p:inputText>
+        <p:watermark value="Filtro completo" for="inputAllAttributes" />
+        <br/><br/>
+
+        <p:inputText id="inputProducto" value="#{solicitud.byProducto}">
+            <p:ajax event="keyup" update="tabla_solicitudes pag:page" listener="#{solicitud.resetPage}"/>
+        </p:inputText>
+        <p:watermark value="Producto" for="inputProducto"/>
+
+        <p:inputText id="inputFecha" value="#{solicitud.byFecha}">
+            <p:ajax event="keyup" update="tabla_solicitudes pag:page" listener="#{solicitud.resetPage}"/>
+        </p:inputText>
+        <p:watermark value="Producto" for="inputFecha"/>
+        <br/><br/>
+
+
+        <!-- tabla de datos-->
+        <p:dataTable id="tabla_solicitudes" value="#{solicitud.solicitudes}" var="solicitudVar">
+            <f:facet name="header">
+                Lista de solicitudes
+            </f:facet>
+
+            <p:column>
+                <f:facet name="header">
+                    <p:commandButton process="tabla_solicitudes" value="Producto" actionListener="#{solicitud.orderByProducto}"
+                                     update="tabla_solicitudes" />
+                </f:facet>
+                #{solicitudVar.producto.descripcion}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <p:commandButton process="tabla_solicitudes" value="Fecha" actionListener="#{solicitud.orderByFecha}"
+                                     update="tabla_solicitudes" />
+                </f:facet>
+                #{solicitudVar.fecha}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">Atendido</f:facet>
+                #{solicitudVar.atendido}
+            </p:column>
+        </p:dataTable>
+
+        <!-- paginacion-->
+        <br/>
+        <h:form id="pag">
+            <p:commandButton process="pag" value="Atras" actionListener="#{solicitud.goBackPage}" update="page :form:tabla_solicitudes" />
+            <h:outputText id="page" value=" #{solicitud.page} of #{solicitud.totalPages} " />
+            <p:commandButton process="pag" value="Siguiente" actionListener="#{solicitud.goNextPage}" update="page :form:tabla_solicitudes" />
+        </h:form>
+
+        <br />
 
         <!-- BOTON DE EXPORTAR Y CREAR -->
         <h:panelGrid columns="2">
