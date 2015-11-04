@@ -10,9 +10,7 @@
 
         <p:outputLabel value="Formulario para la Carga Masiva de Clientes" />
         <h:form enctype="multipart/form-data">
-            <p:fileUpload value="#{cliente.importar}" mode="simple" skinSimple="true"/>
-
-            <p:commandButton value="Submit" ajax="false" actionListener="#{cliente.upload}" disabled="false"/>
+            <p:fileUpload fileUploadListener="#{cliente.upload}" auto="true"/>
         </h:form>
 
     </ui:define>

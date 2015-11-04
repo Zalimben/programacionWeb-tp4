@@ -1,8 +1,10 @@
 package BackingBeans;
 
 import EJB.Helper.ClienteResponse;
+import EJB.Service.ClienteFileService;
 import EJB.Service.ClienteService;
 import JPA.ClienteEntity;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
@@ -33,8 +35,13 @@ public class ClientesBean implements Serializable {
     private static final String CARGA = "carga_masiva.xhtml";
     @Inject
 	ClienteEntity clienteEntity;
+
 	@EJB
 	ClienteService clienteService;
+    @EJB
+    ClienteFileService clienteFileService;
+
+
 	private List<ClienteEntity> clientes;
 
 	private String nombre;
@@ -278,5 +285,14 @@ public class ClientesBean implements Serializable {
 
     public void setFile(StreamedContent file) {
         this.file = file;
+    }
+
+
+    public void upload(FileUploadEvent event) {
+        try {
+            clienteFileService.parsear(event.getFile().getInputstream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
