@@ -26,11 +26,10 @@
             <p:ajax event="keyup" update="tabla_productos pag:page" listener="#{producto.resetPage}"/>
         </p:inputText>
         <p:watermark value="Proveedor" for="inputProveedor" />
-        <br/><br/>
-
+        <br/>
 
         <!-- tabla de datos-->
-        <p:dataTable id="tabla_productos" value="#{producto.productos}" var="productoIterador">
+        <p:dataTable id="tabla_productos" value="#{producto.productos}" var="productoIterador" emptyMessage="No se encuentran registros">
             <f:facet name="header">
                 Lista de productos
             </f:facet>
@@ -60,14 +59,37 @@
                 <f:facet name="header">Precio</f:facet>
                 #{productoIterador.precio}
             </p:column>
+
+            <!-- BTN modificar -->
+            <p:column style="width:35px;text-align: center">
+                <p:commandButton process="tabla_productos"  style="height:25px;width:30px;" update=":form:editProductoForm :messages"  oncomplete="PF('modificarProducto').show()" icon="ui-icon-search" >
+                    <f:setPropertyActionListener value="#{productoIterador}" target="#{producto.selectedProducto}" />
+                </p:commandButton>
+            </p:column>
+
+            <!-- BTN eliminar -->
+            <p:column style="width:35px;text-align: center">
+                <p:commandButton process="tabla_productos" style="height:25px;width:30px;" icon="ui-icon-trash" update="tabla_productos :messages" actionListener="#{producto.eliminarProducto(productoIterador.id)}" >
+                    <p:confirm header="Confirmar" message="Eliminar el registro?" icon="ui-icon-alert" />
+                </p:commandButton>
+            </p:column>
+
         </p:dataTable>
+
+        <!-- CUADRO DE CONFIRMACION PARA ELIMIANR -->
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+            <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+        </p:confirmDialog>
 
         <!-- paginacion-->
         <br/>
         <h:form id="pag">
-            <p:commandButton value="Atras" actionListener="#{producto.goBackPage}" update="page :form:tabla_productos"/>
-            <h:outputText id="page" value=" #{producto.page} of #{producto.totalPages} " />
-            <p:commandButton value="Siguiente" actionListener="#{producto.goNextPage}" update="page :form:tabla_productos"/>
+            <br/><h:panelGrid id="pagination" columns="3" style="align-content: center;padding-left:90%" >
+                <p:commandButton id="backBTN" style="height: 25px;"  icon="ui-icon-arrow-1-w" actionListener="#{producto.goBackPage}" update="page :form:tabla_productos"/>
+                <h:outputText style="height: 25px;" id="page" value=" #{producto.page} of #{producto.totalPages} " />
+                <p:commandButton id="nextBTN" style="height: 25px;"  icon="ui-icon-arrow-1-e" actionListener="#{producto.goNextPage}" update="page :form:tabla_productos"/>
+            </h:panelGrid>
         </h:form>
         <br />
 
@@ -81,35 +103,11 @@
         <br/>
         <ui:include src="/views/productos/abm.xhtml" />
 
-        <!-- BTN MODIFICAR CLIENTE - POPUP-->
+        <!-- BTN MODIFICAR PRODUCTO - POPUP-->
         <h:form id="editProductoForm">
             <p:dialog widgetVar="modificarProducto" closable="false" id="modificar_producto" header="Modificar producto" resizable="false" >
 
                 <h:panelGrid id="formEditProducto"  columns="3" style="width:100%;">
-                    <p:outputLabel value="Descripcion" />
-                    <p:inputText  value="#{producto.productoEntity.descripcion}"
-                                  id="descripcionProducto" maxlength="50" style="width:100%;height:100%"
-                                  required="true" requiredMessage="Describa al producto " >
-                    </p:inputText>
-                    <p:messages style="margin-left: 15px;" for="descripcionProducto" />
-
-                    <p:outputLabel value="Precio" />
-                    <p:inputText value="#{producto.productoEntity.precio}"
-                                 id="precioProducto" maxlength="50" style="width:100%;height:100%"
-                                 required="true" requiredMessage="Describa el precio del producto" >
-                    </p:inputText>
-                    <p:messages style="margin-left: 15px;" for="precioProducto" />
-
-                    <p:outputLabel value="Stock" />
-                    <p:inputText value="#{producto.productoEntity.stock}"
-                                 id="stockProducto" maxlength="50" style="width:100%;height:100%"
-                                 required="true" requiredMessage="Describa el stock del producto" >
-                    </p:inputText>
-                    <p:messages style="margin-left: 15px;" for="stockProducto" />
-                </h:panelGrid>
-
-
-                <!--<h:panelGrid id=""  columns="3" style="width:100%;">
                     <p:outputLabel value="Descripcion" />
                     <p:inputText  value="#{producto.descripcionModificar}" placeholder="#{producto.selectedProducto.descripcion}"
                                   id="descripcionEditProducto" maxlength="50" style="width:100%;height:100%"
@@ -125,24 +123,20 @@
                     <p:messages style="margin-left: 15px;" for="precioEditProducto" />
 
                     <p:outputLabel value="Stock" />
-                    <p:inputText value="#{producto.precioModificar}"  placeholder="#{producto.selectedProducto.stock}"
+                    <p:inputText value="#{producto.stockModificar}"  placeholder="#{producto.selectedProducto.stock}"
                                  id="stockEditProducto" maxlength="50" style="width:100%;height:100%"
                                  requiredMessage="Describa el documento" >
                     </p:inputText>
                     <p:messages style="margin-left: 15px;" for="stockEditProducto" />
-                </h:panelGrid>-->
-
+                </h:panelGrid>
                 <br />
                 <p:commandButton process="editProductoForm" value="Guardar" oncomplete="if(!args.validationFailed){PF('modificarProducto').hide()}"
-                                 update=":messages" actionListener="#{producto.doEditarProducto}" />
+                                 update=":messages :form:tabla_productos" actionListener="#{producto.doEditarProducto}" />
 
                 <p:commandButton process="@this formEditProducto"  immediate="true" oncomplete="PF('modificarProducto').hide()" value="Cancelar"
                                  update="formEditProducto" actionListener="#{producto.resetCampos}"  />
             </p:dialog>
         </h:form>
-
-
-
     </ui:define>
 
 </ui:composition>

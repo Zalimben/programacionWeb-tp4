@@ -12,30 +12,30 @@
         <!-- filtrado-->
         <br/><br/>
         <p:inputText id="inputAllAttributes" value="#{venta.byAllAttributes}">
-            <p:ajax event="keyup" update="tabla_ventas page" listener="#{venta.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_ventas paginacionVenta:page" listener="#{venta.resetPage}"/>
         </p:inputText>
         <p:watermark value="Filtro completo" for="inputAllAttributes" />
         <br/><br/>
 
         <p:inputText id="inputCliente" value="#{venta.byCliente}" >
-            <p:ajax event="keyup" update="tabla_ventas page" listener="#{venta.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_ventas paginacionVenta:page" listener="#{venta.resetPage}"/>
         </p:inputText>
         <p:watermark value="Cliente" for="inputCliente" />
 
         <p:inputText id="inputFecha" value="#{venta.byFecha}" >
-            <p:ajax event="keyup" update="tabla_ventas page" listener="#{venta.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_ventas paginacionVenta:page" listener="#{venta.resetPage}"/>
         </p:inputText>
         <p:watermark value="Fecha" for="inputFecha" />
 
         <p:inputText id="inputMonto" value="#{venta.byMonto}" >
-            <p:ajax event="keyup" update="tabla_ventas page" listener="#{venta.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_ventas paginacionVenta:page" listener="#{venta.resetPage}"/>
         </p:inputText>
         <p:watermark value="Monto" for="inputMonto" />
         <br/><br/>
 
 
         <!-- tabla de datos-->
-        <p:dataTable id="tabla_ventas" value="#{venta.ventas}" var="ventaVar">
+        <p:dataTable id="tabla_ventas" value="#{venta.ventas}" var="ventaVar" emptyMessage="No existen ventas">
             <f:facet name="header">
                 Lista de ventas
             </f:facet>
@@ -63,13 +63,25 @@
                 </f:facet>
                 #{ventaVar.monto}
             </p:column>
+
+            <!-- BTN modificar -->
+            <p:column style="width:35px;text-align: center">
+                <p:commandButton id="viewBTN" process="tabla_ventas" style="height:25px;width:30px;" update=":form:create_ventas :messages"  oncomplete="PF('viewVenta').show()" icon="ui-icon-search" >
+                    <f:setPropertyActionListener value="#{ventaVar}" target="#{venta.selectedVenta}" />
+                </p:commandButton>
+            </p:column>
+
         </p:dataTable>
 
         <!-- paginacion-->
         <br/>
-        <p:commandButton value="Atras" actionListener="#{venta.goBackPage}" update="page tabla_ventas"/>
-        <h:outputText id="page" value=" #{venta.page} of #{venta.page} " />
-        <p:commandButton value="Siguiente" actionListener="#{venta.goNextPage}" update="page tabla_ventas"/>
+        <h:form id="paginacionVenta">
+            <h:panelGrid id="pagination" columns="3" style="align-content: center;padding-left:90%" >
+                <p:commandButton id="backBTN" style="height: 25px;"  icon="ui-icon-arrow-1-w" actionListener="#{venta.goBackPage}" update="page :form:tabla_ventas"/>
+                <h:outputText style="height: 25px;" id="page" value=" #{venta.page} of #{venta.page} " />
+                <p:commandButton id="nextBTN" style="height: 25px;"  icon="ui-icon-arrow-1-e" actionListener="#{venta.goNextPage}" update="page :form:tabla_ventas"/>
+            </h:panelGrid>
+        </h:form>
 
         <br />
 
@@ -82,6 +94,32 @@
         </h:panelGrid>
         <br/>
         <ui:include src="/views/ventas/abm.xhtml" />
+
+        <p:dialog style="width: 500px;height: 450px"  widgetVar="viewVenta" closable="false" id="create_ventas" header="Visualizar Venta" resizable="false">
+            <h:panelGrid id="formViewVenta"  columns="3" style="width:100%;">
+                <p:outputLabel value="Cliente" />
+                <p:outputLabel value="#{venta.selectedVenta.cliente.nombre}" />
+                <p:messages style="margin-left: 15px;" for="proveedorViewCompra" />
+            </h:panelGrid>
+            <p:separator />
+            <p:dataTable style="width: 500px;"  id="listaCompraDetalle" value="#{venta.getViewDetalles(venta.selectedVenta.id)}" emptyMessage="No existen registros"
+                         rowIndexVar="index" rowKey="index" var="det">
+                <f:facet name="header">
+                    Lista de Productos
+                </f:facet>
+
+                <p:column style="width: 150px">
+                    #{det.producto.descripcion}
+                </p:column>
+
+                <p:column style="width: 100px" >
+                    #{det.cantidad}
+                </p:column>
+            </p:dataTable>
+            <br />
+            <p:commandButton id="Cancel" immediate="true" oncomplete="PF('viewVenta').hide()" value="Cancelar" actionListener="#{venta.resetCampos}"  />
+
+        </p:dialog>
 
     </ui:define>
 

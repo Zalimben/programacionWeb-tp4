@@ -207,7 +207,6 @@ public class CompraService extends Service<CompraEntity> {
             criteriaQuery.where(filtradoPorAllAttributes, filtradoPorColumna).orderBy(criteriaBuilder.desc(compras.get(ordenarPorColumna)));
         }
 
-
         response.setEntidades(em.createQuery(criteriaQuery).getResultList());
         try {
 

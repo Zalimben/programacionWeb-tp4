@@ -3,11 +3,9 @@ package BackingBeans;
 import EJB.Helper.VentasResponse;
 import EJB.Service.ClienteService;
 import EJB.Service.ProductoService;
+import EJB.Service.VentaDetalleService;
 import EJB.Service.VentasService;
-import JPA.ClienteEntity;
-import JPA.ProductoEntity;
-import JPA.VentaDetalleEntity;
-import JPA.VentaEntity;
+import JPA.*;
 import org.primefaces.model.StreamedContent;
 
 import javax.ejb.EJB;
@@ -32,6 +30,8 @@ public class VentasBean {
 	VentaEntity ventaEntity;
 	@EJB
 	ClienteService clienteService;
+	@EJB
+	VentaDetalleService ventaDetalleService;
 	@EJB
 	ProductoService productoService;
 	@Inject
@@ -60,6 +60,7 @@ public class VentasBean {
 	private Integer page=1;
 	private Integer totalPages=0;
 	private VentasResponse ventasResponse;
+	private VentaEntity selectedVenta;
 
 	// variables nabil
 	public void goNextPage(){
@@ -185,8 +186,6 @@ public class VentasBean {
 		return ventas;
 	}
 
-
-
 	// variables saul
 	/* Metodos */
 	public void doCrearVenta() {
@@ -195,13 +194,14 @@ public class VentasBean {
 
 		if(clienteId != null) {
 			ClienteEntity c = clienteService.find(clienteId.intValue(), ClienteEntity.class);
+			ventaEntity.setCliente(c);
 		}
 		try{
 			boolean flag = service.createVenta(ventaEntity, detallesVenta);
 			if(flag) {
-				setMessage(new FacesMessage("Compra registrada exitosamente"));
+				setMessage(new FacesMessage("Venta registrada exitosamente", "Hola..."));
 			} else {
-				setMessage(new FacesMessage(FacesMessage.SEVERITY_WARN, "Datos invalidos", "La compra no se ha creado"));
+				setMessage(new FacesMessage(FacesMessage.SEVERITY_WARN, "Datos invalidos", "La venta no se ha creado"));
 			}
 		} catch(Exception e) {
 			setMessage(new FacesMessage("No se puede crear la Compra"));
@@ -227,6 +227,7 @@ public class VentasBean {
 			detallesVenta.add(detalle);
 		}
 
+		detalle = new VentaDetalleEntity();
 	}
 
 	/**
@@ -237,7 +238,18 @@ public class VentasBean {
 	public void eliminarCompraDetalle(VentaDetalleEntity detalle) {
 
 		detallesVenta.remove(detalle);
-		resetCampos();
+
+	}
+
+	public List getViewDetalles(Long id) {
+
+		List<VentaDetalleEntity> l = ventaDetalleService.getDetallesByVenta(id);
+
+		for(VentaDetalleEntity det : l) {
+			selectedVenta.setDetalles(det);
+		}
+
+		return l;
 
 	}
 
@@ -337,5 +349,13 @@ public class VentasBean {
 
 	public void setProducto(Long producto) {
 		this.producto = producto;
+	}
+
+	public void setSelectedVenta(VentaEntity selectedVenta) {
+		this.selectedVenta = selectedVenta;
+	}
+
+	public VentaEntity getSelectedVenta() {
+		return selectedVenta;
 	}
 }

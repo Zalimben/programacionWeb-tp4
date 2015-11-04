@@ -32,7 +32,7 @@ public class ProductosBean {
 
 	// Para Modificar
 	private ProductoEntity selectedProducto;
-	private String stockModificar;
+	private Long stockModificar;
 	private Long precioModificar;
 	private String descripcionModificar;
 	private StreamedContent file;
@@ -226,9 +226,9 @@ public class ProductosBean {
 
 		try{
 			String m = service.deleteProducto((int) id);
-			setMessage(new FacesMessage(m));
+			setMessage(new FacesMessage(m, ""));
 		} catch(Exception e) {
-			setMessage(new FacesMessage("No se puede eliminar el registro"));
+			setMessage(new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede eliminar el registro", "El producto esta siendo utilizado "));
 		}
 
 		context.addMessage("messages", message);
@@ -249,9 +249,18 @@ public class ProductosBean {
 		if(validateLong(precioModificar)) {
 			selectedProducto.setPrecio(precioModificar);
 		}
+
+		if(validateLong(stockModificar)) {
+			selectedProducto.setStock(stockModificar);
+		}
+
 		try{
-			service.update(selectedProducto);
-			setMessage(new FacesMessage("Producto modificado exitosamente"));
+			boolean flag = service.update(selectedProducto);
+			if(flag) {
+				setMessage(new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto modificado exitosamente", ""));
+			} else {
+				setMessage(new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede modificar el producto:", "Los datos no son validos"));
+			}
 		} catch(Exception e) {
 			setMessage(new FacesMessage("No se puede modificar el producto"));
 		}
@@ -272,7 +281,7 @@ public class ProductosBean {
 		}
 		try{
 			if(service.addProducto(productoEntity)) {
-				setMessage(new FacesMessage("Producto creado exitosamente"));
+				setMessage(new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto creado exitosamente", ""));
 			} else {
 				setMessage(new FacesMessage(FacesMessage.SEVERITY_WARN, "Datos invalidos", "EL producto no se ha creado"));
 			}
@@ -326,7 +335,11 @@ public class ProductosBean {
 
 	private boolean validateLong (Long number)  {
 
-		return number < 0;
+		if(number == null || number < 0) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/* Getter & Setter */
@@ -371,11 +384,11 @@ public class ProductosBean {
 		this.descripcionModificar = descripcionModificar;
 	}
 
-	public String getStockModificar() {
+	public Long getStockModificar() {
 		return stockModificar;
 	}
 
-	public void setStockModificar(String stockModificar) {
+	public void setStockModificar(Long stockModificar) {
 		this.stockModificar = stockModificar;
 	}
 

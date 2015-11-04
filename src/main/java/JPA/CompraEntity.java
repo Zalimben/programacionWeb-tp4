@@ -62,12 +62,12 @@ public class CompraEntity {
     }
 
     // Constructor con detalles
-//    public CompraEntity(String fecha, ProveedorEntity proveedor, String monto, List<CompraDetalleEntity> detalles) {
-//        this.fecha = fecha;
-//        this.proveedor = proveedor;
-//        this.monto = monto;
-////        this.detalles = detalles;
-//    }
+    public CompraEntity(String fecha, ProveedorEntity proveedor, String monto, List<CompraDetalleEntity> detalles) {
+        this.fecha = fecha;
+        this.proveedor = proveedor;
+        this.monto = monto;
+        this.detalles = detalles;
+    }
 
     public Long getId() {
         return id;

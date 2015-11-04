@@ -14,9 +14,9 @@
                 <p:outputLabel value="Proveedor" />
                 <h:selectOneMenu value="#{compra.proveedorId}" converter="javax.faces.Long"
                                  id="proveedorCompra" maxlength="50" style="width:100%;height:100%"
-                                 required="true" requiredMessage="Describa el clienteId">
+                                 required="true" requiredMessage="Describa el Proveedor">
 
-                    <f:selectItem itemLabel="Seleccione un clienteId" itemValue="" noSelectionOption="true" />
+                    <f:selectItem itemLabel="Seleccione un Proveedor" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{compra.getProveedores()}" var="proov" itemValue="#{proov.id}"
                                    itemLabel="#{proov.descripcion}"/>
 
@@ -46,7 +46,7 @@
                              id="cantidadCompraDetalle" maxlength="50" style="width:100%;height:100%"
                              required="true" requiredMessage="Describa la cantidad del producto" >
                 </p:inputText>
-                <p:commandButton icon="ui-icon-plus" id="addCompraDetalle" update="listaCompraDetalle formCompraDetalle" process="formCompraDetalle"
+                <p:commandButton icon="ui-icon-plus" id="addCompraDetalle" update=":form:tabla_compras productoCompraDetalle cantidadCompraDetalle listaCompraDetalle formCompraDetalle" process="formCompraDetalle"
                                  actionListener="#{compra.addDetalleCompra}" style="margin-left: 15px;" />
             </h:panelGrid>
 
@@ -78,10 +78,10 @@
 
             <br />
             <p:commandButton process="createComprasForm" value="Crear" oncomplete="if(!args.validationFailed){PF('createCompra').hide()}"
-                             update=":messages proveedorCompra productoCompraDetalle cantidadCompraDetalle listaCompraDetalle" actionListener="#{compra.doCrearCompra}" />
+                             update=":messages :form:tabla_compras proveedorCompra productoCompraDetalle cantidadCompraDetalle listaCompraDetalle" actionListener="#{compra.doCrearCompra}" />
 
             <p:commandButton immediate="true" oncomplete="PF('createCompra').hide()" value="Cancelar"
-                             update="proveedorCompra productoCompraDetalle cantidadCompraDetalle listaCompraDetalle" action="#{compra.resetCampos}"  />
+                             update="proveedorCompra productoCompraDetalle cantidadCompraDetalle listaCompraDetalle" actionListener="#{compra.resetCampos}"  />
 
         </p:dialog>
     </h:form>

@@ -66,7 +66,7 @@ public class ClientesBean implements Serializable {
 			String m = service.deleteCliente((int)id);
 			setMessage(new FacesMessage(m));
 		} catch(Exception e) {
-			setMessage(new FacesMessage("No se puede eliminar el registro"));
+			setMessage(new FacesMessage("No se puede eliminar el registro", ""));
 		}
 
 		context.addMessage("messages", message);
@@ -88,8 +88,12 @@ public class ClientesBean implements Serializable {
 			selectedCliente.setCedulaIdentidad(cedulaModificar);
 		}
 		try{
-			service.update(selectedCliente);
-			setMessage(new FacesMessage("Cliente modificado exitosamente"));
+			boolean flag = service.update(selectedCliente);
+			if(flag) {
+				setMessage(new FacesMessage(FacesMessage.SEVERITY_INFO, "Cliente modificado exitosamente", ""));
+			} else {
+				setMessage(new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede modificar el cliente:", "Los datos no son validos"));
+			}
 		} catch(Exception e) {
 			setMessage(new FacesMessage("No se puede modificar el cliente"));
 		}
@@ -107,7 +111,7 @@ public class ClientesBean implements Serializable {
 		try{
 			boolean flag = service.add(clienteEntity);
 			if(flag) {
-				setMessage(new FacesMessage("Cliente creado exitosamente"));
+				setMessage(new FacesMessage("Cliente creado exitosamente", ""));
 			} else {
 				setMessage(new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede crear el cliente:", "CI Duplicado"));
 			}

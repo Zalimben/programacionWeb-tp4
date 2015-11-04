@@ -12,30 +12,30 @@
         <!-- filtrado-->
         <br/><br/>
         <p:inputText id="inputAllAttributes" value="#{compra.byAllAttributes}">
-            <p:ajax event="keyup" update="tabla_compras page" listener="#{compra.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_compras paginacionCompra:page" listener="#{compra.resetPage}"/>
         </p:inputText>
         <p:watermark value="Filtro completo" for="inputAllAttributes"/>
         <br/><br/>
 
         <p:inputText id="inputProveedor" value="#{compra.byProveedor}">
-            <p:ajax event="keyup" update="tabla_compras page" listener="#{compra.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_compras paginacionCompra:page" listener="#{compra.resetPage}"/>
         </p:inputText>
         <p:watermark value="Proveedor" for="inputProveedor"/>
 
         <p:inputText id="inputFecha" value="#{compra.byFecha}">
-            <p:ajax event="keyup" update="tabla_compras page" listener="#{compra.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_compras paginacionCompra:page" listener="#{compra.resetPage}"/>
         </p:inputText>
         <p:watermark value="Fecha" for="inputFecha"/>
 
         <p:inputText id="inputMonto" value="#{compra.byMonto}">
-            <p:ajax event="keyup" update="tabla_compras page" listener="#{compra.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_compras paginacionCompra:page" listener="#{compra.resetPage}"/>
         </p:inputText>
         <p:watermark value="Monto" for="inputMonto"/>
         <br/><br/>
 
 
         <!-- tabla de datos-->
-        <p:dataTable id="tabla_compras" value="#{compra.compras}" var="comprasVar">
+        <p:dataTable id="tabla_compras" value="#{compra.compras}" var="comprasVar" emptyMessage="No se encuentran registros">
             <f:facet name="header">
                 Lista de compras
             </f:facet>
@@ -63,14 +63,24 @@
                 </f:facet>
                 #{comprasVar.monto}
             </p:column>
+
+            <!-- BTN modificar -->
+            <p:column style="width:35px;text-align: center">
+                <p:commandButton id="viewBTN" process="tabla_compras" style="height:25px;width:30px;" update=":form:viewComprasForm :messages"  oncomplete="PF('viewCompra').show()" icon="ui-icon-search" >
+                    <f:setPropertyActionListener value="#{comprasVar}" target="#{compra.selectedCompra}" />
+                </p:commandButton>
+            </p:column>
         </p:dataTable>
 
         <!-- paginacion-->
         <br/>
-        <p:commandButton value="Atras" actionListener="#{compra.goBackPage}" update="page tabla_compras"/>
-        <h:outputText id="page" value=" #{compra.page} of #{compra.totalPages} " />
-        <p:commandButton value="Siguiente" actionListener="#{compra.goNextPage}" update="page tabla_compras"/>
-
+        <h:form id="paginacionCompra">
+            <h:panelGrid id="pagination" columns="3" style="align-content: center;padding-left:90%" >
+                <p:commandButton id="backBTN"  style="height: 25px;" icon="ui-icon-arrow-1-w" actionListener="#{compra.goBackPage}" update="page :form:tabla_compras"/>
+                <h:outputText style="height: 25px;" id="page" value=" #{compra.page} of #{compra.totalPages} " />
+                <p:commandButton id="nextBTN"  style="height: 25px;" icon="ui-icon-arrow-1-e" actionListener="#{compra.goNextPage}" update="page :form:tabla_compras"/>
+            </h:panelGrid>
+        </h:form>
         <br />
 
         <!-- BOTON DE EXPORTAR Y CREAR -->
@@ -83,6 +93,41 @@
         </h:panelGrid>
         <br/>
         <ui:include src="/views/compras/abm.xhtml" />
+
+        <h:form id="viewComprasForm" style="width: 500px;height: 450px" >
+            <p:dialog style="width: 500px;height: 450px"  widgetVar="viewCompra" closable="false" id="create_compras" header="Visualizar compra" resizable="false">
+
+                <h:panelGrid id="formViewCompra"  columns="3" style="width:100%;">
+                    <p:outputLabel value="Proveedor" />
+                    <p:outputLabel value="#{compra.selectedCompra.proveedor.descripcion}" />
+                    <p:messages style="margin-left: 15px;" for="proveedorViewCompra" />
+
+                </h:panelGrid>
+
+                <p:separator />
+
+                <p:dataTable style="width: 500px;"  id="listaCompraDetalle" value="#{compra.getViewDetalles(compra.selectedCompra.id)}" emptyMessage="No existen registros"
+                             rowIndexVar="index" rowKey="index" var="det">
+
+                    <f:facet name="header">
+                        Lista de Productos
+                    </f:facet>
+
+                    <p:column style="width: 150px">
+                        #{det.producto.descripcion}
+                    </p:column>
+
+                    <p:column style="width: 100px" >
+                        #{det.cantidad}
+                    </p:column>
+
+                </p:dataTable>
+                <br />
+                <p:commandButton id="Cancel" immediate="true" oncomplete="PF('viewCompra').hide()" value="Cancelar" actionListener="#{compra.resetCampos}"  />
+
+            </p:dialog>
+        </h:form>
+
 
     </ui:define>
 

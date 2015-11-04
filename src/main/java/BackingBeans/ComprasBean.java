@@ -1,6 +1,7 @@
 package BackingBeans;
 
 import EJB.Helper.ComprasResponse;
+import EJB.Service.CompraDetalleService;
 import EJB.Service.CompraService;
 import EJB.Service.ProductoService;
 import EJB.Service.ProveedorService;
@@ -31,6 +32,8 @@ public class ComprasBean {
 	ProveedorService proveedorService;
 	@EJB
 	ProductoService productoService;
+	@EJB
+	CompraDetalleService compraDetalleService;
 	@Inject
 	CompraDetalleEntity detalle;
 	@Inject
@@ -59,6 +62,7 @@ public class ComprasBean {
 	private Integer page=1;
 	private Integer totalPages =0;
 	private ComprasResponse comprasResponse;
+	private CompraEntity selectedCompra;
 
 	/* Metodos */
 
@@ -202,7 +206,7 @@ public class ComprasBean {
 		try{
 			boolean flag = service.createCompra(compraEntity, detallesCompra);
 			if(flag) {
-				setMessage(new FacesMessage("Compra registrada exitosamente"));
+				setMessage(new FacesMessage("Compra registrada exitosamente", ""));
 			} else {
 				setMessage(new FacesMessage(FacesMessage.SEVERITY_WARN, "Datos invalidos", "La compra no se ha creado"));
 			}
@@ -225,8 +229,6 @@ public class ComprasBean {
 		}
 
 		return null;
-
-
 	}
 
 	/**
@@ -244,7 +246,7 @@ public class ComprasBean {
 			detalle.setProducto(productoService.find(producto.intValue(), ProductoEntity.class));
 			detallesCompra.add(detalle);
 		}
-
+		detalle = new CompraDetalleEntity();
 	}
 
 	/**
@@ -255,7 +257,6 @@ public class ComprasBean {
 	public void eliminarCompraDetalle(CompraDetalleEntity detalle) {
 
 		detallesCompra.remove(detalle);
-		resetCampos();
 
 	}
 
@@ -283,6 +284,19 @@ public class ComprasBean {
 		return proveedorService.getAllProveedores();
 
 	}
+
+	public List getViewDetalles(Long id) {
+
+		List<CompraDetalleEntity> l = compraDetalleService.getDetallesByCompra(id);
+
+		for(CompraDetalleEntity det : l) {
+			selectedCompra.setDetalles(det);
+		}
+
+		return l;
+
+	}
+
 
 	/* Getter & Setter */
 
@@ -356,6 +370,14 @@ public class ComprasBean {
 
 	public void setProductoEntity(ProductoEntity productoEntity) {
 		this.productoEntity = productoEntity;
+	}
+
+	public void setSelectedCompra(CompraEntity selectedCompra) {
+		this.selectedCompra = selectedCompra;
+	}
+
+	public CompraEntity getSelectedCompra() {
+		return selectedCompra;
 	}
 }
 

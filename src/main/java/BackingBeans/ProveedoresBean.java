@@ -136,9 +136,9 @@ public class ProveedoresBean {
 
 		try{
 			String m = service.deleteProveedor((int) id);
-			setMessage(new FacesMessage(m));
+			setMessage(new FacesMessage(FacesMessage.SEVERITY_INFO, m, ""));
 		} catch(Exception e) {
-			setMessage(new FacesMessage("No se puede eliminar el registro"));
+			setMessage(new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede eliminar el registro", "El proveedor esta siendo utlizado"));
 		}
 
 		context.addMessage("messages", message);
@@ -157,9 +157,9 @@ public class ProveedoresBean {
 		}
 		try{
 			service.update(selectedProveedor);
-			setMessage(new FacesMessage("Cliente modificado exitosamente"));
+			setMessage(new FacesMessage(FacesMessage.SEVERITY_INFO, "Proveedor modificado exitosamente", ""));
 		} catch(Exception e) {
-			setMessage(new FacesMessage("No se puede modificar el cliente"));
+			setMessage(new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede modificar el Proveedor", ""));
 		}
 		resetCampos();
 		context.addMessage("messages", message);
@@ -173,8 +173,12 @@ public class ProveedoresBean {
 		FacesContext context = FacesContext.getCurrentInstance();
 
 		try{
-			service.add(proveedorEntity);
-			setMessage(new FacesMessage("Cliente creado exitosamente"));
+			boolean flag = service.add(proveedorEntity);
+			if(flag) {
+				setMessage(new FacesMessage("Cliente creado exitosamente", ""));
+			} else {
+				setMessage(new FacesMessage(FacesMessage.SEVERITY_WARN, "Cliente creado exitosamente", ""));
+			}
 		} catch(Exception e) {
 			setMessage(new FacesMessage("No se puede crear el cliente"));
 		}

@@ -89,7 +89,7 @@ public class VentasService extends Service<VentaEntity> {
             }
             else {
                 try {
-                    productoEntity.setStock(productoEntity.getStock() + detalle.getCantidad());
+                    productoEntity.setStock(productoEntity.getStock() - detalle.getCantidad());
                     montoAcumulador = montoAcumulador + productoEntity.getPrecio() * detalle.getCantidad();
                     productoService.update(productoEntity);
                 } catch(Exception e) {

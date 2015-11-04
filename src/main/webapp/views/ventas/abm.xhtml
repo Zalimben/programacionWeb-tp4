@@ -14,9 +14,9 @@
                 <p:outputLabel value="Cliente" />
                 <h:selectOneMenu value="#{venta.clienteId}" converter="javax.faces.Long"
                                  id="clienteVenta" maxlength="50" style="width:100%;height:100%"
-                                 required="true" requiredMessage="Describa un clienteId">
+                                 required="true" requiredMessage="Describa un cliente">
 
-                    <f:selectItem itemLabel="Seleccione un clienteId" itemValue="" noSelectionOption="true" />
+                    <f:selectItem itemLabel="Seleccione un cliente" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{venta.clientes}" var="cli" itemValue="#{cli.id}"
                                    itemLabel="#{cli.nombre}"/>
 
@@ -78,7 +78,7 @@
 
             <br />
             <p:commandButton process="createVentasForm" value="Crear" oncomplete="if(!args.validationFailed){PF('createVenta').hide()}"
-                             update=":messages clienteVenta productoVentaDetalle cantidadVentaDetalle listaVentaDetalle" actionListener="#{venta.doCrearVenta}" />
+                             update=":messages :form:tabla_ventas clienteVenta productoVentaDetalle cantidadVentaDetalle listaVentaDetalle" actionListener="#{venta.doCrearVenta}" />
 
             <p:commandButton immediate="true" oncomplete="PF('createVenta').hide()" value="Cancelar"
                              update="clienteVenta productoVentaDetalle cantidadVentaDetalle listaVentaDetalle" action="#{venta.resetCampos}"  />

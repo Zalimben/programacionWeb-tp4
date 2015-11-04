@@ -325,10 +325,8 @@ public class ProductoService extends Service<ProductoEntity> {
 
         // Fijamos la Ordenacion
         if ("asc".equals(ordenDeOrdenacion)) {
-            criteriaQuery.multiselect(productos.<String>get("proveedor"), productos.<Long>get("stock"), productos.<Long>get("precio"), productos.<String>get("descripcion"));
             criteriaQuery.where(filtradoPorAllAttributes, filtradoPorColumna).orderBy(criteriaBuilder.asc(productos.get(ordenarPorColumna)));
         } else {
-            criteriaQuery.multiselect(productos.<String>get("proveedor"), productos.<Long>get("stock"), productos.<Long>get("precio"), productos.<String>get("descripcion"));
             criteriaQuery.where(filtradoPorAllAttributes, filtradoPorColumna).orderBy(criteriaBuilder.desc(productos.get(ordenarPorColumna)));
         }
 

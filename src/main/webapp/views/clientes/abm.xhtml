@@ -7,18 +7,18 @@
 
         <!-- PopUp para Crear Cliente -->
         <h:form id="createClienteForm">
-            <p:dialog widgetVar="createCliente" closable="false" id="create_cliente" header="Registrar nuevo clienteId" resizable="false" >
+            <p:dialog widgetVar="createCliente" closable="false" id="create_cliente" header="Registrar nuevo Cliente" resizable="false" >
 
                 <h:panelGrid id="formCliente"  columns="3" style="width:100%;">
                     <p:outputLabel value="Nombre" />
-                    <p:inputText  value="#{clienteId.clienteEntity.nombre}"
+                    <p:inputText  value="#{cliente.clienteEntity.nombre}"
                                   id="nombreCliente" maxlength="50" style="width:100%;height:100%"
                                   required="true" requiredMessage="Describa un nombre " >
                     </p:inputText>
                     <p:messages style="margin-left: 15px;" for="nombreCliente" />
 
                     <p:outputLabel value="Nro. Documento" />
-                    <p:inputText value="#{clienteId.clienteEntity.cedulaIdentidad}"
+                    <p:inputText value="#{cliente.clienteEntity.cedulaIdentidad}"
                                  id="documentoCliente" maxlength="50" style="width:100%;height:100%"
                                  required="true" requiredMessage="Describa el documento" >
                     </p:inputText>
@@ -27,10 +27,10 @@
 
                 <br />
                 <p:commandButton process="createClienteForm" value="Crear" oncomplete="if(!args.validationFailed){PF('createCliente').hide()}"
-                                 update=":messages documentoCliente nombreCliente" action="#{clienteId.doCrearCliente}" />
+                                 update=":messages documentoCliente nombreCliente" action="#{cliente.doCrearCliente}" />
 
                 <p:commandButton oncomplete="PF('createCliente').hide()" value="Cancelar"
-                                 update="documentoCliente nombreCliente" action="#{clienteId.resetCampos}"  />
+                                 update="documentoCliente nombreCliente" action="#{cliente.resetCampos}"  />
 
             </p:dialog>
         </h:form>

@@ -30,7 +30,7 @@
 
 
         <!-- tabla de datos-->
-        <p:dataTable id="tabla_factura" value="#{factura.facturas}" var="facturaVar">
+        <p:dataTable id="tabla_factura" value="#{factura.facturas}" var="facturaVar" emptyMessage="No se encuentran registros">
             <f:facet name="header">
                 Lista de factura
             </f:facet>
@@ -60,14 +60,15 @@
         </p:dataTable>
 
         <!-- paginacion-->
-        <br/>
-        <p:commandButton value="Atras" actionListener="#{factura.goBackPage}" update="page tabla_factura"/>
-        <h:outputText id="page" value=" #{factura.page} of #{factura.totalPages} " />
-        <p:commandButton value="Siguiente" actionListener="#{factura.goNextPage}" update="page tabla_factura"/>
+        <br/><h:panelGrid id="pagination" columns="3" style="align-content: center;padding-left:90%" >
+            <p:commandButton id="backBTN"  style="height: 25px;" icon="ui-icon-arrow-1-w" actionListener="#{factura.goBackPage}" update="page tabla_factura"/>
+            <h:outputText style="height: 25px;" id="page" value=" #{factura.page} of #{factura.totalPages} " />
+            <p:commandButton id="nextBTN" style="height: 25px;"  icon="ui-icon-arrow-1-e" actionListener="#{factura.goNextPage}" update="page tabla_factura"/>
+        </h:panelGrid>
 
         <br /> <br />
 
-        <h:panelGrid columns="4">
+        <h:panelGrid columns="4" style="height: 30px;">
             <p:commandButton icon="ui-icon-disk" value="Descargar" ajax="false">
                 <p:fileDownload value="#{factura.file}"/>
             </p:commandButton>

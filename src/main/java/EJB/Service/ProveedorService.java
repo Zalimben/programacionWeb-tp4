@@ -89,13 +89,10 @@ public class ProveedorService extends Service<ProveedorEntity> {
 
         // Fijamos la Ordenacion
         if ("asc".equals(ordenDeOrdenacion)) {
-            criteriaQuery.multiselect(proveedores.<String>get("descripcion"));
             criteriaQuery.where(filtradoPorAllAttributes, filtradoPorColumna).orderBy(criteriaBuilder.asc(proveedores.get(ordenarPorColumna)));
         } else {
-            criteriaQuery.multiselect(proveedores.<String>get("descripcion"));
             criteriaQuery.where(filtradoPorAllAttributes, filtradoPorColumna).orderBy(criteriaBuilder.desc(proveedores.get(ordenarPorColumna)));
         }
-
 
         response.setEntidades(em.createQuery(criteriaQuery).getResultList());
         try {

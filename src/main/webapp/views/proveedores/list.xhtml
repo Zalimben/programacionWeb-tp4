@@ -25,7 +25,7 @@
 
 
         <!-- tabla de datos-->
-        <p:dataTable id="tabla_proveedores" value="#{proveedor.proveedores}" var="proveedorVar">
+        <p:dataTable id="tabla_proveedores" value="#{proveedor.proveedores}" var="proveedorVar" emptyMessage="No se encuentran registros" >
             <f:facet name="header">
                 Lista de proveedores
             </f:facet>
@@ -37,14 +37,37 @@
                 </f:facet>
                 #{proveedorVar.descripcion}
             </p:column>
+
+            <!-- BTN modificar -->
+            <p:column style="width:35px;text-align: center">
+                <p:commandButton process="tabla_proveedores"  style="height:25px;width:30px;" update=":form:editProveedorForm :messages"  oncomplete="PF('modificarProveedor').show()" icon="ui-icon-search" >
+                    <f:setPropertyActionListener value="#{proveedorVar}" target="#{proveedor.selectedProveedor}" />
+                </p:commandButton>
+            </p:column>
+
+            <!-- BTN eliminar -->
+            <p:column style="width:35px;text-align: center">
+                <p:commandButton process="tabla_proveedores" style="height:25px;width:30px;" icon="ui-icon-trash" update="tabla_proveedores :messages" actionListener="#{proveedor.eliminarProveedor(proveedorVar.id)}" >
+                    <p:confirm header="Confirmar" message="Eliminar el registro?" icon="ui-icon-alert" />
+                </p:commandButton>
+            </p:column>
+
         </p:dataTable>
+
+        <!-- CUADRO DE CONFIRMACION PARA ELIMIANR -->
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+            <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+        </p:confirmDialog>
 
         <!-- paginacion-->
         <br/>
         <h:form id="pag">
-            <p:commandButton process="pag" value="Atras" actionListener="#{proveedor.goBackPage}" update="page :form:tabla_proveedores" />
-            <h:outputText id="page" value=" #{proveedor.page} of #{proveedor.totalPages} " />
-            <p:commandButton process="pag" value="Siguiente" actionListener="#{proveedor.goNextPage}" update="page :form:tabla_proveedores" />
+            <h:panelGrid id="pagination" columns="3" style="align-content: center;padding-left:90%" >
+                <p:commandButton process="pag" style="height: 25px;" id="backBTN"  icon="ui-icon-arrow-1-w" actionListener="#{proveedor.goBackPage}" update="page :form:tabla_proveedores" />
+                <h:outputText style="height: 25px;" id="page" value=" #{proveedor.page} of #{proveedor.totalPages} " />
+                <p:commandButton process="pag" style="height: 25px;" id="nextBTN"  icon="ui-icon-arrow-1-e" actionListener="#{proveedor.goNextPage}" update="page :form:tabla_proveedores" />
+            </h:panelGrid>
         </h:form>
 
         <br />
@@ -75,7 +98,7 @@
 
                 <br />
                 <p:commandButton process="editProveedorForm" value="Guardar" oncomplete="if(!args.validationFailed){PF('modificarProveedor').hide()}"
-                                 update=":messages" actionListener="#{proveedor.doCrearProveedor}" />
+                                 update=":messages :form:tabla_proveedores" actionListener="#{proveedor.doEditarProveedor}" />
 
                 <p:commandButton process="@this formEditProveedor"  immediate="true" oncomplete="PF('modificarProveedor').hide()" value="Cancelar"
                                  update="formEditProveedor" actionListener="#{proveedor.resetCampos}"  />
