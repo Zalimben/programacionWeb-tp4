@@ -3,6 +3,7 @@ package BackingBeans;
 import EJB.Helper.SolicitudCompraResponse;
 import EJB.Service.SolicitudCompraService;
 import JPA.SolicitudCompraEntity;
+import org.primefaces.model.StreamedContent;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -10,9 +11,6 @@ import javax.faces.bean.SessionScoped;
 import javax.inject.Inject;
 import java.util.List;
 
-/**
- * Created by szalimben on 25/10/15.
- */
 @ManagedBean(name = "solicitud")
 @SessionScoped
 public class SolicitudesBean {
@@ -35,6 +33,7 @@ public class SolicitudesBean {
 	private String byFecha;
 	private Integer page=1;
 	private Integer totalPages=0;
+    private StreamedContent file;
 	private SolicitudCompraResponse solicitudCompraResponse;
 
 	/* Metodos */
@@ -135,5 +134,12 @@ public class SolicitudesBean {
 
     public void setByFecha(String byFecha) {
         this.byFecha = byFecha;
+    }
+
+    public void setFile(StreamedContent file) {
+        this.file = file;
+    }
+    public StreamedContent getFile() {
+        return file;
     }
 }

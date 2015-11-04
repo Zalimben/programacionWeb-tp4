@@ -28,7 +28,6 @@
         <p:watermark value="Producto" for="inputFecha"/>
         <br/><br/>
 
-
         <!-- tabla de datos-->
         <p:dataTable id="tabla_solicitudes" value="#{solicitud.solicitudes}" var="solicitudVar">
             <f:facet name="header">
@@ -60,9 +59,11 @@
         <!-- paginacion-->
         <br/>
         <h:form id="pag">
-            <p:commandButton process="pag" value="Atras" actionListener="#{solicitud.goBackPage}" update="page :form:tabla_solicitudes" />
-            <h:outputText id="page" value=" #{solicitud.page} of #{solicitud.totalPages} " />
-            <p:commandButton process="pag" value="Siguiente" actionListener="#{solicitud.goNextPage}" update="page :form:tabla_solicitudes" />
+            <h:panelGrid id="pagination" columns="3" style="align-content: center;padding-left:90%" >
+                <p:commandButton process="pag" style="height: 25px;" icon="ui-icon-arrow-1-w" actionListener="#{solicitud.goBackPage}" update="page :form:tabla_solicitudes" />
+                <h:outputText style="height: 25px;" id="page" value=" #{solicitud.page} of #{solicitud.totalPages} " />
+                <p:commandButton process="pag" style="height: 25px;" icon="ui-icon-arrow-1-e" actionListener="#{solicitud.goNextPage}" update="page :form:tabla_solicitudes" />
+            </h:panelGrid>
         </h:form>
 
         <br />
@@ -70,7 +71,7 @@
         <!-- BOTON DE EXPORTAR Y CREAR -->
         <h:panelGrid columns="2">
             <p:commandButton icon="ui-icon-disk" value="Descargar" ajax="false">
-                <p:fileDownload value="#{clienteId.file}"/>
+                <p:fileDownload value="#{solicitud.file}"/>
             </p:commandButton>
         </h:panelGrid>
         <br/>
