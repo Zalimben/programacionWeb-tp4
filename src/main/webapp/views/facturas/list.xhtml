@@ -12,27 +12,27 @@
         <!-- filtrado-->
         <br/><br/>
         <p:inputText id="inputAllAttributes" value="#{factura.byAllAttributes}">
-            <p:ajax event="keyup" update="tabla_facturas page" listener="#{factura.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_factura page" listener="#{factura.resetPage}"/>
         </p:inputText>
         <p:watermark value="Filtro completo" for="inputAllAttributes" />
         <br/><br/>
 
         <p:inputText id="inputFecha" value="#{factura.byFecha}" >
-            <p:ajax event="keyup" update="tabla_facturas page" listener="#{factura.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_factura page" listener="#{factura.resetPage}"/>
         </p:inputText>
         <p:watermark value="Fecha" for="inputFecha" />
 
         <p:inputText id="inputMonto" value="#{factura.byMonto}" >
-            <p:ajax event="keyup" update="tabla_facturas page" listener="#{factura.resetPage}"/>
+            <p:ajax event="keyup" update="tabla_factura page" listener="#{factura.resetPage}"/>
         </p:inputText>
         <p:watermark value="Monto" for="inputMonto" />
         <br/><br/>
 
 
         <!-- tabla de datos-->
-        <p:dataTable id="tabla_facturas" value="#{factura.facturas}" var="facturaVar">
+        <p:dataTable id="tabla_factura" value="#{factura.facturas}" var="facturaVar">
             <f:facet name="header">
-                Lista de facturas
+                Lista de factura
             </f:facet>
 
             <p:column>
@@ -45,7 +45,7 @@
             <p:column>
                 <f:facet name="header">
                     <p:commandButton value="Fecha" actionListener="#{factura.orderByFecha}"
-                                     update="tabla_facturas" />
+                                     update="tabla_factura" />
                 </f:facet>
                 #{facturaVar.fecha}
             </p:column>
@@ -53,7 +53,7 @@
             <p:column>
                 <f:facet name="header">
                     <p:commandButton value="Monto" actionListener="#{factura.orderByMonto}"
-                                     update="tabla_facturas" />
+                                     update="tabla_factura" />
                 </f:facet>
                 #{facturaVar.monto}
             </p:column>
@@ -61,27 +61,27 @@
 
         <!-- paginacion-->
         <br/>
-        <p:commandButton value="Atras" actionListener="#{factura.goBackPage}" update="page tabla_facturas"/>
+        <p:commandButton value="Atras" actionListener="#{factura.goBackPage}" update="page tabla_factura"/>
         <h:outputText id="page" value=" #{factura.page} of #{factura.totalPages} " />
-        <p:commandButton value="Siguiente" actionListener="#{factura.goNextPage}" update="page tabla_facturas"/>
+        <p:commandButton value="Siguiente" actionListener="#{factura.goNextPage}" update="page tabla_factura"/>
 
         <br /> <br />
 
         <h:panelGrid columns="4">
             <p:commandButton icon="ui-icon-disk" value="Descargar" ajax="false">
-                <p:fileDownload value="#{clienteId.file}"/>
+                <p:fileDownload value="#{factura.file}"/>
             </p:commandButton>
-            <p:commandButton id="facturar" value="Iniciar Facturacion" actionListener="#{facturas.doFacturar}"
+            <p:commandButton id="facturar" value="Iniciar Facturacion" actionListener="#{factura.doFacturar}"
                              update=":messages">
                 <p:confirm header="Facturacion" message="Esta seguro de iniciar el proceso de facturacion"
                            icon="ui-icon-alert"/>
             </p:commandButton>
 
-            <p:commandButton id="estado" value="Estado de Facturacion" actionListener="#{facturas.getEstadoFacturacion}"
+            <p:commandButton id="estado" value="Estado de Facturacion" actionListener="#{factura.getEstadoFacturacion}"
                              update=":messages"/>
 
             <p:commandButton id="cancelFacturacion" value="Cancelar Facturacion"
-                             actionListener="#{facturas.doCancelarFacturacion}" update=":messages">
+                             actionListener="#{factura.doCancelarFacturacion}" update=":messages">
                 <p:confirm header="Detener Facturacion" message="Esta seguro de detener el proceso de facturacion"
                            icon="ui-icon-alert"/>
             </p:commandButton>

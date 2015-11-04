@@ -3,6 +3,7 @@ package BackingBeans;
 import EJB.Helper.FacturasResponse;
 import EJB.Service.FacturaService;
 import JPA.FacturaEntity;
+import org.primefaces.model.StreamedContent;
 
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -15,7 +16,7 @@ import java.util.List;
 /**
  * Created by alex on 25/10/15.
  */
-@ManagedBean(name = "facturas")
+@ManagedBean(name = "factura")
 @SessionScoped
 public class FacturasBean {
 
@@ -28,6 +29,15 @@ public class FacturasBean {
     FacturaEntity facturaEntity;
 
     private String mensaje;
+    private StreamedContent file;
+
+    public StreamedContent getFile() {
+        return file;
+    }
+
+    public void setFile(StreamedContent file) {
+        this.file = file;
+    }
 
     public String getMensaje() {
         return mensaje;
