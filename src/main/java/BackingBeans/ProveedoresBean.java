@@ -3,6 +3,7 @@ package BackingBeans;
 import EJB.Helper.ProveedorResponse;
 import EJB.Service.ProveedorService;
 import JPA.ProveedorEntity;
+import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
 import javax.ejb.EJB;
@@ -11,6 +12,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 @ManagedBean(name = "proveedor")
@@ -28,7 +31,7 @@ public class ProveedoresBean {
 
 	private ProveedorEntity selectedProveedor;
 	private String descripcionModificar;
-	private StreamedContent file;
+    private StreamedContent exportFile;
 
 	private FacesMessage message;
 
@@ -234,13 +237,17 @@ public class ProveedoresBean {
 		this.descripcionModificar = descripcionModificar;
 	}
 
-	public StreamedContent getFile() {
-		return file;
-	}
+    public StreamedContent getExportFile() throws FileNotFoundException {
+        service.exportAllProdveedores(descripcion, byAllAttributes,
+                byDescripcion);
+        String contentType = FacesContext.getCurrentInstance().getExternalContext().getMimeType("/tmp/proveedores.json");
+        exportFile = new DefaultStreamedContent(new FileInputStream("/tmp/proveedores.json"), contentType, "proveedores.json");
+        return exportFile;
+    }
 
-	public void setFile(StreamedContent file) {
-		this.file = file;
-	}
+    public void setExportFile(StreamedContent exportFile) {
+        this.exportFile = exportFile;
+    }
 
 	public FacesMessage getMessage() {
 		return message;

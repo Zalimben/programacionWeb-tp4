@@ -4,7 +4,10 @@ import EJB.Helper.VentasResponse;
 import EJB.Jackson.Venta;
 import EJB.Jackson.VentaDetalle;
 import EJB.Util.StockInsuficienteException;
-import JPA.*;
+import JPA.ClienteEntity;
+import JPA.ProductoEntity;
+import JPA.VentaDetalleEntity;
+import JPA.VentaEntity;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -15,7 +18,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.ws.rs.core.MultivaluedMap;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
@@ -245,7 +247,9 @@ public class VentasService extends Service<VentaEntity> {
         return response;
     }
 
-    public Object exportAllVentas(MultivaluedMap<String, String> queryParams) {
+    public Object exportAllVentas(String cliente, String fecha, String monto,
+                                  String byAllAttributes, String byCliente,
+                                  String byFecha, String byMonto) {
         VentasResponse response = new VentasResponse();
         ObjectMapper mapper = new ObjectMapper();
         String file = "/tmp/ventas.json";
@@ -259,22 +263,23 @@ public class VentasService extends Service<VentaEntity> {
         /**
          * Retrieve one or none of the URI query params that have the column name and sort order values
          */
-        if (queryParams.getFirst("cliente.nombre") != null) {
+        if (cliente != null) {
             ordenarPorColumna = "cliente";
-            ordenDeOrdenacion = queryParams.getFirst("cliente.nombre");
-        } else if (queryParams.getFirst("monto") != null) {
+            ordenDeOrdenacion = cliente;
+        } else if (monto != null) {
             ordenarPorColumna = "monto";
-            ordenDeOrdenacion = queryParams.getFirst("monto");
-        } else if (queryParams.getFirst("fecha") != null) {
+            ordenDeOrdenacion = monto;
+        } else if (fecha != null) {
             ordenarPorColumna = "fecha";
-            ordenDeOrdenacion = queryParams.getFirst("fecha");
+            ordenDeOrdenacion = fecha;
         }
 
         // Iniciamos las variables para el filtrado
-        String by_all_attributes = queryParams.getFirst("by_all_attributes");
-        String by_monto = queryParams.getFirst("by_monto");
-        String by_cliente = queryParams.getFirst("by_cliente.nombre");
-        String by_fecha = queryParams.getFirst("by_fecha");
+        String by_all_attributes = byAllAttributes;
+        String by_monto = byMonto;
+        String by_cliente = byCliente;
+        String by_fecha = byFecha;
+
 
         if (by_cliente == null) {
             by_cliente = "";
@@ -309,16 +314,25 @@ public class VentasService extends Service<VentaEntity> {
 
         // Fijamos la Ordenacion
         if ("asc".equals(ordenDeOrdenacion)) {
+//            criteriaQuery.multiselect(ventas.<String>get("cliente"),
+//                    ventas.<String>get("fecha"),
+//                    ventas.<String>get("monto"));
+
             criteriaQuery.where(filtradoPorAllAttributes, filtradoPorColumna).orderBy(criteriaBuilder.asc(ventas.get(ordenarPorColumna)));
         } else {
+//            criteriaQuery.multiselect(ventas.<String>get("cliente"),
+//                    ventas.<String>get("fecha"),
+//                    ventas.<String>get("monto"));
+
             criteriaQuery.where(filtradoPorAllAttributes, filtradoPorColumna).orderBy(criteriaBuilder.desc(ventas.get(ordenarPorColumna)));
         }
 
 
         response.setEntidades(em.createQuery(criteriaQuery).getResultList());
+        File fileResponse = new File(file);
+
         try {
 
-            File fileResponse = new File(file);
             // convert user object to json string, and save to a file
             mapper.writeValue(fileResponse, response.getEntidades());
 
@@ -338,6 +352,6 @@ public class VentasService extends Service<VentaEntity> {
             e.printStackTrace();
 
         }
-        return response;
+        return fileResponse;
     }
 }

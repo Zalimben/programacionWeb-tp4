@@ -1,8 +1,10 @@
 package BackingBeans;
 
 import EJB.Helper.ClienteResponse;
+import EJB.Service.ClienteFileService;
 import EJB.Service.ClienteService;
 import JPA.ClienteEntity;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
@@ -33,7 +35,9 @@ public class ClientesBean implements Serializable {
 	ClienteEntity clienteEntity;
 	@EJB
 	ClienteService service;
-	private List<ClienteEntity> clientes;
+    @EJB
+    ClienteFileService fileService;
+    private List<ClienteEntity> clientes;
 
 	private String nombre;
 	private String cedulaIdentidad;
@@ -48,7 +52,7 @@ public class ClientesBean implements Serializable {
 	private ClienteEntity selectedCliente;
 	private String nombreModificar;
 	private String cedulaModificar;
-    private StreamedContent file;
+    private StreamedContent exportFile;
 
 	private FacesMessage message;
 
@@ -332,14 +336,22 @@ public class ClientesBean implements Serializable {
 		this.nombreModificar = nombreModificar;
 	}
 
-    public StreamedContent getFile() throws IOException {
-        service.exportAllClientes(nombre, cedulaIdentidad, by_all_attributes, by_nombre, by_cedula, page);
+    public StreamedContent getExportFile() throws IOException {
+        service.exportAllClientes(nombre, cedulaIdentidad, by_all_attributes, by_nombre, by_cedula);
         String contentType = FacesContext.getCurrentInstance().getExternalContext().getMimeType("/tmp/clientes.json");
-        file = new DefaultStreamedContent(new FileInputStream("/tmp/clientes.json"), contentType, "clientes.json");
-        return file;
+        exportFile = new DefaultStreamedContent(new FileInputStream("/tmp/clientes.json"), contentType, "clientes.json");
+        return exportFile;
     }
 
-    public void setFile(StreamedContent file) {
-        this.file = file;
+    public void setExportFile(StreamedContent exportFile) {
+        this.exportFile = exportFile;
+    }
+
+    public void upload(FileUploadEvent event) {
+        try {
+            fileService.parsear(event.getFile().getInputstream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

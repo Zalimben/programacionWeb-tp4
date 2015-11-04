@@ -14,7 +14,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.ws.rs.core.MultivaluedMap;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -110,7 +109,9 @@ public class ProductoService extends Service<ProductoEntity> {
     }
 
 
-    public Object exportAllProductos(MultivaluedMap<String, String> queryParams) {
+    public Object exportAllProductos(String descripcion, String proveedor, String stock,
+                                     String precio, String byAllAttributes, String byDescripcion,
+                                     String byProveedor, String byStock, String byPrecio) {
 
         ProductoResponse response = new ProductoResponse();
         ObjectMapper mapper = new ObjectMapper();
@@ -125,26 +126,26 @@ public class ProductoService extends Service<ProductoEntity> {
         /**
          * Retrieve one or none of the URI query params that have the column name and sort order values
          */
-        if (queryParams.getFirst("proveedor.descipcion") != null) {
+        if (proveedor != null) {
             ordenarPorColumna = "proveedor";
-            ordenDeOrdenacion = queryParams.getFirst("proveedor.descripcion");
-        } else if (queryParams.getFirst("stock") != null) {
+            ordenDeOrdenacion = proveedor;
+        } else if (stock != null) {
             ordenarPorColumna = "stock";
-            ordenDeOrdenacion = queryParams.getFirst("stock");
-        } else if (queryParams.getFirst("precio") != null) {
+            ordenDeOrdenacion = stock;
+        } else if (precio != null) {
             ordenarPorColumna = "precio";
-            ordenDeOrdenacion = queryParams.getFirst("precio");
-        } else if (queryParams.getFirst("descripcion") != null) {
+            ordenDeOrdenacion = precio;
+        } else if (descripcion != null) {
             ordenarPorColumna = "descripcion";
-            ordenDeOrdenacion = queryParams.getFirst("descripcion");
+            ordenDeOrdenacion = descripcion;
         }
 
         // Iniciamos las varialles para el filtrado
-        String by_all_attributes = queryParams.getFirst("by_all_attributes");
-        String by_stock = queryParams.getFirst("by_stock");
-        String by_proveedor = queryParams.getFirst("by_proveedor.descripcion");
-        String by_precio = queryParams.getFirst("by_precio");
-        String by_descripcion = queryParams.getFirst("by_descripcion");
+        String by_all_attributes = byAllAttributes;
+        String by_stock = byStock;
+        String by_proveedor = byProveedor;
+        String by_precio = byPrecio;
+        String by_descripcion = byDescripcion;
 
         if (by_proveedor == null) {
             by_proveedor = "";
@@ -159,6 +160,12 @@ public class ProductoService extends Service<ProductoEntity> {
             by_all_attributes = "";
         }
 
+//        if(by_precio.equals(""))
+//            by_precio = "0";
+//
+//        if(by_stock.equals(""))
+//            by_stock = "0";
+
         /* Creamos el query para la consulta */
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<ProductoEntity> criteriaQuery = criteriaBuilder.createQuery(ProductoEntity.class);
@@ -170,8 +177,8 @@ public class ProductoService extends Service<ProductoEntity> {
         if (by_stock != null && by_precio != null) {
             filtradoPorAllAttributes = criteriaBuilder.or(criteriaBuilder.like(productos.<String>get("proveedor").<String>get("descripcion"), "%" + by_proveedor + "%"),
                     criteriaBuilder.like(productos.<String>get("descripcion"), "%" + by_all_attributes + "%"),
-                    criteriaBuilder.equal(productos.<Long>get("precio"), by_precio),
-                    criteriaBuilder.equal(productos.<Long>get("stock"), by_stock));
+                    criteriaBuilder.equal(productos.<Long>get("precio"), Integer.parseInt(by_precio)),
+                    criteriaBuilder.equal(productos.<Long>get("stock"), Integer.parseInt(by_stock)));
         } else {
             if (by_precio == null && by_stock == null) {
                 filtradoPorAllAttributes = criteriaBuilder.or(criteriaBuilder.like(productos.<String>get("proveedor").<String>get("descripcion"), "%" + by_proveedor + "%"),
@@ -195,20 +202,17 @@ public class ProductoService extends Service<ProductoEntity> {
 
         // Fijamos la Ordenacion
         if ("asc".equals(ordenDeOrdenacion)) {
-            criteriaQuery.multiselect(productos.<String>get("proveedor"), productos.<String>get("precio"), productos.<String>get("stock"), productos.<String>get("descripcion"));
-
             criteriaQuery.where(filtradoPorAllAttributes, filtradoPorColumna).orderBy(criteriaBuilder.asc(productos.get(ordenarPorColumna)));
         } else {
-            criteriaQuery.multiselect(productos.<String>get("proveedor"), productos.<String>get("precio"), productos.<String>get("stock"), productos.<String>get("descripcion"));
-
             criteriaQuery.where(filtradoPorAllAttributes, filtradoPorColumna).orderBy(criteriaBuilder.desc(productos.get(ordenarPorColumna)));
         }
 
 
         response.setEntidades(em.createQuery(criteriaQuery).getResultList());
+        File fileResponse = new File(file);
+
         try {
 
-            File fileResponse = new File(file);
             // convert user object to json string, and save to a file
             mapper.writeValue(fileResponse, response.getEntidades());
 
@@ -227,7 +231,7 @@ public class ProductoService extends Service<ProductoEntity> {
             e.printStackTrace();
 
         }
-        return response;
+        return fileResponse;
 
     }
 

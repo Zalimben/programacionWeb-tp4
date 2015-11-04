@@ -59,7 +59,14 @@
             <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
             <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
         </p:confirmDialog>
-
+        <!-- BOTON DE EXPORTAR Y CREAR -->
+        <h:panelGrid columns="2">
+            <p:commandButton icon="ui-icon-disk" value="Descargar" ajax="false">
+                <p:fileDownload value="#{proveedor.exportFile}"/>
+            </p:commandButton>
+            <p:commandButton icon="ui-icon-plusthick" id="newProoveedor" update="createProveedorForm"
+                             oncomplete="PF('createProveedor').show()" value="Añadir Proveedor"/>
+        </h:panelGrid>
         <!-- paginacion-->
         <br/>
         <h:form id="pag">
@@ -72,13 +79,7 @@
 
         <br />
 
-        <!-- BOTON DE EXPORTAR Y CREAR -->
-        <h:panelGrid columns="2">
-            <p:commandButton icon="ui-icon-disk" value="Descargar" ajax="false">
-                <p:fileDownload value="#{proveedor.file}"/>
-            </p:commandButton>
-            <p:commandButton icon="ui-icon-plusthick"  id="newProoveedor" update="createProveedorForm" oncomplete="PF('createProveedor').show()" value="Añadir Proveedor"/>
-        </h:panelGrid>
+
         <br/>
         <ui:include src="/views/proveedores/abm.xhtml" />
 

@@ -18,7 +18,9 @@ public class VentaDetalleEntity {
     @Id
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
     @Expose
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_venta_detalle")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_venta_detalle")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @SequenceGenerator(name = "seq_venta_detalle", sequenceName = "seq_venta_detalle")
     private Long id;
 

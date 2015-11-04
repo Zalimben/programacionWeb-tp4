@@ -8,15 +8,14 @@
 
     <ui:define name="content">
 
-        <p:outputLabel value="Formulario para la Carga Masiva de Clientes" />
+        <p:outputLabel value="Selececcione el archivo para la Carga Masiva de Clientes"/>
         <br />  <br />
 
-            <h:form enctype="multipart/form-data">
-                <p:fileUpload  value="#{clienteId.importar}" mode="simple" skinSimple="true"/>
-            </h:form>
+        <h:form enctype="multipart/form-data">
+            <p:fileUpload fileUploadListener="#{cliente.upload}" auto="true"/>
+        </h:form>
 
         <br />
-        <p:commandButton icon="ui-icon-circle-arrow-n" value="Cargar" ajax="false" action="#{clienteId.upload}" disabled="false"/>
 
     </ui:define>
 

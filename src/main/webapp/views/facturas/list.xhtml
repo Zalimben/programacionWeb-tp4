@@ -70,7 +70,7 @@
 
         <h:panelGrid columns="4" style="height: 30px;">
             <p:commandButton icon="ui-icon-disk" value="Descargar" ajax="false">
-                <p:fileDownload value="#{factura.file}"/>
+                <p:fileDownload value="#{factura.exportFile}"/>
             </p:commandButton>
             <p:commandButton id="facturar" value="Iniciar Facturacion" actionListener="#{factura.doFacturar}"
                              update=":messages">

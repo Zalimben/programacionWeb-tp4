@@ -12,7 +12,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.ws.rs.core.MultivaluedMap;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -44,29 +43,28 @@ public class ProveedorService extends Service<ProveedorEntity> {
         return query.getResultList();
     }
 
-    public Object exportAllProdveedores(MultivaluedMap<String, String> queryParams) {
+    public Object exportAllProdveedores(String descripcion, String byAllAttributes, String byDescripcion) {
 
         ProveedorResponse response = new ProveedorResponse();
         ObjectMapper mapper = new ObjectMapper();
         String file = "/tmp/proveedores.json";
-
-        /**
-         * Variables default values for the column sort
-         */
+/**
+ * Variables default values for the column sort
+ */
         String ordenarPorColumna = "id";
         String ordenDeOrdenacion = "asc";
 
         /**
          * Retrieve one or none of the URI query params that have the column name and sort order values
          */
-        if (queryParams.getFirst("descripcion") != null) {
+        if (descripcion != null) {
             ordenarPorColumna = "descripcion";
-            ordenDeOrdenacion = queryParams.getFirst("descripcion");
+            ordenDeOrdenacion = descripcion;
         }
 
         // Iniciamos las varialles para el filtrado
-        String by_all_attributes = queryParams.getFirst("by_all_attributes");
-        String by_descripcion = queryParams.getFirst("by_descripcion");
+        String by_all_attributes = byAllAttributes;
+        String by_descripcion = byDescripcion;
 
         if (by_descripcion == null) {
             by_descripcion = "";
@@ -89,14 +87,17 @@ public class ProveedorService extends Service<ProveedorEntity> {
 
         // Fijamos la Ordenacion
         if ("asc".equals(ordenDeOrdenacion)) {
+            criteriaQuery.multiselect(proveedores.<String>get("id"), proveedores.<String>get("descripcion"));
             criteriaQuery.where(filtradoPorAllAttributes, filtradoPorColumna).orderBy(criteriaBuilder.asc(proveedores.get(ordenarPorColumna)));
         } else {
+            criteriaQuery.multiselect(proveedores.<String>get("id"), proveedores.<String>get("descripcion"));
             criteriaQuery.where(filtradoPorAllAttributes, filtradoPorColumna).orderBy(criteriaBuilder.desc(proveedores.get(ordenarPorColumna)));
         }
 
         response.setEntidades(em.createQuery(criteriaQuery).getResultList());
+        File fileResponse = new File(file);
+
         try {
-            File fileResponse = new File(file);
             // convert user object to json string, and save to a file
             mapper.writeValue(fileResponse, response.getEntidades());
             return fileResponse;
@@ -115,7 +116,7 @@ public class ProveedorService extends Service<ProveedorEntity> {
             e.printStackTrace();
 
         }
-        return "No se pudo generar el archivo";
+        return fileResponse;
 
     }
 

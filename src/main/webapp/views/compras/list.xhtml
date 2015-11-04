@@ -71,6 +71,15 @@
                 </p:commandButton>
             </p:column>
         </p:dataTable>
+        <!-- BOTON DE EXPORTAR Y CREAR -->
+        <h:panelGrid columns="2">
+            <p:commandButton icon="ui-icon-disk" value="Descargar" ajax="false">
+                <p:fileDownload value="#{compra.exportFile}"/>
+            </p:commandButton>
+
+            <p:commandButton icon="ui-icon-plusthick" id="newCompra" value="Crear Compra" update="createComprasForm"
+                             oncomplete="PF('createCompra').show()"/>
+        </h:panelGrid>
 
         <!-- paginacion-->
         <br/>
@@ -83,14 +92,7 @@
         </h:form>
         <br />
 
-        <!-- BOTON DE EXPORTAR Y CREAR -->
-        <h:panelGrid columns="2">
-            <p:commandButton icon="ui-icon-disk" value="Descargar" ajax="false">
-                <p:fileDownload value="#{compra.file}"/>
-            </p:commandButton>
 
-            <p:commandButton icon="ui-icon-plusthick" id="newCompra"  value="Crear Compra" update="createComprasForm" oncomplete="PF('createCompra').show()"/>
-        </h:panelGrid>
         <br/>
         <ui:include src="/views/compras/abm.xhtml" />
 

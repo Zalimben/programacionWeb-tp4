@@ -3,7 +3,6 @@ package BackingBeans;
 import EJB.Helper.FacturasResponse;
 import EJB.Service.FacturaService;
 import JPA.FacturaEntity;
-import org.primefaces.model.StreamedContent;
 
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -29,27 +28,8 @@ public class FacturasBean {
     FacturaEntity facturaEntity;
 
     private String mensaje;
-    private StreamedContent file;
-
-    public StreamedContent getFile() {
-        return file;
-    }
-
-    public void setFile(StreamedContent file) {
-        this.file = file;
-    }
-
-    public String getMensaje() {
-        return mensaje;
-    }
-
-    public void setMensaje(String mensaje) {
-        this.mensaje = mensaje;
-    }
-
     // variables nabil
     private List<FacturaEntity> facturas;
-
     private String fecha;
     private String monto;
     private String byAllAttributes;
@@ -58,6 +38,14 @@ public class FacturasBean {
     private Integer page=1;
     private Integer totalPages=0;
     private FacturasResponse facturasResponse;
+
+    public String getMensaje() {
+        return mensaje;
+    }
+
+    public void setMensaje(String mensaje) {
+        this.mensaje = mensaje;
+    }
 
     // metodos nabil
     public Integer getPage() {

@@ -1,11 +1,13 @@
 package BackingBeans;
 
 import EJB.Helper.VentasResponse;
-import EJB.Service.ClienteService;
-import EJB.Service.ProductoService;
-import EJB.Service.VentaDetalleService;
-import EJB.Service.VentasService;
-import JPA.*;
+import EJB.Service.*;
+import JPA.ClienteEntity;
+import JPA.ProductoEntity;
+import JPA.VentaDetalleEntity;
+import JPA.VentaEntity;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
 import javax.ejb.EJB;
@@ -14,6 +16,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +31,9 @@ public class VentasBean {
 	/* Variables & Dependencias */
 	@EJB
 	VentasService service;
-	@Inject
+    @EJB
+    VentaFileService fileService;
+    @Inject
 	VentaEntity ventaEntity;
 	@EJB
 	ClienteService clienteService;
@@ -39,8 +46,8 @@ public class VentasBean {
 	@Inject
 	ProductoEntity productoEntity;
 
-	private StreamedContent file;
-	private Long clienteId;
+    private StreamedContent exportFile;
+    private Long clienteId;
 	private FacesMessage message;
 
 	private List<VentaDetalleEntity> detallesVenta;
@@ -303,13 +310,17 @@ public class VentasBean {
 		this.productoEntity = productoEntity;
 	}
 
-	public StreamedContent getFile() {
-		return file;
-	}
+    public StreamedContent getExportFile() throws FileNotFoundException {
+        service.exportAllVentas(cliente, fecha, monto, byAllAttributes, byCliente,
+                byFecha, byMonto);
+        String contentType = FacesContext.getCurrentInstance().getExternalContext().getMimeType("/tmp/ventas.json");
+        exportFile = new DefaultStreamedContent(new FileInputStream("/tmp/ventas.json"), contentType, "ventas.json");
+        return exportFile;
+    }
 
-	public void setFile(StreamedContent file) {
-		this.file = file;
-	}
+    public void setExportFile(StreamedContent exportFile) {
+        this.exportFile = exportFile;
+    }
 
 	public Long getClienteId() {
 		return clienteId;
@@ -351,11 +362,19 @@ public class VentasBean {
 		this.producto = producto;
 	}
 
+    public VentaEntity getSelectedVenta() {
+        return selectedVenta;
+    }
+
 	public void setSelectedVenta(VentaEntity selectedVenta) {
 		this.selectedVenta = selectedVenta;
 	}
 
-	public VentaEntity getSelectedVenta() {
-		return selectedVenta;
-	}
+    public void upload(FileUploadEvent event) {
+        try {
+            fileService.parsear(event.getFile().getInputstream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

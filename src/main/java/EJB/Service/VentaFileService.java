@@ -10,6 +10,7 @@ import javax.ejb.Remove;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,14 +39,12 @@ public class VentaFileService {
 
     private List<VentaDetalleEntity> listaVentaDetalles = new ArrayList<>();
 
-    public void parsear(String is){
+    public void parsear(InputStream is) {
         ObjectMapper objectMapper = new ObjectMapper();
         jfactory = objectMapper.getJsonFactory();
-        String result = is;
-        String archivo = result.substring(result.indexOf('{'));
 
         try {
-            jParser = jfactory.createJsonParser(archivo);
+            jParser = jfactory.createJsonParser(is);
 
             jParser.nextToken(); // token '{'
             jParser.nextToken(); // token 'ventas'

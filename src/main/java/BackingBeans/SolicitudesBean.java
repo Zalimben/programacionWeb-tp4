@@ -33,8 +33,8 @@ public class SolicitudesBean {
 	private String byFecha;
 	private Integer page=1;
 	private Integer totalPages=0;
-    private StreamedContent file;
-	private SolicitudCompraResponse solicitudCompraResponse;
+    private StreamedContent exportFile;
+    private SolicitudCompraResponse solicitudCompraResponse;
 
 	/* Metodos */
 
@@ -136,10 +136,4 @@ public class SolicitudesBean {
         this.byFecha = byFecha;
     }
 
-    public void setFile(StreamedContent file) {
-        this.file = file;
-    }
-    public StreamedContent getFile() {
-        return file;
-    }
 }

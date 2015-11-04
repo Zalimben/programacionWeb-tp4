@@ -76,6 +76,15 @@
             <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
         </p:confirmDialog>
 
+        <!-- BOTON DE EXPORTAR Y CREAR CLIENTE -->
+        <h:panelGrid columns="2">
+            <p:commandButton icon="ui-icon-disk" value="Descargar" ajax="false" process="tabla_clientes">
+                <p:fileDownload value="#{cliente.exportFile}"/>
+            </p:commandButton>
+            <p:commandButton icon="ui-icon-plusthick" id="newCliente" update="tabla_clientes createClienteForm"
+                             value="Añadir Cliente" oncomplete="PF('createCliente').show()"/>
+        </h:panelGrid>
+
         <!-- paginacion-->
         <br/>
         <h:form id="formPagination">
@@ -86,13 +95,7 @@
             </h:panelGrid>
         </h:form>
 
-        <!-- BOTON DE EXPORTAR Y CREAR CLIENTE -->
-        <h:panelGrid columns="2">
-            <p:commandButton icon="ui-icon-disk" value="Descargar" ajax="false">
-                <p:fileDownload value="#{cliente.file}"/>
-            </p:commandButton>
-            <p:commandButton icon="ui-icon-plusthick" id="newCliente" update="tabla_clientes createClienteForm" value="Añadir Cliente" oncomplete="PF('createCliente').show()"  />
-        </h:panelGrid>
+
         <br/>
         <ui:include src="abm.xhtml" />
 

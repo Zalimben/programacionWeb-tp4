@@ -1,14 +1,13 @@
 package BackingBeans;
 
 import EJB.Helper.ComprasResponse;
-import EJB.Service.CompraDetalleService;
-import EJB.Service.CompraService;
-import EJB.Service.ProductoService;
-import EJB.Service.ProveedorService;
+import EJB.Service.*;
 import JPA.CompraDetalleEntity;
 import JPA.CompraEntity;
 import JPA.ProductoEntity;
 import JPA.ProveedorEntity;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
 import javax.ejb.EJB;
@@ -17,6 +16,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +30,9 @@ public class ComprasBean {
 	/* Variables & Dependencias */
 	@EJB
 	CompraService service;
-	@EJB
+    @EJB
+    CompraFileService fileService;
+    @EJB
 	ProveedorService proveedorService;
 	@EJB
 	ProductoService productoService;
@@ -41,8 +45,8 @@ public class ComprasBean {
 	@Inject
 	ProductoEntity productoEntity;
 
-	private StreamedContent file;
-	private Long proveedorId;
+    private StreamedContent exportFile;
+    private Long proveedorId;
 	private FacesMessage message;
 
 	private List<CompraDetalleEntity> detallesCompra;
@@ -147,22 +151,6 @@ public class ComprasBean {
 		page = 1;
 	}
 
-	public void setByAllAttributes(String byAllAttributes) {
-		this.byAllAttributes = byAllAttributes;
-	}
-
-	public void setByProveedor(String byProveedor) {
-		this.byProveedor = byProveedor;
-	}
-
-	public void setByFecha(String byFecha) {
-		this.byFecha = byFecha;
-	}
-
-	public void setByMonto(String byMonto) {
-		this.byMonto = byMonto;
-	}
-
 	public Integer getPage() {
 		return page;
 	}
@@ -171,17 +159,33 @@ public class ComprasBean {
 		return byAllAttributes;
 	}
 
+    public void setByAllAttributes(String byAllAttributes) {
+        this.byAllAttributes = byAllAttributes;
+    }
+
 	public String getByProveedor() {
 		return byProveedor;
 	}
+
+    public void setByProveedor(String byProveedor) {
+        this.byProveedor = byProveedor;
+    }
 
 	public String getByFecha() {
 		return byFecha;
 	}
 
+    public void setByFecha(String byFecha) {
+        this.byFecha = byFecha;
+    }
+
 	public String getByMonto() {
 		return byMonto;
 	}
+
+    public void setByMonto(String byMonto) {
+        this.byMonto = byMonto;
+    }
 
 	public List<CompraEntity> getCompras() {
 		comprasResponse = service.getCompras(proveedor,fecha, monto, byAllAttributes,
@@ -308,13 +312,7 @@ public class ComprasBean {
 		this.proveedorId = proveedorId;
 	}
 
-	public StreamedContent getFile() {
-		return file;
-	}
 
-	public void setFile(StreamedContent file) {
-		this.file = file;
-	}
 
 	public FacesMessage getMessage() {
 		return message;
@@ -348,13 +346,13 @@ public class ComprasBean {
 		this.detallesCompra = detallesCompra;
 	}
 
-	public void setCantidad(Long cantidad) {
-		this.cantidad = cantidad;
-	}
-
 	public Long getCantidad() {
 		return cantidad;
 	}
+
+    public void setCantidad(Long cantidad) {
+        this.cantidad = cantidad;
+    }
 
 	public Long getProducto() {
 		return producto;
@@ -372,12 +370,33 @@ public class ComprasBean {
 		this.productoEntity = productoEntity;
 	}
 
+    public CompraEntity getSelectedCompra() {
+        return selectedCompra;
+    }
+
 	public void setSelectedCompra(CompraEntity selectedCompra) {
 		this.selectedCompra = selectedCompra;
 	}
 
-	public CompraEntity getSelectedCompra() {
-		return selectedCompra;
-	}
+    public StreamedContent getExportFile() throws FileNotFoundException {
+        service.exportAllCompras(proveedor, fecha, monto, byAllAttributes,
+                byProveedor, byFecha, byMonto);
+        String contentType = FacesContext.getCurrentInstance().getExternalContext().getMimeType("/tmp/compras.json");
+        exportFile = new DefaultStreamedContent(new FileInputStream("/tmp/compras.json"), contentType, "compras.json");
+        return exportFile;
+    }
+
+    public void setExportFile(StreamedContent exportFile) {
+        this.exportFile = exportFile;
+    }
+
+    public void upload(FileUploadEvent event) {
+        try {
+            fileService.parsear(event.getFile().getInputstream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 

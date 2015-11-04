@@ -40,7 +40,7 @@ public class ClienteService extends Service<ClienteEntity> {
      * @return Elemento cuyo identificador corresponda
      */
     public Object exportAllClientes(String nombre, String cedula, String por_all_attributes,
-                                    String por_nombre, String por_cedula, Integer page_parametro) {
+                                    String por_nombre, String por_cedula) {
         ClienteResponse response = new ClienteResponse();
         ObjectMapper mapper = new ObjectMapper();
         String file = "/tmp/clientes.json";
@@ -94,10 +94,8 @@ public class ClienteService extends Service<ClienteEntity> {
 
         // Fijamos la Ordenacion
         if ("asc".equals(ordenDeOrdenacion)) {
-            criteriaQuery.multiselect(clientes.<String>get("nombre"), clientes.<String>get("cedulaIdentidad"));
             criteriaQuery.where(filtradoPorAllAttributes, filtradoPorColumna).orderBy(criteriaBuilder.asc(clientes.get(ordenarPorColumna)));
         } else {
-            criteriaQuery.multiselect(clientes.<String>get("nombre"), clientes.<String>get("cedulaIdentidad"));
             criteriaQuery.where(filtradoPorAllAttributes, filtradoPorColumna).orderBy(criteriaBuilder.desc(clientes.get(ordenarPorColumna)));
         }
 
