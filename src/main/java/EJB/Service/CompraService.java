@@ -22,6 +22,7 @@ import javax.persistence.criteria.Root;
 import javax.ws.rs.core.MultivaluedMap;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -82,9 +83,10 @@ public class CompraService extends Service<CompraEntity> {
 	 */
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public boolean createCompra(CompraEntity entity, List<CompraDetalleEntity> detalleEntityList) throws StockInsuficienteException{
-
-        entity.setFecha(new Date().toString());
-	    long montoAcumulador = 0;
+        Date dNow = new Date();
+        SimpleDateFormat ft = new SimpleDateFormat("MM-dd-yyyy");
+        entity.setFecha(ft.format(dNow));
+        long montoAcumulador = 0;
 
         for (CompraDetalleEntity detalle : detalleEntityList) {
             ProductoEntity productoEntity = productoService.find(detalle.getProducto().getId().intValue(), ProductoEntity.class);

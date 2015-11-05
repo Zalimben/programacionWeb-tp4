@@ -20,6 +20,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -50,8 +51,9 @@ public class VentasService extends Service<VentaEntity> {
 
         VentaEntity ventaEntity = new VentaEntity();
         ventaEntity.setCliente(clienteService.find(venta.getClienteId(), ClienteEntity.class));
-        ventaEntity.setFecha(new Date().toString());
-
+        Date dNow = new Date();
+        SimpleDateFormat ft = new SimpleDateFormat("MM-dd-yyyy");
+        ventaEntity.setFecha(ft.format(dNow));
         long montoAcumulador = 0;
 
         for (VentaDetalle detalle : venta.getDetalles()) {

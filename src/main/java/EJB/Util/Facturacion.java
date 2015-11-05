@@ -17,6 +17,7 @@ import javax.ejb.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -77,7 +78,9 @@ public class Facturacion {
                     }
 
                     FacturaEntity factura = new FacturaEntity();
-                    factura.setFecha(new Date().toString());
+                    Date dNow = new Date();
+                    SimpleDateFormat ft = new SimpleDateFormat("MM-dd-yyyy");
+                    factura.setFecha(ft.format(dNow));
                     factura.setMonto(venta.getMonto());
                     facturaService.add(factura);
 

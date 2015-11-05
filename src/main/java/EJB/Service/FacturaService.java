@@ -11,7 +11,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.ws.rs.core.MultivaluedMap;
 import java.util.concurrent.Future;
 
 /**
@@ -124,11 +123,11 @@ public class FacturaService extends Service<FacturaEntity> {
     }
 
     public String facturar() {
-//        try {
-//            estadoFacturacion = facturacion.facturacion();
-//        } catch (Exception e) {
-//            return e.getMessage();
-//        }
+        try {
+            estadoFacturacion = facturacion.facturacion();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
         return "Facturando";
     }
 
