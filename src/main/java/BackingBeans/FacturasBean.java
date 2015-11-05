@@ -151,21 +151,21 @@ public class FacturasBean {
     // metodos saul
 
     public void doFacturar() {
-        mensaje = facturaService.facturar();
+//        mensaje = facturaService.facturar();
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage("messages", new FacesMessage(facturaService.facturar()));
 
     }
 
     public void doCancelarFacturacion() {
-        mensaje = facturaService.facturar();
+//        mensaje = facturaService.facturar();
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage("messages", new FacesMessage(facturaService.detener()));
 
     }
 
     public void getEstadoFacturacion() {
-        mensaje = facturaService.facturar();
+//        mensaje = facturaService.facturar();
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage("messages", new FacesMessage(facturaService.isRun()));
     }
